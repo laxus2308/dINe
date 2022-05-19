@@ -1,51 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import {
-    StyleSheet,
-    View,
-    Image,
-    TouchableWithoutFeedback,
-    Keyboard,
-} from 'react-native';
-import Username from './components/username';
-import Password from './components/password';
-import ForgetPasswordButton from './components/forgetPasswordButton';
-import LoginButton from './components/loginButton';
+import LoginPage from './screens/LoginPage';
+import ForgetPasswordPage from './screens/ForgetPasswordPage';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
     return (
-        <TouchableWithoutFeedback onPress={() => {
-            Keyboard.dismiss();
-        }}>
-            <View style={styles.container}>
-                <Image
-                    style={styles.image}
-                    source={require("./assets/857718.png")}
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen
+                    name='login page'
+                    component={LoginPage}
                 />
-                <StatusBar style="auto" />
-                <Username />
-                <Password />
-                <ForgetPasswordButton />
-                <LoginButton />
-            </View>
-        </TouchableWithoutFeedback>
+                <Stack.Screen
+                    name='forget password page'
+                    component={ForgetPasswordPage}
+                />
+            </Stack.Navigator>
+        </NavigationContainer>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    image: {
-        marginBottom: 40,
-        width: 100,
-        height: 100,
-        resizeMode: 'contain'
-    },
-});
 
 export default App;

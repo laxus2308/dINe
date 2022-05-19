@@ -5,9 +5,9 @@ import {
     StyleSheet,
 } from 'react-native';
 
-const ForgetPassword = () => {
+const ForgetPassword = (props) => {
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => props.navigation.navigate("forget password page")}>
             <Text style={styles.forgot_button}>Forgot Password?</Text>
         </TouchableOpacity>
     )
