@@ -6,45 +6,51 @@ import {
   View,
   Image,
   TextInput,
-  Button,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 
 const App = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={require("./assets/857718.png")}
-      />
-      <StatusBar style="auto" />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder='NUS Email'
-          placeholderTextColor="#000080"
-          onChangeText={(email) => setEmail(email)}
+    <TouchableWithoutFeedback onPress={() => {
+      Keyboard.dismiss();
+    }}>
+      <View style={styles.container}>
+        <Image
+          style={styles.image}
+          source={require("./assets/857718.png")}
         />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder='Password'
-          placeholderTextColor="#000080"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
-      </View>
-      <TouchableOpacity>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
+        <StatusBar style="auto" />
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder='NUS Email'
+            placeholderTextColor="#000080"
+            keyboardType='email-address'
+            onChangeText={(email) => setEmail(email)}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder='Password'
+            placeholderTextColor="#000080"
+            secureTextEntry={true}
+            onChangeText={(password) => setPassword(password)}
+          />
+        </View>
+        <TouchableOpacity>
+          <Text style={styles.forgot_button}>Forgot Password?</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText}>LOGIN</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity style={styles.loginBtn}>
+          <Text style={styles.loginText}>LOGIN</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -94,11 +100,6 @@ const styles = StyleSheet.create({
     marginTop: 40,
     backgroundColor: "#ffff00",
   },
-
-  testwtv: {
-    width: 300,
-    height: 10,
-  }
 });
 
 
