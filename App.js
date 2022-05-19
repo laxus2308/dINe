@@ -97,7 +97,9 @@ const styles = StyleSheet.create({
 
   testwtv: {
     width: 100,
+    height: 10,
   }
 });
+
 
 export default App;
