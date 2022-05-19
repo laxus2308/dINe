@@ -9,15 +9,14 @@ const Password = () => {
     const [password, setPassword] = useState('');
 
     return (
-        <View style={styles.inputView}>
-            <TextInput
-                style={styles.TextInput}
-                placeholder='Password'
-                placeholderTextColor="#000080"
-                secureTextEntry={true}
-                onChangeText={(password) => setPassword(password)}
-            />
-        </View>
+        <TextInput
+            style={styles.inputView}
+            placeholder='Password'
+            placeholderTextColor="#000080"
+            secureTextEntry={true}
+            onChangeText={(password) => setPassword(password)}
+        />
+
     )
 }
 
@@ -29,13 +28,7 @@ const styles = StyleSheet.create({
         height: 45,
         marginBottom: 10,
         alignItems: "center",
-    },
-
-    TextInput: {
-        height: 50,
-        flex: 1,
-        padding: 10,
-        alignItems: "center",
+        textAlign: "center",
     },
 })
 

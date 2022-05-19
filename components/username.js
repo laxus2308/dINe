@@ -8,16 +8,13 @@ import {
 const Username = ({ placeholder, }) => {
     const [email, setEmail] = useState('');
     return (
-        <View style={styles.inputView}>
-            <TextInput
-                style={styles.TextInput}
-                placeholder='NUS Email'
-                placeholderTextColor="#000080"
-                keyboardType='email-address'
-                onChangeText={(email) => setEmail(email)}
-            />
-        </View>
-
+        <TextInput
+            style={styles.inputView}
+            placeholder='NUS Email'
+            placeholderTextColor="#000080"
+            keyboardType='email-address'
+            onChangeText={(email) => setEmail(email)}
+        />
     )
 }
 
@@ -29,6 +26,7 @@ const styles = StyleSheet.create({
         height: 45,
         marginBottom: 10,
         alignItems: "center",
+        textAlign: "center",
     },
 
     TextInput: {
