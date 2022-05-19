@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
 
   testwtv: {
-    width: 100,
+    width: 300,
     height: 10,
   }
 });
