@@ -5,8 +5,8 @@ import {
     TextInput,
 } from 'react-native';
 
-const Password = () => {
-    const [password, setPassword] = useState('');
+const Password = (props) => {
+
 
     return (
         <TextInput
@@ -14,7 +14,7 @@ const Password = () => {
             placeholder='Password'
             placeholderTextColor="#000080"
             secureTextEntry={true}
-            onChangeText={(password) => setPassword(password)}
+            onChangeText={(password) => props.setPassword(password)}
         />
 
     )

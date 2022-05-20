@@ -5,15 +5,15 @@ import {
     TextInput,
 } from 'react-native';
 
-const Username = ({ placeholder, }) => {
-    const [email, setEmail] = useState('');
+const Username = (props) => {
+
     return (
         <TextInput
             style={styles.inputView}
             placeholder='NUS Email'
             placeholderTextColor="#000080"
             keyboardType='email-address'
-            onChangeText={(email) => setEmail(email)}
+            onChangeText={(email) => props.setEmail(email)}
         />
     )
 }
