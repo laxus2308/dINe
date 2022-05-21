@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 40,
+        marginTop: 10,
         backgroundColor: "#ffff00",
     },
 })
