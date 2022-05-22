@@ -19,7 +19,7 @@ const LoginButton = (props) => {
                 password: props.password,
             })
             if (error) throw error
-            alert('Check your email for the login link!')
+            alert('Logged in!')
         } catch (error) {
             alert(error.error_description || error.message)
         } finally {

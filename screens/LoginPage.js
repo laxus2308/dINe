@@ -6,14 +6,12 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
-  Button,
 } from 'react-native';
 import Username from '../components/username';
 import Password from '../components/password';
 import ForgetPasswordButton from '../components/forgetPasswordButton';
 import LoginButton from '../components/loginButton';
 import SignUpButton from '../components/signUpButton';
-import { supabase } from '../supabase'
 
 
 const LoginPage = (props) => {
