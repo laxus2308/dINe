@@ -1,31 +1,31 @@
-import React from 'react';
-import LoginPage from './screens/LoginPage';
-import ForgetPasswordPage from './screens/ForgetPasswordPage';
-import SignUpPage from './screens/SignUpPage';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-const Stack = createNativeStackNavigator();
+import { useState, useEffect } from 'react'
+import { View, StyleSheet } from 'react-native'
+import { supabase } from './supabase'
+import AuthStack from './stacks/HomeStack'
+import AccountPage from './screens/AccountPage'
 
 const App = () => {
+    const [session, setSession] = useState(null)
+
+    useEffect(() => {
+        setSession(supabase.auth.session())
+
+        supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session)
+        })
+    }, [])
+
     return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen
-                    name='login page'
-                    component={LoginPage}
-                />
-                <Stack.Screen
-                    name='forget password page'
-                    component={ForgetPasswordPage}
-                />
-                <Stack.Screen
-                    name='sign up page'
-                    component={SignUpPage}
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
+        <View style={styles.container}>
+            {!session ? <AuthStack /> : <AccountPage key={session.user.id} session={session} />}
+        </View>
+    )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+})
 
 export default App;
