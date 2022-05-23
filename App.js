@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { supabase } from './supabase'
-import AuthStack from './stacks/HomeStack'
+import AuthStack from './stacks/AuthStack'
 import AccountPage from './screens/AccountPage'
 
 const App = () => {
