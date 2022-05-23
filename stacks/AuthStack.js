@@ -10,18 +10,32 @@ const Stack = createNativeStackNavigator();
 const AuthStack = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator
+                screenOptions={{
+                    headerStyle: {
+                        backgroundColor: 'grey', height: 60,
+                    }
+                }}>
                 <Stack.Screen
                     name='login page'
                     component={LoginPage}
+                    options={{
+                        title: "Login"
+                    }}
                 />
                 <Stack.Screen
                     name='forget password page'
                     component={ForgetPasswordPage}
+                    options={{
+                        title: "Forget your password?"
+                    }}
                 />
                 <Stack.Screen
                     name='sign up page'
                     component={SignUpPage}
+                    options={{
+                        title: "Sign up now!"
+                    }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
