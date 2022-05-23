@@ -3,7 +3,9 @@ import {
   View,
   StyleSheet,
   Button,
-  TextInput
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import { supabase } from '../supabase'
 
@@ -38,33 +40,37 @@ const SignUpPage = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.inputView}
-        placeholder='NUS Email'
-        placeholderTextColor="#000080"
-        keyboardType='email-address'
-        onChangeText={(signUpEmail) => setEmail(signUpEmail)}
-      />
-      <TextInput
-        style={styles.inputView}
-        placeholder='Password'
-        placeholderTextColor="#000080"
-        secureTextEntry={true}
-        onChangeText={(signUpPassword) => setPassword(signUpPassword)}
-      />
-      <TextInput
-        style={styles.inputView}
-        placeholder='Confirm Password'
-        placeholderTextColor="#000080"
-        secureTextEntry={true}
-        onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
-      />
-      <Button
-        title="Sign up now"
-        onPress={signUpWithEmail}
-      />
-    </View>
+    <TouchableWithoutFeedback onPress={() => {
+      Keyboard.dismiss();
+    }}>
+      <View style={styles.container}>
+        <TextInput
+          style={styles.inputView}
+          placeholder='NUS Email'
+          placeholderTextColor="#000080"
+          keyboardType='email-address'
+          onChangeText={(signUpEmail) => setEmail(signUpEmail)}
+        />
+        <TextInput
+          style={styles.inputView}
+          placeholder='Password'
+          placeholderTextColor="#000080"
+          secureTextEntry={true}
+          onChangeText={(signUpPassword) => setPassword(signUpPassword)}
+        />
+        <TextInput
+          style={styles.inputView}
+          placeholder='Confirm Password'
+          placeholderTextColor="#000080"
+          secureTextEntry={true}
+          onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
+        />
+        <Button
+          title="Sign up now"
+          onPress={signUpWithEmail}
+        />
+      </View>
+    </TouchableWithoutFeedback>
   )
 }
 
