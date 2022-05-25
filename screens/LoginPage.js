@@ -8,6 +8,7 @@ import {
   Keyboard,
 } from 'react-native';
 import AuthButton from '../components/auth/AuthButton'
+import AuthCheckBox from '../components/auth/AuthCheckBox';
 import AuthTextInput from '../components/auth/AuthTextInput'
 import Styles from '../Style'
 import { supabase } from '../supabase'
@@ -56,9 +57,10 @@ const LoginPage = props => {
           secureTextEntry
           placeholder="Password"
         />
+        <AuthCheckBox/>
         <AuthButton
           pressHandler={() => props.navigation.navigate("forget password page")}
-          title='Forgot Password'
+          title='Forgot Password?'
           style={Styles.forgotPasswordButton}
         />
         <AuthButton
