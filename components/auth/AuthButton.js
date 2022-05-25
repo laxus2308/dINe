@@ -5,7 +5,7 @@ import {
     StyleSheet,
 } from 'react-native';
 
-const LoginButton = (props) => {
+const AuthButton = (props) => {
     const { pressHandler, title, style } = props;
 
     return (
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default LoginButton;
+export default AuthButton;
