@@ -29,6 +29,7 @@ const ForgetPasswordPage = () => {
                 <AuthTextInput
                     value={email}
                     textHandler={setEmail}
+                    placeholder="NUS email"
                 />
                 <AuthButton
                     style={Styles.resetButton}

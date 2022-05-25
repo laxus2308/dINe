@@ -22,8 +22,8 @@ const LoginPage = props => {
     try {
       setLoading(true)
       const { error } = await supabase.auth.signIn({
-        email: props.email,
-        password: props.password,
+        email: email,
+        password: password,
       })
       if (error) throw error
       alert('Logged in!')

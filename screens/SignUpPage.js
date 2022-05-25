@@ -16,7 +16,7 @@ const SignUpPage = () => {
   const [signUpPassword, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const signUpWithEmail = async (e) => {
+  const signUpWithEmailAndPassword = async (e) => {
     if (signUpPassword !== confirmPassword) {
       alert('Passwords must be the same!')
     } else if (!signUpEmail.includes('u.nus.edu')) {
@@ -46,28 +46,28 @@ const SignUpPage = () => {
     }}>
       <View style={styles.container}>
         <AuthTextInput
-            value={signUpEmail}
-            textHandler={(signUpEmail) => setEmail(signUpEmail)}
-            keyboardType="email-address"
-            placeholder="NUS Email"
-            placeholderTextColor="#000080"
+          value={signUpEmail}
+          textHandler={(signUpEmail) => setEmail(signUpEmail)}
+          keyboardType="email-address"
+          placeholder="NUS Email"
+          placeholderTextColor="#000080"
         />
         <AuthTextInput
-            value={signUpPassword}
-            textHandler={(signUpPassword) => setPassword(signUpPassword)}
-            placeholder="Password"
-            placeholderTextColor="#000080"
-            secureTextEntry
+          value={signUpPassword}
+          textHandler={(signUpPassword) => setPassword(signUpPassword)}
+          placeholder="Password"
+          placeholderTextColor="#000080"
+          secureTextEntry
         />
         <AuthTextInput
-            value={confirmPassword}
-            textHandler={(confirmPassword) => setConfirmPassword(confirmPassword)}
-            placeholder="Confirm Password"
-            placeholderTextColor="#000080"
-            secureTextEntry
+          value={confirmPassword}
+          textHandler={(confirmPassword) => setConfirmPassword(confirmPassword)}
+          placeholder="Confirm Password"
+          placeholderTextColor="#000080"
+          secureTextEntry
         />
         <AuthButton
-          pressHandler={signUpEmail}
+          pressHandler={signUpWithEmailAndPassword}
           title='Sign up now'
           style={Styles.signUpButton}
         />
