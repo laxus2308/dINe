@@ -7,16 +7,32 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import Username from '../components/username';
-import Password from '../components/password';
-import ForgetPasswordButton from '../components/forgetPasswordButton';
-import LoginButton from '../components/loginButton';
-import SignUpButton from '../components/signUpButton';
+import AuthButton from '../components/auth/AuthButton'
+import AuthTextInput from '../components/auth/AuthTextInput'
+import Styles from '../Style'
+import { supabase } from '../supabase'
 
-
-const LoginPage = (props) => {
+const LoginPage = props => {
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const signInWithEmailAndPassword = async (e) => {
+    e.preventDefault()
+    try {
+      setLoading(true)
+      const { error } = await supabase.auth.signIn({
+        email: props.email,
+        password: props.password,
+      })
+      if (error) throw error
+      alert('Logged in!')
+    } catch (error) {
+      alert(error.error_description || error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => {
@@ -28,11 +44,33 @@ const LoginPage = (props) => {
           source={require("../assets/857720.png")}
         />
         <StatusBar style="auto" />
-        <Username email={email} setEmail={setEmail} />
-        <Password password={password} setPassword={setPassword} />
-        <ForgetPasswordButton navigation={props.navigation} />
-        <LoginButton email={email} password={password} />
-        <SignUpButton navigation={props.navigation} />
+        <AuthTextInput
+          value={email}
+          textHandler={(email) => setEmail(email)}
+          keyboardType="email-address"
+          placeholder="NUS email"
+        />
+        <AuthTextInput
+          value={password}
+          textHandler={(password) => setPassword(password)}
+          secureTextEntry
+          placeholder="Password"
+        />
+        <AuthButton
+          pressHandler={() => props.navigation.navigate("forget password page")}
+          title='Forgot Password'
+          style={Styles.forgotPasswordButton}
+        />
+        <AuthButton
+          pressHandler={signInWithEmailAndPassword}
+          title='LOGIN'
+          style={Styles.loginButton}
+        />
+        <AuthButton
+          pressHandler={() => props.navigation.navigate("sign up page")}
+          title='No account? Sign up now!'
+          style={Styles.signUpButton}
+        />
       </View>
     </TouchableWithoutFeedback>
   );

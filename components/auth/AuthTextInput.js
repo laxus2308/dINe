@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     StyleSheet,
     TextInput,
 } from 'react-native';
 
-const Username = (props) => {
+const AuthTextInput = props => {
+    const { secureTextEntry, keyboardType, placeholder, textHandler, value } = props;
 
     return (
         <TextInput
             style={styles.inputView}
-            placeholder='NUS Email'
+            placeholder={placeholder}
             placeholderTextColor="#000080"
-            keyboardType='email-address'
-            onChangeText={(email) => props.setEmail(email)}
+            keyboardType={keyboardType}
+            onChangeText={textHandler}
+            secureTextEntry={secureTextEntry}
+            value={value}
         />
     )
 }
@@ -27,13 +30,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         textAlign: "center",
     },
-
-    TextInput: {
-        height: 50,
-        flex: 1,
-        padding: 10,
-        alignItems: "center",
-    },
 })
 
-export default Username;
+export default AuthTextInput;
