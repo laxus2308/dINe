@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
-const AuthStack = () => {
+const AuthNavigation = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator
@@ -42,4 +42,4 @@ const AuthStack = () => {
     );
 }
 
-export default AuthStack;
+export default AuthNavigation;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { supabase } from './supabase'
-import AuthStack from './stacks/AuthStack'
+import AuthNavigation from './Navigation/AuthNavigation'
 import AccountPage from './screens/AccountPage'
 
 const App = () => {
@@ -17,7 +17,7 @@ const App = () => {
 
     return (
         <View style={styles.container}>
-            {!session ? <AuthStack /> : <AccountPage key={session.user.id} session={session} />}
+            {!session ? <AuthNavigation /> : <AccountPage key={session.user.id} session={session} />}
         </View>
     )
 }
