@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
-  Button,
-  TextInput,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import AuthTextInput from '../components/auth/AuthTextInput';
+import AuthButton from '../components/auth/AuthButton'
+import Styles from '../Style'
 import { supabase } from '../supabase'
 
 const SignUpPage = () => {
@@ -44,30 +45,31 @@ const SignUpPage = () => {
       Keyboard.dismiss();
     }}>
       <View style={styles.container}>
-        <TextInput
-          style={styles.inputView}
-          placeholder='NUS Email'
-          placeholderTextColor="#000080"
-          keyboardType='email-address'
-          onChangeText={(signUpEmail) => setEmail(signUpEmail)}
+        <AuthTextInput
+            value={signUpEmail}
+            textHandler={(signUpEmail) => setEmail(signUpEmail)}
+            keyboardType="email-address"
+            placeholder="NUS Email"
+            placeholderTextColor="#000080"
         />
-        <TextInput
-          style={styles.inputView}
-          placeholder='Password'
-          placeholderTextColor="#000080"
-          secureTextEntry={true}
-          onChangeText={(signUpPassword) => setPassword(signUpPassword)}
+        <AuthTextInput
+            value={signUpPassword}
+            textHandler={(signUpPassword) => setPassword(signUpPassword)}
+            placeholder="Password"
+            placeholderTextColor="#000080"
+            secureTextEntry
         />
-        <TextInput
-          style={styles.inputView}
-          placeholder='Confirm Password'
-          placeholderTextColor="#000080"
-          secureTextEntry={true}
-          onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
+        <AuthTextInput
+            value={confirmPassword}
+            textHandler={(confirmPassword) => setConfirmPassword(confirmPassword)}
+            placeholder="Confirm Password"
+            placeholderTextColor="#000080"
+            secureTextEntry
         />
-        <Button
-          title="Sign up now"
-          onPress={signUpWithEmail}
+        <AuthButton
+          pressHandler={signUpEmail}
+          title='Sign up now'
+          style={Styles.signUpButton}
         />
       </View>
     </TouchableWithoutFeedback>
