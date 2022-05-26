@@ -22,8 +22,8 @@ const LoginPage = ({ navigation }) => {
     try {
       setLoading(true)
       const { error } = await supabase.auth.signIn({
-        email: { email },
-        password: { password },
+        email: email,
+        password: password,
       })
       if (error) throw error
       alert('Logged in!')
