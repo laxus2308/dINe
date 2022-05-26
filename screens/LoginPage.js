@@ -56,7 +56,6 @@ const LoginPage = ({ navigation }) => {
           secureTextEntry
           placeholder="Password"
         />
-        <AuthCheckBox />
         <AuthButton
           pressHandler={() => navigation.navigate("forget password page")}
           title='Forgot Password'
