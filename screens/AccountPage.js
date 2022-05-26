@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import {
     View,
     Button,
     TextInput,
     StyleSheet,
-} from 'react-native'
-import { supabase } from '../supabase'
+} from 'react-native';
+import { supabase } from '../supabase';
+import 'react-native-url-polyfill/auto';
 
 const Account = ({ session }) => {
     const [loading, setLoading] = useState(true)
@@ -104,7 +105,7 @@ const Account = ({ session }) => {
             </View>
 
             <View style={styles.verticallySpaced}>
-                <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
+                <Button title="Sign Out" onPress={async () => await supabase.auth.signOut()} />
             </View>
         </View>
     )
