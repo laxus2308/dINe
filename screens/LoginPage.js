@@ -7,12 +7,12 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import AuthButton from '../components/auth/AuthButton'
-import AuthTextInput from '../components/auth/AuthTextInput'
-import Styles from '../Style'
-import { supabase } from '../supabase'
+import AuthButton from '../components/auth/AuthButton';
+import AuthTextInput from '../components/auth/AuthTextInput';
+import Styles from '../Style';
+import { supabase } from '../supabase';
 
-const LoginPage = props => {
+const LoginPage = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,8 +22,8 @@ const LoginPage = props => {
     try {
       setLoading(true)
       const { error } = await supabase.auth.signIn({
-        email: email,
-        password: password,
+        email: { email },
+        password: { password },
       })
       if (error) throw error
       alert('Logged in!')
@@ -57,7 +57,7 @@ const LoginPage = props => {
           placeholder="Password"
         />
         <AuthButton
-          pressHandler={() => props.navigation.navigate("forget password page")}
+          pressHandler={() => navigation.navigate("forget password page")}
           title='Forgot Password'
           style={Styles.forgotPasswordButton}
         />
@@ -67,7 +67,7 @@ const LoginPage = props => {
           style={Styles.loginButton}
         />
         <AuthButton
-          pressHandler={() => props.navigation.navigate("sign up page")}
+          pressHandler={() => navigation.navigate("sign up page")}
           title='No account? Sign up now!'
           style={Styles.signUpButton}
         />
