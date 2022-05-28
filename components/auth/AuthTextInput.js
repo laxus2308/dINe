@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 
 const AuthTextInput = props => {
-    const { secureTextEntry, keyboardType, placeholder, textHandler, value, placeholderTextColor} = props;
+    const { secureTextEntry, keyboardType, placeholder, textHandler, value, placeholderTextColor } = props;
 
     return (
         <TextInput

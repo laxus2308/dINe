@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { supabase } from './supabase'
 import AuthNavigation from './Navigation/AuthNavigation'
 import AccountPage from './screens/AccountPage'
+import ProfilePage from './screens/ProfilePage'
 
 const App = () => {
     const [session, setSession] = useState(null)
@@ -17,7 +18,7 @@ const App = () => {
 
     return (
         <View style={styles.container}>
-            {!session ? <AuthNavigation /> : <AccountPage key={session.user.id} session={session} />}
+            {!session ? <AuthNavigation /> : <ProfilePage session={session} />}
         </View>
     )
 }
