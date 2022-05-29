@@ -121,8 +121,8 @@ const styles = StyleSheet.create({
     image: {
         marginBottom: 30,
         marginTop: 20,
-        width: 200,
-        height: 150,
+        width: 300,
+        height: 200,
         resizeMode: 'contain',
     },
     loginButton: {

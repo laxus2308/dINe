@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
-    TouchableWithoutFeedback,
-    Keyboard,
     StyleSheet,
     Button,
     SafeAreaView,
     FlatList,
 } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Avatar from '../components/Avatar';
 import { supabase } from '../supabase';
 
@@ -103,26 +102,22 @@ const ProfilePage = ({ session }) => {
     )
 
     const listHeaderComponent = (item) => (
-        <Text style={{ marginTop: 10, alignSelf: 'flex-start' }}>
+        <Text style={{ marginTop: 5, alignSelf: 'flex-start' }}>
             {item}
         </Text>
     )
 
     return (
         <SafeAreaView style={styles.container}>
-
-
-            <View>
+            <View style={styles.container}>
                 <Avatar url={avatar_url} />
+                {/* 
                 <Text style={styles.profileDescription}> Name: {username}</Text>
                 <Text style={styles.profileDescription}> Faculty: {faculty}</Text>
                 <Text style={styles.profileDescription}> Age: {age}</Text>
-                {/* <Text style={styles.profileDescription}> Dietary restrictions: {dietary} </Text>
-                    <Text style={styles.profileDescription}> Interests: {interests}</Text>
-                    <Text style={styles.profileDescription}> Preferred cuisines: {cuisines}</Text> */}
                 <View style={{ height: 70 }}>
                     <FlatList
-                        // style={{ flex: 1 }}
+                        style={{ flex: 1 }}
                         data={interests}
                         renderItem={renderItem}
                         keyExtractor={item => item.toString()}
@@ -130,21 +125,21 @@ const ProfilePage = ({ session }) => {
                         ListHeaderComponent={item => listHeaderComponent('Interests: ')}
 
                     />
-                </View>
-                <FlatList
-                    // style={{ flex: 1 }}
-                    data={cuisines}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.toString()}
-                    horizontal={true}
-                    ListHeaderComponent={item => listHeaderComponent('Preferred Cuisines: ')}
-                />
-
-
-                <Button title="Sign Out" onPress={async () => await supabase.auth.signOut()} />
+                    <FlatList
+                        style={{ flex: 1 }}
+                        data={cuisines}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.toString()}
+                        horizontal={true}
+                        ListHeaderComponent={item => listHeaderComponent('Preferred Cuisines: ')}
+                    />
+                </View> */}
             </View>
-
-        </SafeAreaView>
+            {/* <TouchableOpacity>
+                <Text> Update Profile </Text>
+            </TouchableOpacity> */}
+            <Button title="Sign Out" onPress={async () => await supabase.auth.signOut()} />
+        </SafeAreaView >
     )
 }
 
@@ -154,20 +149,17 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     profileDescription: {
-        marginTop: 10,
+        marginTop: 15,
         marginBottom: 10,
         alignItems: 'flex-start',
     },
     tag: {
         backgroundColor: 'lightblue',
-        padding: 10,
-        height: 50,
+        padding: 5,
+        height: 30,
         border: 1,
         marginLeft: 20,
-
     },
-
-
 })
 
 export default ProfilePage;
