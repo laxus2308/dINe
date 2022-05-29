@@ -11,9 +11,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer'
 
 const Avatar = ({ url }) => {
-
     const [hasUrl, setUrl] = url ? useState(true) : useState(false);
-    console.log(hasUrl)
     const [hasGalleryPermission, setGalleryPermission] = useState(false);
     const [image, setImage] = useState(null);
 
@@ -63,7 +61,7 @@ const Avatar = ({ url }) => {
 
             const { data, error } = await supabase
                 .from('profiles')
-                .update({ avatar_url: filePath })
+                .update({ Avatar_url: filePath })
                 .match({ id: user.id })
 
             if (uploadError) {
@@ -82,7 +80,6 @@ const Avatar = ({ url }) => {
 
     const downloadImage = async (path) => {
         try {
-            console.log(path);
             const { publicURL, error } = await supabase.storage.from('avatars').getPublicUrl(path)
             if (error) {
                 throw error
@@ -119,15 +116,14 @@ const Avatar = ({ url }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         alignItems: 'center',
     },
     image: {
         marginBottom: 30,
+        marginTop: 20,
         width: 200,
         height: 150,
         resizeMode: 'contain',
-        flex: 1 / 3,
     },
     loginButton: {
         width: "80%",
