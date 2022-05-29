@@ -7,11 +7,10 @@ import {
     SafeAreaView,
     FlatList,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Avatar from '../components/Avatar';
 import { supabase } from '../supabase';
 
-const ProfilePage = ({ session }) => {
+const ProfilePage = () => {
     const [loading, setLoading] = useState(true);
     const [username, setUsername] = useState('');
     const [avatar_url, setAvatarUrl] = useState(null);
@@ -23,35 +22,35 @@ const ProfilePage = ({ session }) => {
 
     useEffect(() => {
         getProfile()
-    }, [session]);
+    }, []);
 
-    const updateProfile = async (e) => {
-        e.preventDefault();
-        try {
-            setLoading(true);
-            const user = supabase.auth.user()
+    // const updateProfile = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         setLoading(true);
+    //         const user = supabase.auth.user()
 
-            const updates = {
-                id: user.id,
-                Username: username,
-                Avatar_url: avatar_url,
-            }
+    //         const updates = {
+    //             id: user.id,
+    //             Username: username,
+    //             Avatar_url: avatar_url,
+    //         }
 
-            let { error } = await supabase
-                .from('profiles')
-                .upsert(updates, {
-                    returning: 'minimal', // Don't return the value after inserting
-                })
+    //         let { error } = await supabase
+    //             .from('profiles')
+    //             .upsert(updates, {
+    //                 returning: 'minimal', // Don't return the value after inserting
+    //             })
 
-            if (error) {
-                throw error
-            }
-        } catch (error) {
-            alert(error.message)
-        } finally {
-            setLoading(false)
-        }
-    };
+    //         if (error) {
+    //             throw error
+    //         }
+    //     } catch (error) {
+    //         alert(error.message)
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // };
 
     const getProfile = async () => {
         try {
@@ -112,7 +111,6 @@ const ProfilePage = ({ session }) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.container}>
                 <Avatar url={avatar_url} />
-                {/* 
                 <Text style={styles.profileDescription}> Name: {username}</Text>
                 <Text style={styles.profileDescription}> Faculty: {faculty}</Text>
                 <Text style={styles.profileDescription}> Age: {age}</Text>
@@ -134,14 +132,14 @@ const ProfilePage = ({ session }) => {
                         horizontal={true}
                         ListHeaderComponent={item => listHeaderComponent('Preferred Cuisines: ')}
                     />
-                </View> */}
+                </View>
             </View>
             {/* <TouchableOpacity>
                 <Text> Update Profile </Text>
             </TouchableOpacity> */}
             <Button title="Sign Out" onPress={async () => await supabase.auth.signOut()} />
         </SafeAreaView >
-    )
+    )}
 
 const styles = StyleSheet.create({
     container: {
@@ -160,6 +158,6 @@ const styles = StyleSheet.create({
         border: 1,
         marginLeft: 20,
     },
-})
+});
 
 export default ProfilePage;
