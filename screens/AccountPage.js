@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Button,
@@ -8,7 +8,8 @@ import {
 import { supabase } from '../supabase';
 import 'react-native-url-polyfill/auto';
 
-const Account = ({ session }) => {
+
+const Account = ({ session, navigation }) => {
     const [loading, setLoading] = useState(true)
     const [username, setUsername] = useState(null)
     const [website, setWebsite] = useState(null)
@@ -99,7 +100,8 @@ const Account = ({ session }) => {
             <View style={[styles.verticallySpaced, styles.mt20]}>
                 <Button
                     title={loading ? "Loading ..." : "Update"}
-                    onPress={() => updateProfile({ username, website, avatar_url })}
+                    //onPress={() => updateProfile({ username, website, avatar_url })}
+                    onPress={() => navigation.navigate("Home Page")}
                     disabled={loading}
                 />
             </View>

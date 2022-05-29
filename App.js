@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { supabase } from './supabase'
 import AuthNavigation from './Navigation/AuthNavigation'
-import AccountPage from './screens/AccountPage'
-import ProfilePage from './screens/ProfilePage'
+import HomeNavigation from './Navigation/HomeNavigation'
+import 'react-native-gesture-handler'
 
 const App = () => {
     const [session, setSession] = useState(null)
@@ -18,7 +18,7 @@ const App = () => {
 
     return (
         <View style={styles.container}>
-            {!session ? <AuthNavigation /> : <ProfilePage session={session} />}
+            {!session ? <AuthNavigation /> : <HomeNavigation />}
         </View>
     )
 }
@@ -26,7 +26,7 @@ const App = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
+    }, 
 })
 
 export default App;

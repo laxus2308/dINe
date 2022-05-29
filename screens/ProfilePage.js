@@ -86,6 +86,7 @@ const ProfilePage = ({ session }) => {
         }
     }
 
+
     const createProfile = async () => {
         const user = supabase.auth.user()
 
@@ -141,7 +142,6 @@ const ProfilePage = ({ session }) => {
             <Button title="Sign Out" onPress={async () => await supabase.auth.signOut()} />
         </SafeAreaView >
     )
-}
 
 const styles = StyleSheet.create({
     container: {
