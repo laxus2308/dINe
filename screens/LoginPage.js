@@ -30,7 +30,7 @@ const LoginPage = ({ navigation }) => {
     } catch (error) {
       alert(error.error_description || error.message)
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
