@@ -20,17 +20,15 @@ const LoginPage = ({ navigation }) => {
   const signInWithEmailAndPassword = async (e) => {
     e.preventDefault()
     try {
-      setLoading(true)
       const { error } = await supabase.auth.signIn({
         email: email,
         password: password,
       })
       if (error) throw error
-      alert('Logged in!')
     } catch (error) {
       alert(error.error_description || error.message)
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
