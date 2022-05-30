@@ -10,7 +10,7 @@ import {
 import Avatar from '../components/Avatar';
 import { supabase } from '../supabase';
 
-const ProfilePage = () => {
+const ProfilePage = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const [username, setUsername] = useState('');
     const [avatar_url, setAvatarUrl] = useState(null);
@@ -24,33 +24,37 @@ const ProfilePage = () => {
         getProfile()
     }, []);
 
-    // const updateProfile = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         setLoading(true);
-    //         const user = supabase.auth.user()
+    const updateProfile = async (e) => {
+        e.preventDefault();
+        try {
+            setLoading(true);
+            const user = supabase.auth.user()
 
-    //         const updates = {
-    //             id: user.id,
-    //             Username: username,
-    //             Avatar_url: avatar_url,
-    //         }
+            const updates = {
+                id: user.id,
+                Username: username,
+                Faculty: faculty,
+                Age: age,
+                Dietary, dietary,
+                Interests, interests,
+                Cuisines, cuisines,
+            }
 
-    //         let { error } = await supabase
-    //             .from('profiles')
-    //             .upsert(updates, {
-    //                 returning: 'minimal', // Don't return the value after inserting
-    //             })
+            let { error } = await supabase
+                .from('profiles')
+                .upsert(updates, {
+                    returning: 'minimal', // Don't return the value after inserting
+                })
 
-    //         if (error) {
-    //             throw error
-    //         }
-    //     } catch (error) {
-    //         alert(error.message)
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // };
+            if (error) {
+                throw error
+            }
+        } catch (error) {
+            alert(error.message)
+        } finally {
+            setLoading(false)
+        }
+    };
 
     const getProfile = async () => {
         try {
@@ -107,6 +111,10 @@ const ProfilePage = () => {
         </Text>
     )
 
+    const pressHandler = () => {
+        navigation.navigate('UpdateProfilePage', {})
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.container}>
@@ -134,12 +142,13 @@ const ProfilePage = () => {
                     />
                 </View>
             </View>
-            {/* <TouchableOpacity>
+            <TouchableOpacity onPress={pressHandler}>
                 <Text> Update Profile </Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
             <Button title="Sign Out" onPress={async () => await supabase.auth.signOut()} />
         </SafeAreaView >
-    )}
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
