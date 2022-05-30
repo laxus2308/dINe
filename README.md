@@ -10,9 +10,10 @@
 2. Clone this repository 
 
 3. Run these commands in the terminal in the directory containing the file App.js
+    ```
     npm i
     npm start
-    
+    ```
 4. Scan the QR code and the app should load and run on your mobile devices
 
 
