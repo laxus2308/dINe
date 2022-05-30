@@ -1,5 +1,4 @@
 import React from 'react';
-import AccountPage from '../screens/AccountPage';
 import HomePage from '../screens/HomePage';
 import ProfilePage from '../screens/ProfilePage';
 import ChatPage from '../screens/ChatPage';
@@ -25,13 +24,6 @@ const HomeNavigation = () => {
                         backgroundColor: 'grey', height: 60,
                     }
                 }}>
-                <Stack.Screen
-                    name='Account Page'
-                    component={AccountPage}
-                    options={{
-                        title: "Account Page"
-                    }}
-                />
                 <Stack.Screen
                     name='Home Page'
                     component={TabRoutes}
@@ -61,7 +53,7 @@ const DrawerRoutes = () => {
 const TabRoutes = () => {
     return (
         <Tab.Navigator>
-            <Tab.Screen name="Home" component={DrawerRoutes} options={{
+            <Tab.Screen name="Home Screen" component={DrawerRoutes} options={{
                 headerShown: false, tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="home" color={color} size={size} />
                 ),

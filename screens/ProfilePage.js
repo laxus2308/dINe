@@ -137,9 +137,9 @@ const ProfilePage = () => {
             {/* <TouchableOpacity>
                 <Text> Update Profile </Text>
             </TouchableOpacity> */}
-            <Button title="Sign Out" onPress={async () => await supabase.auth.signOut()} />
         </SafeAreaView >
-    )}
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
