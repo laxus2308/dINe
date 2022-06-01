@@ -14,7 +14,7 @@
     npm i
     npm start
     ```
-4. Scan the QR code and the app should load and run on your mobile devices
+4. Install Expo Go from the App Store or Play Store. Scan the QR code using Expo Go and the app should load and run on your mobile devices
 
 
 
