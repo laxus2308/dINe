@@ -4,6 +4,7 @@ import { supabase } from './supabase'
 import AuthNavigation from './Navigation/AuthNavigation'
 import HomeNavigation from './Navigation/HomeNavigation'
 import 'react-native-gesture-handler'
+import 'react-native-url-polyfill/auto'
 
 const App = () => {
     const [session, setSession] = useState(null)
@@ -26,7 +27,7 @@ const App = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    }, 
+    },
 })
 
 export default App;
