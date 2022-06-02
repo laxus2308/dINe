@@ -9,22 +9,22 @@ const Stack = createNativeStackNavigator();
 
 const ProfileNavigation = () => {
     return (
-        <NavigationContainer>
-            <Stack.Navigator
-                screenOptions={{
-                    headerStyle: {
-                        backgroundColor: 'grey', height: 60,
-                    }
-                }}>
-                <Stack.Screen
-                    component={ProfilePage}
-                />
-                <Stack.Screen
-                    name='UpdateProfilePage'
-                    component={UpdateProfilePage}
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: 'grey', height: 60,
+                }
+            }}>
+            <Stack.Screen
+                name='Profile Page'
+                component={ProfilePage}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name='Update Profile Page'
+                component={UpdateProfilePage}
+            />
+        </Stack.Navigator>
     )
 }
 

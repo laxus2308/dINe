@@ -3,7 +3,7 @@ import {
     View,
     Text,
     StyleSheet,
-    Button,
+    TouchableOpacity,
     SafeAreaView,
     FlatList,
 } from 'react-native';
@@ -111,9 +111,7 @@ const ProfilePage = ({ navigation }) => {
         </Text>
     )
 
-    const pressHandler = () => {
-        navigation.navigate('UpdateProfilePage', {})
-    }
+    const pressHandler = () => { navigation.navigate('Update Profile Page') }
 
     return (
         <SafeAreaView style={styles.container}>
