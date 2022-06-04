@@ -106,7 +106,7 @@ const Avatar = ({ url }) => {
                 />
             )}
             <TouchableOpacity
-                style={styles.loginButton}
+                style={styles.Button}
                 onPress={() => pickImage()}>
                 <Text> Import from gallery </Text>
             </TouchableOpacity>
@@ -125,10 +125,10 @@ const styles = StyleSheet.create({
         height: 200,
         resizeMode: 'contain',
     },
-    loginButton: {
-        width: "80%",
+    Button: {
         borderRadius: 25,
         height: 50,
+        padding: 10,
         alignItems: "center",
         justifyContent: "center",
         marginTop: 10,

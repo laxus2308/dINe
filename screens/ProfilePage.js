@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Avatar from '../components/Avatar';
 import { supabase } from '../supabase';
+import { useIsFocused } from '@react-navigation/native';
 
 const ProfilePage = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
@@ -20,41 +21,11 @@ const ProfilePage = ({ navigation }) => {
     const [interests, setInterests] = useState('');
     const [cuisines, setCuisines] = useState('');
 
+    const isFocused = useIsFocused();
+
     useEffect(() => {
         getProfile()
-    }, []);
-
-    const updateProfile = async (e) => {
-        e.preventDefault();
-        try {
-            setLoading(true);
-            const user = supabase.auth.user()
-
-            const updates = {
-                id: user.id,
-                Username: username,
-                Faculty: faculty,
-                Age: age,
-                Dietary, dietary,
-                Interests, interests,
-                Cuisines, cuisines,
-            }
-
-            let { error } = await supabase
-                .from('profiles')
-                .upsert(updates, {
-                    returning: 'minimal', // Don't return the value after inserting
-                })
-
-            if (error) {
-                throw error
-            }
-        } catch (error) {
-            alert(error.message)
-        } finally {
-            setLoading(false)
-        }
-    };
+    }, [isFocused]);
 
     const getProfile = async () => {
         try {
@@ -111,7 +82,9 @@ const ProfilePage = ({ navigation }) => {
         </Text>
     )
 
-    const pressHandler = () => { navigation.navigate('Update Profile Page') }
+    const pressHandler = () => {
+        navigation.navigate('Update Profile Page')
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -120,6 +93,7 @@ const ProfilePage = ({ navigation }) => {
                 <Text style={styles.profileDescription}> Name: {username}</Text>
                 <Text style={styles.profileDescription}> Faculty: {faculty}</Text>
                 <Text style={styles.profileDescription}> Age: {age}</Text>
+                <Text style={styles.profileDescription}> Dietary: {dietary}</Text>
                 <View style={{ height: 70 }}>
                     <FlatList
                         style={{ flex: 1 }}
@@ -139,10 +113,11 @@ const ProfilePage = ({ navigation }) => {
                         ListHeaderComponent={item => listHeaderComponent('Preferred Cuisines: ')}
                     />
                 </View>
+                <TouchableOpacity onPress={pressHandler} style={styles.updateProfileButoon}>
+                    <Text> Update Profile </Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={pressHandler}>
-                <Text> Update Profile </Text>
-            </TouchableOpacity>
+
         </SafeAreaView >
     )
 }
@@ -164,6 +139,15 @@ const styles = StyleSheet.create({
         border: 1,
         marginLeft: 20,
     },
+    updateProfileButoon: {
+        marginTop: 30,
+        backgroundColor: "#ffff00",
+        borderRadius: 10,
+        height: 50,
+        alignContent: 'center',
+        justifyContent: 'center',
+        padding: 10,
+    }
 });
 
 export default ProfilePage;
