@@ -1,7 +1,7 @@
 import React from 'react';
-import AccountPage from '../screens/AccountPage';
 import HomePage from '../screens/HomePage';
 import ProfilePage from '../screens/ProfilePage';
+import ProfileNavigation from './ProfileNavigation';
 import ChatPage from '../screens/ChatPage';
 import RequestBoard from '../screens/RequestBoard';
 import MatchingPage from '../screens/MatchingPage';
@@ -29,13 +29,6 @@ const HomeNavigation = () => {
                     }
                 }}>
                 <Stack.Screen
-                    name='Account Page'
-                    component={AccountPage}
-                    options={{
-                        title: "Account Page"
-                    }}
-                />
-                <Stack.Screen
                     name='Home Page'
                     component={TabRoutes}
                     options={{ headerShown: false }}
@@ -56,7 +49,7 @@ const DrawerRoutes = () => {
             )
         }}>
             <Drawer.Screen name="Home" component={HomePage} />
-            <Drawer.Screen name="Profile" component={ProfilePage} />
+            <Drawer.Screen name="Profile" component={ProfileNavigation} />
         </Drawer.Navigator>
     );
 }

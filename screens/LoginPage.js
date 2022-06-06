@@ -51,7 +51,7 @@ const LoginPage = ({ navigation }) => {
         <AuthTextInput
           value={password}
           textHandler={(password) => setPassword(password)}
-          secureTextEntry
+          secureTextEntry={true}
           placeholder="Password"
         />
         <AuthButton

@@ -3,14 +3,15 @@ import {
     View,
     Text,
     StyleSheet,
-    Button,
+    TouchableOpacity,
     SafeAreaView,
     FlatList,
 } from 'react-native';
 import Avatar from '../components/Avatar';
 import { supabase } from '../supabase';
+import { useIsFocused } from '@react-navigation/native';
 
-const ProfilePage = () => {
+const ProfilePage = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const [username, setUsername] = useState('');
     const [avatar_url, setAvatarUrl] = useState(null);
@@ -20,37 +21,11 @@ const ProfilePage = () => {
     const [interests, setInterests] = useState('');
     const [cuisines, setCuisines] = useState('');
 
+    const isFocused = useIsFocused();
+
     useEffect(() => {
         getProfile()
-    }, []);
-
-    // const updateProfile = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         setLoading(true);
-    //         const user = supabase.auth.user()
-
-    //         const updates = {
-    //             id: user.id,
-    //             Username: username,
-    //             Avatar_url: avatar_url,
-    //         }
-
-    //         let { error } = await supabase
-    //             .from('profiles')
-    //             .upsert(updates, {
-    //                 returning: 'minimal', // Don't return the value after inserting
-    //             })
-
-    //         if (error) {
-    //             throw error
-    //         }
-    //     } catch (error) {
-    //         alert(error.message)
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // };
+    }, [isFocused]);
 
     const getProfile = async () => {
         try {
@@ -107,6 +82,10 @@ const ProfilePage = () => {
         </Text>
     )
 
+    const pressHandler = () => {
+        navigation.navigate('Update Profile Page')
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.container}>
@@ -114,6 +93,7 @@ const ProfilePage = () => {
                 <Text style={styles.profileDescription}> Name: {username}</Text>
                 <Text style={styles.profileDescription}> Faculty: {faculty}</Text>
                 <Text style={styles.profileDescription}> Age: {age}</Text>
+                <Text style={styles.profileDescription}> Dietary: {dietary}</Text>
                 <View style={{ height: 70 }}>
                     <FlatList
                         style={{ flex: 1 }}
@@ -133,13 +113,14 @@ const ProfilePage = () => {
                         ListHeaderComponent={item => listHeaderComponent('Preferred Cuisines: ')}
                     />
                 </View>
+                <TouchableOpacity onPress={pressHandler} style={styles.updateProfileButoon}>
+                    <Text> Update Profile </Text>
+                </TouchableOpacity>
             </View>
-            {/* <TouchableOpacity>
-                <Text> Update Profile </Text>
-            </TouchableOpacity> */}
-            <Button title="Sign Out" onPress={async () => await supabase.auth.signOut()} />
+
         </SafeAreaView >
-    )}
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -158,6 +139,15 @@ const styles = StyleSheet.create({
         border: 1,
         marginLeft: 20,
     },
+    updateProfileButoon: {
+        marginTop: 30,
+        backgroundColor: "#ffff00",
+        borderRadius: 10,
+        height: 50,
+        alignContent: 'center',
+        justifyContent: 'center',
+        padding: 10,
+    }
 });
 
 export default ProfilePage;
