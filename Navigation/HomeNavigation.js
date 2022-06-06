@@ -7,46 +7,54 @@ import RequestBoard from '../screens/RequestBoard';
 import MatchingPage from '../screens/MatchingPage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RequestNavigation from './RequestNavigation';
 import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 import Styles from '../Style';
+import { supabase } from '../supabase';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 const HomeNavigation = () => {
-  return (
-    <NavigationContainer>
-        <Stack.Navigator
-            screenOptions={{
-                headerStyle: {
-                    backgroundColor: 'grey', height: 60,
-                }
-            }}>
-            <Stack.Screen
-                name='Account Page'
-                component={AccountPage}
-                options={{
-                    title: "Account Page"
-            }}
-            />
-            <Stack.Screen
-                name='Home Page'
-                component={TabRoutes}
-                options={{ headerShown: false }}
-            />
-        </Stack.Navigator>
-    </NavigationContainer>
-  );
+    return (
+        <NavigationContainer>
+            <Stack.Navigator
+                screenOptions={{
+                    headerStyle: {
+                        backgroundColor: 'grey', height: 60,
+                    }
+                }}>
+                <Stack.Screen
+                    name='Account Page'
+                    component={AccountPage}
+                    options={{
+                        title: "Account Page"
+                    }}
+                />
+                <Stack.Screen
+                    name='Home Page'
+                    component={TabRoutes}
+                    options={{ headerShown: false }}
+                />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
 }
 
 const DrawerRoutes = () => {
     return (
-        <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Navigator initialRouteName="Home" drawerContent={props => {
+            return (
+                <DrawerContentScrollView {...props} >
+                    <DrawerItemList {...props} />
+                    <DrawerItem label="Logout" onPress={async () => await supabase.auth.signOut()} />
+                </DrawerContentScrollView>
+            )
+        }}>
             <Drawer.Screen name="Home" component={HomePage} />
             <Drawer.Screen name="Profile" component={ProfilePage} />
         </Drawer.Navigator>
@@ -73,8 +81,8 @@ const TabRoutes = () => {
             <MaterialCommunityIcons name="chat" color={color} size={size}/>
         ), }} />
       </Tab.Navigator>
-    );
-}
+    )}
+
 
 const styles = StyleSheet.create({
     header: {
