@@ -22,7 +22,7 @@ const ProfileNavigation = () => {
             <Stack.Screen
                 name='Update Profile Page'
                 component={UpdateProfilePage}
-            // options={{ headerShown: false }}
+                options={{ headerShown: false }}
             />
         </Stack.Navigator>
     )
