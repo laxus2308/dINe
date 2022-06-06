@@ -52,14 +52,26 @@ const Avatar = ({ url }) => {
         try {
             setUploading(true)
             const user = supabase.auth.user()
+
+            const url = await getExistingImage();
+            if (url) {
+                const { data, error: deleteError } = await supabase.storage
+                    .from('avatars')
+                    .remove([url + '.png'])
+                console.log(data)
+                console.log(deleteError)
+                if (deleteError) throw deleteError
+            }
+
             const filePath = `public/${user.id}/${Math.random()}`
             const { error: uploadError } = await supabase.storage
                 .from('avatars')
                 .upload(filePath, decode(base64File), {
-                    contentType: 'image/png'
+                    contentType: 'image/png',
+                    // upsert: 'false'
                 })
 
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('profiles')
                 .update({ Avatar_url: filePath })
                 .match({ id: user.id })
@@ -75,6 +87,22 @@ const Avatar = ({ url }) => {
             alert(error.message)
         } finally {
             setUploading(false)
+        }
+    }
+
+    const getExistingImage = async () => {
+        try {
+            const user = supabase.auth.user()
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('Avatar_url')
+                .match({ id: user.id })
+            if (error) {
+                throw error
+            }
+            return data[0].Avatar_url
+        } catch (error) {
+            alert(error.message)
         }
     }
 
