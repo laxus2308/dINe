@@ -16,7 +16,7 @@
     ```
 4. Install Expo Go from the App Store or Play Store. Scan the QR code using Expo Go and the app should load and run on your mobile devices
 
-
+5. Create an account via the sign up, click on the link sent to your email and you will be verified. Even though the link leads you to an error page, you can login to the app now.
 
 ## **Current Features**
 
