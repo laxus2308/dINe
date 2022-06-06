@@ -13,6 +13,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ScreenStackHeaderRightView } from 'react-native-screens';
+import { StyleSheet } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +22,7 @@ const RequestNavigation = () => {
           <Stack.Navigator
               screenOptions={{
                   headerStyle: {
-                      backgroundColor: 'grey', height: 60,
+                      backgroundColor: 'white', height: 60,
                   }
               }}>
               <Stack.Screen
@@ -29,14 +30,18 @@ const RequestNavigation = () => {
                   component={RequestBoard}
                   options={{
                       headerTitle: "Request Board",
+              }}/>
+              <Stack.Screen
+                  name='Create Request'
+                  component={CreateRequest}
+                  options={{
+                      headerTitle: "CreateRequest",
                       headerShown:false
               }}
               />
           </Stack.Navigator>
     );
   }
-
-
 
 
 export default RequestNavigation

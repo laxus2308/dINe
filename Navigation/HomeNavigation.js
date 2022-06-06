@@ -57,16 +57,12 @@ const DrawerRoutes = () => {
 const TabRoutes = () => {
     return (
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={DrawerRoutes} options={{ headerShown: false, tabBarIcon: ({ color, size }) => (
+        <Tab.Screen name="Home Screen" component={DrawerRoutes} options={{ headerShown: false, tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),}}/>
-        <Tab.Screen name="Request Board" style={styles.header} component={RequestNavigation} options={{tabBarIcon: ({ color, size }) => (
+        <Tab.Screen name="Request Screen" style={styles.header} component={RequestNavigation} options={{tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="clipboard-list" color={color} size={size} />
-          ), headerRight: () => (
-            <TouchableOpacity style={styles.button} onPress={()=>{alert("you clicked me")}}>
-                <Image style={styles.image} source={require("../assets/create.png")}/>
-            </TouchableOpacity>
-        ),}}/> 
+          ), headerShown: false}}/> 
         <Tab.Screen name="Matching" component={MatchingPage} options={{tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account-group" color={color} size={size}/>
         ), }} />
@@ -81,18 +77,6 @@ const styles = StyleSheet.create({
     header: {
         flex:1,
     },
-
-    button: {
-        flex:1,
-    },
-
-    image: {
-        flex: 0.5,
-        resizeMode:'contain',
-        marginTop:'10%',
-        marginHorizontal:'-125%',
-        flexDirection:'row'
-    }
 })
 
 

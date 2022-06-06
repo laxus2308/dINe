@@ -5,10 +5,13 @@ import {
     Text,
     FlatList,
     Button,
+    TouchableOpacity,
+    Image
   } from 'react-native';
 import Request from '../components/Request.js';
 import { getRequests } from '../components/RequestList.js';
 import { supabase } from '../supabase.js';
+import CreateRequest from './CreateRequest.js';
 
 const getData = async() => {
   const {data, error} = await supabase.from('Requests').select().order('Date', { ascending: true }).order('Time', { ascending: true });
@@ -17,6 +20,16 @@ const getData = async() => {
 
 
 const RequestBoard = ({navigation}) => {
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('Create Request');}}>
+            <Image style={styles.image} source={require("../assets/create.png")}/>
+        </TouchableOpacity>
+    )
+    })
+  }, [navigation])
 
   const renderRequest = ({item:request}) => {
     return (
@@ -64,7 +77,20 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     justifyContent: "space-around"
-  }
+  },
+
+  image: {
+    padding: 10,
+    margin: '10%',
+    marginLeft: '130%',
+    height: '60%',
+    width: '65%',
+    resizeMode: 'stretch',
+  },
+
+  button: {
+      flex:1/3
+  },
 
 });
 
