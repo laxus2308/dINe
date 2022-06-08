@@ -9,9 +9,26 @@ import {
 } from 'react-native';
 import Avatar from '../components/Avatar';
 import { supabase } from '../supabase';
-import { useIsFocused } from '@react-navigation/native';
 
 const ProfilePage = ({ navigation }) => {
+    const listenForChanges = async () => {
+        const sub = await supabase
+            .from('profiles')
+            .on('*', async (update) => {
+                await getProfile()
+            })
+            .subscribe();
+        return sub;
+    }
+
+    useEffect(() => {
+        const unsub = getProfile().then(() => {
+            return listenForChanges();
+        })
+
+        return async () => await unsub;
+    }, [])
+
     const [loading, setLoading] = useState(true);
     const [username, setUsername] = useState('');
     const [avatar_url, setAvatarUrl] = useState(null);
@@ -20,12 +37,6 @@ const ProfilePage = ({ navigation }) => {
     const [dietary, setDietary] = useState('');
     const [interests, setInterests] = useState('');
     const [cuisines, setCuisines] = useState('');
-
-    const isFocused = useIsFocused();
-
-    useEffect(() => {
-        getProfile()
-    }, [isFocused]);
 
     const getProfile = async () => {
         try {
