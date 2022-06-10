@@ -3,6 +3,7 @@ import HomePage from '../screens/HomePage';
 import ProfilePage from '../screens/ProfilePage';
 import ProfileNavigation from './ProfileNavigation';
 import ChatPage from '../screens/ChatPage';
+import ChatListPage from '../screens/ChatListPage';
 import RequestBoard from '../screens/RequestBoard';
 import MatchingPage from '../screens/MatchingPage';
 import { NavigationContainer } from '@react-navigation/native';
@@ -76,7 +77,7 @@ const TabRoutes = () => {
                     <MaterialCommunityIcons name="account-group" color={color} size={size} />
                 ),
             }} />
-            <Tab.Screen name="Chat" component={ChatPage} options={{
+            <Tab.Screen name="Chat" component={ChatListPage} options={{
                 tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="chat" color={color} size={size} />
                 ),

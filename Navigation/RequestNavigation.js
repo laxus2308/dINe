@@ -1,9 +1,9 @@
 import React from 'react';
-import {Button} from 'react-native';
+import { Button } from 'react-native';
 import AccountPage from '../screens/AccountPage';
 import HomePage from '../screens/HomePage';
 import ProfilePage from '../screens/ProfilePage';
-import ChatPage from '../screens/ChatPage';
+
 import RequestBoard from '../screens/RequestBoard';
 import CreateRequest from '../screens/CreateRequest'
 import MatchingPage from '../screens/MatchingPage';
@@ -18,26 +18,25 @@ const Stack = createNativeStackNavigator();
 
 const RequestNavigation = () => {
     return (
-          <Stack.Navigator
-              screenOptions={{
-                  headerStyle: {
-                      backgroundColor: 'grey', height: 60,
-                  }
-              }}>
-              <Stack.Screen
-                  name='Request Board'
-                  component={RequestBoard}
-                  options={{
-                      headerTitle: "Request Board",
-                      headerShown:false
-              }}
-              />
-          </Stack.Navigator>
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: 'grey', height: 60,
+                }
+            }}>
+            <Stack.Screen
+                name='Request Board'
+                component={RequestBoard}
+                options={{
+                    headerTitle: "Request Board",
+                    headerShown: false
+                }}
+            />
+        </Stack.Navigator>
     );
-  }
+}
 
 
 
 
 export default RequestNavigation
-  
