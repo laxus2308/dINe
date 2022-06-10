@@ -105,9 +105,9 @@ const ProfilePage = ({ navigation }) => {
                 <Text style={styles.profileDescription}> Faculty: {faculty}</Text>
                 <Text style={styles.profileDescription}> Age: {age}</Text>
                 <Text style={styles.profileDescription}> Dietary: {dietary}</Text>
-                <View style={{ height: 70 }}>
+                <View style={{ height: 70 , marginTop:'5%'}}>
                     <FlatList
-                        style={{ flex: 1 }}
+                        style={styles.flatList}
                         data={interests}
                         renderItem={renderItem}
                         keyExtractor={item => item.toString()}
@@ -116,7 +116,7 @@ const ProfilePage = ({ navigation }) => {
 
                     />
                     <FlatList
-                        style={{ flex: 1 }}
+                        style={styles.flatList}
                         data={cuisines}
                         renderItem={renderItem}
                         keyExtractor={item => item.toString()}
@@ -139,16 +139,17 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     profileDescription: {
-        marginTop: 15,
-        marginBottom: 10,
+        marginTop: '5%',
         alignItems: 'flex-start',
+        alignSelf: 'flex-start',
+        marginLeft: '10%',
     },
     tag: {
         backgroundColor: 'lightblue',
         padding: 5,
-        height: 30,
-        border: 1,
-        marginLeft: 20,
+        height:'80%',
+        borderRadius: 25,
+        marginLeft: 10,
     },
     updateProfileButoon: {
         marginTop: 30,
@@ -158,6 +159,11 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         padding: 10,
+    },
+    flatList : {
+        flex: 1,
+        marginLeft:'10%',
+
     }
 });
 
