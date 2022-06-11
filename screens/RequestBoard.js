@@ -9,15 +9,9 @@ import {
     Image
   } from 'react-native';
 import Request from '../components/Request.js';
-import { getRequests } from '../components/RequestList.js';
+import { getData } from '../components/RequestList.js';
 import { supabase } from '../supabase.js';
-import CreateRequest from './CreateRequest.js';
-
-const getData = async() => {
-  const {data, error} = await supabase.from('Requests').select().order('Date', { ascending: true }).order('Time', { ascending: true });
-  console.log(data);
-}
-
+import CreateRequestPage from './CreateRequestPage.js';
 
 const RequestBoard = ({navigation}) => {
 
@@ -32,6 +26,7 @@ const RequestBoard = ({navigation}) => {
   }, [navigation])
 
   const renderRequest = ({item:request}) => {
+    console.log(requests)
     return (
       <Request {...request} 
         onPress={() => {
@@ -46,15 +41,19 @@ const RequestBoard = ({navigation}) => {
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
-    setRequests(getRequests());
+    const getData = async () => {
+      const newData = await supabase.from('Requests').select().order('Date', { ascending: true }).order('Time', { ascending: true });
+      setRequests([newData]);
+    };
+
     getData();
-  });
+  }, []);
 
   return (
     <FlatList
       style={styles.requestsList}
       contentContainerStyle={styles.requestsListContainer}
-      keyExtractor={(item) => item.id.toString()}
+      keyExtractor={(item) => item.id}
       data={requests}
       renderItem={renderRequest}
       numColumns={2}

@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
 
 const Request = (props) => {
-    const {title, image, onPress, username, date, time} = props;
+    const {date, description, location, pax, time, title, onPress, image} = props;
 
     return (
         <TouchableOpacity style={styles.card} onPress = {onPress}>
@@ -12,9 +12,10 @@ const Request = (props) => {
             />
             <View style={styles.infoContainer}>
                 <Text style={styles.title}>{title}</Text>
+                <Text style={styles.timing}>Location: {location}</Text>
                 <Text style={styles.timing}>Date: {date}</Text>
                 <Text style={styles.timing}>Time: {time}</Text>
-                <Text style={styles.username}>{username}</Text>
+                <Text style={styles.timing}>Pax: {pax}</Text>
             </View>
         </TouchableOpacity>
     )

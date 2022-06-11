@@ -5,7 +5,7 @@ import HomePage from '../screens/HomePage';
 import ProfilePage from '../screens/ProfilePage';
 import ChatPage from '../screens/ChatPage';
 import RequestBoard from '../screens/RequestBoard';
-import CreateRequest from '../screens/CreateRequest'
+import CreateRequestPage from '../screens/CreateRequestPage'
 import MatchingPage from '../screens/MatchingPage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -33,10 +33,9 @@ const RequestNavigation = () => {
               }}/>
               <Stack.Screen
                   name='Create Request'
-                  component={CreateRequest}
+                  component={CreateRequestPage}
                   options={{
-                      headerTitle: "CreateRequest",
-                      headerShown:false
+                      headerTitle: "Create Request",
               }}
               />
           </Stack.Navigator>
