@@ -93,7 +93,7 @@ const ProfilePage = ({ navigation }) => {
         </Text>
     )
 
-    const pressHandler = () => {
+    const goUpdateProfilePage = () => {
         navigation.navigate('Update Profile Page')
     }
 
@@ -124,7 +124,7 @@ const ProfilePage = ({ navigation }) => {
                         ListHeaderComponent={item => listHeaderComponent('Preferred Cuisines: ')}
                     />
                 </View>
-                <TouchableOpacity onPress={pressHandler} style={styles.updateProfileButoon}>
+                <TouchableOpacity onPress={goUpdateProfilePage} style={styles.updateProfileButoon}>
                     <Text> Update Profile </Text>
                 </TouchableOpacity>
             </View>

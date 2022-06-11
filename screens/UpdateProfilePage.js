@@ -54,6 +54,10 @@ const UpdateProfilePage = ({ navigation }) => {
         }
     };
 
+    const goBack = () => {
+        navigation.pop()
+    }
+
     const inputChecker = () => {
         if (username == '') {
             alert("You have yet to input your name!")
@@ -321,6 +325,10 @@ const UpdateProfilePage = ({ navigation }) => {
             <TouchableOpacity style={styles.updateButton} onPress={updateProfile}>
                 <Text> Update Profile </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity style={styles.returnButton} onPress={goBack}>
+                <Text> Return without updating </Text>
+            </TouchableOpacity>
         </View >
 
     )
@@ -355,6 +363,12 @@ const styles = StyleSheet.create({
         zIndex: -1,
         marginTop: '10%'
     },
+    returnButton: {
+        justifyContent: 'center',
+        alignItems: "center",
+        alignSelf: "center",
+        marginTop: '10%',
+    }
 })
 
 

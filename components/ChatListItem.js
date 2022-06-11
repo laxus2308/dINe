@@ -7,10 +7,12 @@ import {
     Text,
 } from 'react-native';
 import { supabase } from '../supabase';
+import { useNavigation } from '@react-navigation/native';
 
 
 const ChatListItem = (props) => {
     const { chatRoom } = props;
+    const navigation = useNavigation();
 
     const getUri = (path) => {
         try {
@@ -24,20 +26,27 @@ const ChatListItem = (props) => {
             alert('Error downloading image: ', error.message)
         }
     }
-    const uri = getUri(chatRoom.lastMessage.url)
+    const uri = getUri(chatRoom.lastMessage.url);
+
+    const enterChat = () => {
+        navigation.navigate('ChatRoomPage', {
+            id: chatRoom.id,
+            name: chatRoom.lastMessage.id,
+        });
+    }
 
     return (
-        <View style={styles.chatMessageContainer}>
+        <TouchableOpacity style={styles.chatMessageContainer} onPress={enterChat}>
             <View style={styles.leftContainer}>
                 <Image source={{ uri: uri }} style={styles.avatar} />
-                <View styles={styles.midContainer}>
+                <View style={styles.midContainer}>
                     <Text style={styles.username}> {chatRoom.lastMessage.id} </Text>
                     <Text style={styles.content} ellipsizeMode='tail'  numberOfLines={1}>{chatRoom.lastMessage.content}</Text>
                 </View>
             </View>
 
             <Text style={styles.time}> {chatRoom.lastMessage.created_at}</Text>
-        </View>
+        </TouchableOpacity>
     )
 
 
@@ -46,6 +55,7 @@ const ChatListItem = (props) => {
 const styles = StyleSheet.create({
     chatMessageContainer: {
         flexDirection: 'row',
+        flex: 1,
         alignSelf: 'flex-start',
         width: '100%',
         justifyContent: 'space-between',
@@ -60,25 +70,24 @@ const styles = StyleSheet.create({
     },
     leftContainer: {
         flexDirection: 'row',
+        flex: 1,
     },
     midContainer: {
-        justifyContent:'space-around',
-
+        flexDirection: 'column',
+        flex: 1,
+        marginLeft: '5%',
+        justifyContent: 'space-evenly',
     },
     username: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        marginLeft: '10%',
-
+        fontSize: 20,
+        fontWeight: 'bold', 
     },
     content: {
-        marginLeft: '15%',
         color: 'grey',
-        
-
     },
     time: {
-
+        marginTop: '8%',
+        marginRight:'3%',
     },
 })
 
