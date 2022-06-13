@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {
     View,
     StyleSheet,
@@ -6,6 +6,8 @@ import {
     Keyboard,
     Text,
     FlatList,
+    KeyboardAvoidingView,
+    ScrollView,
 } from 'react-native';
 import Message from '../components/Message'
 import { supabase } from '../supabase'
@@ -16,14 +18,15 @@ import MessageInput from '../components/MessageInput';
 const ChatRoomPage = () => {
     const route = useRoute();
     const room_id = route.params.id;
+    const flatListRef = useRef();
 
     const [messages, setMessages] = useState(null);
 
     const listenForChanges = () => {
         const mysub = supabase
             .from(`messages:room_id=eq.${room_id}`)
-            .on('*', async (update) => {
-                await getMessages()
+            .on('*',  (payload) => {
+                setMessages(current => [payload.new, ...current])
             })
             .subscribe();
         return mysub;
@@ -47,11 +50,9 @@ const ChatRoomPage = () => {
               created_at
             `)
             .eq('room_id', room_id)
+            .order('created_at', {ascending:false})
             if (error) throw error
-            // console.log(data)
-            // console.log(data[0].avatar_url)
-            // console.log(data[0].avatar_url[0].Avatar_url)
-            // console.log("messages", data)
+            
             setMessages(data)
         } catch(error) {
             console.log("Chat room page", error)
@@ -64,8 +65,9 @@ const ChatRoomPage = () => {
             <FlatList
                 data={messages}
                 renderItem={({ item }) => <Message messageData={item} />}
-                // inverted
+                inverted
                 style={styles.flatList}
+                reference={flatListRef}
             />
             <MessageInput room_id={room_id} />
         </View>
@@ -75,37 +77,8 @@ const ChatRoomPage = () => {
 const styles = StyleSheet.create({
     flatList: {
         height: '90%',
+
     }
 })
 
 export default ChatRoomPage;
-
- // const listenForChanges = async () => {
-    //     const sub = await supabase
-    //         .from('Messages')
-    //         .on('*', async (update) => {
-    //             await loadMessages()
-    //         })
-    //         .subscribe();
-    //     return sub;
-    // }
-
-    // useEffect(() => {
-    //     const unsub = loadMessages().then(() => {
-    //         return listenForChanges();
-    //     })
-
-    //     return async () => await unsub;
-    // }, [])
-
-    // const loadMessages = async ({ sender, receiver }) => {
-    //     // try {
-
-
-    //     //     const { data, error } = await supabase
-    //     //         .from('Messages')
-    //     //         .select()
-    //     // }
-
-
-    // }

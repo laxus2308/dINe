@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         width: '80%',
         borderRadius: 30,
         padding: 10,
-        marginBottom: '2%',
+        marginVertical: '1%',
         marginHorizontal: '2%',
     },
     name: {

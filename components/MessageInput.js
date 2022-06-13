@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
         padding: 8,
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 25,
     },
     textInput: {
         flex: 1,
