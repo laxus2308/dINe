@@ -31,7 +31,7 @@ const MessageInput = (props) => {
             ])
             if(error) throw error
         } catch (error) {
-            console.log(error)
+            console.log('Message input', error)
         } finally {
             setMessage('')
         }

@@ -10,7 +10,6 @@ import {
 import Message from '../components/Message'
 import { supabase } from '../supabase'
 import { useRoute } from '@react-navigation/native';
-import ChatsData from '../ChatsData'
 import MessageInput from '../components/MessageInput';
 
 
@@ -22,7 +21,7 @@ const ChatRoomPage = () => {
 
     const listenForChanges = () => {
         const mysub = supabase
-            .from('messages')
+            .from(`messages:room_id=eq.${room_id}`)
             .on('*', async (update) => {
                 await getMessages()
             })
@@ -47,6 +46,7 @@ const ChatRoomPage = () => {
               sender_id,
               created_at
             `)
+            .eq('room_id', room_id)
             if (error) throw error
             // console.log(data)
             // console.log(data[0].avatar_url)
@@ -54,7 +54,7 @@ const ChatRoomPage = () => {
             // console.log("messages", data)
             setMessages(data)
         } catch(error) {
-            console.log(error)
+            console.log("Chat room page", error)
         }   
     }
       

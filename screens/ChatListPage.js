@@ -10,7 +10,6 @@ import {
   FlatList,
 } from 'react-native';
 import ChatListItem from '../components/ChatListItem';
-// import ChatRoomData from '../ChatRoomData';
 import { supabase } from '../supabase';
 
 const ChatListPage = () => {
@@ -61,7 +60,7 @@ const ChatListPage = () => {
       // console.log("chat list", data)
       setChatRooms(data)
     } catch (error) {
-      console.log(error)
+      console.log("Chat list page", error)
     }
    
   }

@@ -29,7 +29,7 @@ const Message = (props) => {
             setUsername(username.Username)
             // return username;
         } catch(error) {
-            console.log(error)
+            console.log('Message', error)
         }
      
 
