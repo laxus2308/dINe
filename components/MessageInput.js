@@ -6,13 +6,35 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { supabase } from '../supabase';
 
 
-const MessageInput = () => {
+const MessageInput = (props) => {
     const [message, setMessage] = useState('');
+    const {room_id} = props;
 
-    const sendMessgae = () => {
-        console.log(message);
+    const sendMessage = async () => {
+        if (!message) {
+            alert("Can't send empty messages")
+            return
+        } 
+        try {
+            const user = supabase.auth.user()
+            const { error } = await supabase
+            .from('messages')
+            .insert([
+                { 
+                room_id:room_id,
+                content: message,
+                sender_id: user.id,
+                }
+            ])
+            if(error) throw error
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setMessage('')
+        }
     }
 
     return (
@@ -26,7 +48,7 @@ const MessageInput = () => {
                 onChangeText={(message) => setMessage(message)}
                 // multiline
             />
-            <TouchableOpacity  style={styles.icon} onPress={sendMessgae}>
+            <TouchableOpacity  style={styles.icon} onPress={sendMessage}>
                 <MaterialCommunityIcons name='send' size ={30}/>
             </TouchableOpacity>
         </View>

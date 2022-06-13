@@ -11,8 +11,8 @@ import Avatar from '../components/Avatar';
 import { supabase } from '../supabase';
 
 const ProfilePage = ({ navigation }) => {
-    const listenForChanges = async () => {
-        const sub = await supabase
+    const listenForChanges = () => {
+        const sub = supabase
             .from('profiles')
             .on('*', async (update) => {
                 await getProfile()

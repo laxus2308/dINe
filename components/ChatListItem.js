@@ -26,12 +26,12 @@ const ChatListItem = (props) => {
             alert('Error downloading image: ', error.message)
         }
     }
-    const uri = getUri(chatRoom.lastMessage.url);
+    const uri = getUri(chatRoom.avatar_url[0].Avatar_url);
 
     const enterChat = () => {
         navigation.navigate('ChatRoomPage', {
             id: chatRoom.id,
-            name: chatRoom.lastMessage.id,
+            name: chatRoom.name,
         });
     }
 
@@ -40,12 +40,12 @@ const ChatListItem = (props) => {
             <View style={styles.leftContainer}>
                 <Image source={{ uri: uri }} style={styles.avatar} />
                 <View style={styles.midContainer}>
-                    <Text style={styles.username}> {chatRoom.lastMessage.id} </Text>
-                    <Text style={styles.content} ellipsizeMode='tail'  numberOfLines={1}>{chatRoom.lastMessage.content}</Text>
+                    <Text style={styles.username}> {chatRoom.name} </Text>
+                    {/* <Text style={styles.content} ellipsizeMode='tail'  numberOfLines={1}>{chatRoom.lastMessage.content}</Text> */}
                 </View>
             </View>
 
-            <Text style={styles.time}> {chatRoom.lastMessage.created_at}</Text>
+            {/* <Text style={styles.time}> {chatRoom.lastMessage.created_at}</Text> */}
         </TouchableOpacity>
     )
 

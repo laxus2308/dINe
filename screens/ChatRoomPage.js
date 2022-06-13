@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {
     View,
     StyleSheet,
@@ -15,20 +15,60 @@ import MessageInput from '../components/MessageInput';
 
 
 const ChatRoomPage = () => {
-
     const route = useRoute();
+    const room_id = route.params.id;
+
+    const [messages, setMessages] = useState(null);
+
+    const listenForChanges = () => {
+        const mysub = supabase
+            .from('messages')
+            .on('*', async (update) => {
+                await getMessages()
+            })
+            .subscribe();
+        return mysub;
+    }
+    
+    useEffect(() => {
+        const unsub = getMessages().then(() => {
+            return listenForChanges();
+        })
+
+    return async () => await unsub;
+    }, [])
+    
+    const getMessages = async () => {
+        try {
+            const { data, error } = await supabase
+            .from('messages')
+            .select(`
+              content,
+              sender_id,
+              created_at
+            `)
+            if (error) throw error
+            // console.log(data)
+            // console.log(data[0].avatar_url)
+            // console.log(data[0].avatar_url[0].Avatar_url)
+            // console.log("messages", data)
+            setMessages(data)
+        } catch(error) {
+            console.log(error)
+        }   
+    }
+      
 
     return (
         <View>
             <FlatList
-                data={ChatsData.messages}
+                data={messages}
                 renderItem={({ item }) => <Message messageData={item} />}
                 // inverted
                 style={styles.flatList}
             />
-            <MessageInput />
+            <MessageInput room_id={room_id} />
         </View>
-
     )
 }
 

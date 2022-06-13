@@ -1,18 +1,41 @@
-import React from 'react'
+import React, {useState}from 'react'
 import {
     View,
     StyleSheet,
     Text,
-    FlatList,
 } from 'react-native';
 import moment from 'moment';
+import { supabase } from '../supabase';
+
 
 const Message = (props) => {
     const {messageData} = props;
+    const [username, setUsername] = useState('')
 
     const isMyMessage = () => {
-        return messageData.user.id === 'u1';
+        return messageData.sender_id === supabase.auth.user().id;
     }
+
+    const get_username = async () => {
+        try {
+            const { data: username, error } = await supabase
+            .from('profiles')
+            .select('Username')
+            .eq('id', messageData.sender_id)
+            .single()
+    
+            if (error) throw error
+            // console.log(error)
+            setUsername(username.Username)
+            // return username;
+        } catch(error) {
+            console.log(error)
+        }
+     
+
+    }
+    get_username()
+    
 
     return (
         <View style={[
@@ -20,7 +43,7 @@ const Message = (props) => {
             { backgroundColor: isMyMessage() ? 'lightyellow' : 'lightgreen' ,
                 alignSelf: isMyMessage() ? 'flex-end' : 'flex-start'}
         ]}>          
-            <Text style={styles.name}> {messageData.user.username}</Text>
+            <Text style={styles.name}> {username}</Text>
             <Text style={styles.content}> {messageData.content}</Text>
             <Text style={styles.time}> {moment(messageData.created_at).fromNow()} </Text>
         </View>
