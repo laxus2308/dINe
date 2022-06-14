@@ -9,11 +9,11 @@ import {
     Image
   } from 'react-native';
 import Request from '../components/Request.js';
-import { getData } from '../components/RequestList.js';
 import { supabase } from '../supabase.js';
-import CreateRequestPage from './CreateRequestPage.js';
 
 const RequestBoard = ({navigation}) => {
+
+  const [requests, setRequests] = useState([]);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -25,37 +25,56 @@ const RequestBoard = ({navigation}) => {
     })
   }, [navigation])
 
-  const renderRequest = ({item:request}) => {
-    console.log(requests)
-    return (
-      <Request {...request} 
-        onPress={() => {
-          navigation.navigate('RequestDetails', {
-          requestId: request.id,
-        });
-      }}
-      />
-    );
+  const listenForChanges = () => {
+    const mysub = supabase
+        .from('Requests')
+        .on('*', async (update) => {
+            await getRequests()
+        })
+        .subscribe();
+    return mysub;
   }
 
-  const [requests, setRequests] = useState([]);
-
   useEffect(() => {
-    const getData = async () => {
-      const newData = await supabase.from('Requests').select().order('Date', { ascending: true }).order('Time', { ascending: true });
-      setRequests([newData]);
-    };
+      const unsub = getRequests().then(() => {
+          return listenForChanges();
+      })
 
-    getData();
-  }, []);
+    return async () => await unsub;
+  }, [])
+
+
+  const getRequests = async () => {
+    try {
+      const { data, error } = await supabase.from('Requests')
+      .select(`
+      id,
+      key,
+      username:profiles (Username),
+      created_at,
+      Location,
+      Time,
+      Date,
+      Pax,
+      Description,
+      Title,
+      Request_url
+      `)
+      .order('Date', { ascending: true }).order('Time', { ascending: true });
+      if (error) throw error
+      setRequests(data)
+    } catch (error) {
+      console.log("Request page", error)
+    }
+   
+  }
 
   return (
     <FlatList
       style={styles.requestsList}
       contentContainerStyle={styles.requestsListContainer}
-      keyExtractor={(item) => item.id}
       data={requests}
-      renderItem={renderRequest}
+      renderItem={({item}) => <Request req = {item}/>}
       numColumns={2}
       columnWrapperStyle={styles.row}
     />

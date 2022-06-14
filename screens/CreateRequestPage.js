@@ -1,27 +1,34 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
   View,
   StyleSheet,
   TextInput,
   Text, 
-  TouchableOpacity
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
+  ScrollView
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../supabase';
+import RequestImage from '../components/RequestImage';
 
 
-const CreateRequestPage = ({navigation}) => {
+const CreateRequestPage = ({navigation, url}) => {
 
   const [title, setTitle] = useState('');
-  const [image, setImage] = useState('');
+  const [description, setDescription] = useState('');
+  const [image, setImage] = useState(null);
   const [location, setLocation] = useState('');
   const [datePicked, setDate] = useState('Select a date');
   const [timePicked, setTime] = useState('Select a time');
   const [pax, setPax] = useState();
   const [paxOpen, setPaxOpen] = useState(false);
+  const [request_url, setRequestUrl] = useState(null);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -90,8 +97,9 @@ const CreateRequestPage = ({navigation}) => {
             Time: timePicked,
             Date: datePicked,
             Pax: pax,
-            Description: 'test',
+            Description: description,
             Title: title,
+            Request_url: request_url,
         }
 
         let { error } = await supabase
@@ -125,6 +133,8 @@ const CreateRequestPage = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <ScrollView nestedScrollEnabled={true}>
+      <RequestImage url={setRequestUrl} />
       <View style={{ ...styles.verticalComponent, ...styles.bottomSeparator }}>
         <Text style={{ flex: 1 / 4 }}> Title </Text>
           <TextInput
@@ -166,6 +176,15 @@ const CreateRequestPage = ({navigation}) => {
           onConfirm={handleConfirmTime}
           onCancel={hideTimePicker}/>
       </View>
+      <View style={{ ...styles.verticalComponent, ...styles.bottomSeparator }}>
+        <Text style={{ flex: 1 / 3 }}> Description </Text>
+          <TextInput
+              placeholder={"Insert brief description"}
+              value={description}
+              onChangeText={setDescription}
+              style={{ flex: 1 }}
+          />
+      </View>
       <View>
         <Text style={{marginTop: 10, marginLeft: 3}}>No. of people</Text>
           <DropDownPicker
@@ -175,13 +194,16 @@ const CreateRequestPage = ({navigation}) => {
             items={paxData}
             setValue={setPax}
             style={styles.bottomSeparator}
+            listMode="SCROLLVIEW"
+            scrollViewProps={{
+              nestedScrollEnabled: true,}}
           />
       </View>
       <TouchableOpacity style={styles.submitButton} onPress={submitRequest}>
             <Text> Submit </Text>
       </TouchableOpacity>
+      </ScrollView>
     </View>
-
   )
 }
 
@@ -204,29 +226,30 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'grey',
     zIndex: -1,
-},
+}, 
 
-date: {
-  width: "80%",
-  borderRadius: 25,
-  height: 50,
-  alignItems: "center",
-  justifyContent: "center",
-  marginTop: -18,
-  backgroundColor: "#ffff00",
-},
 
-submitButton: {
-  justifyContent: 'center',
-  alignItems: "center",
-  alignSelf: "center",
-  backgroundColor: "#ffff00",
-  width: "80%",
-  borderRadius: 25,
-  height: 50,
-  zIndex: -1,
-  marginTop: '10%'
-},
+  date: {
+    width: "80%",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: -18,
+    backgroundColor: "#ffff00",
+  },
+
+  submitButton: {
+    justifyContent: 'center',
+    alignItems: "center",
+    alignSelf: "center",
+    backgroundColor: "#ffff00",
+    width: "80%",
+    borderRadius: 25,
+    height: 50,
+    zIndex: -1,
+    marginTop: '10%'
+  },
 
 });
 

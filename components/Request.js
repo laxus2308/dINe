@@ -1,21 +1,46 @@
 import React from 'react';
-import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, Image, View, StyleSheet, TouchableOpacity, onPress} from 'react-native';
+
+const getUri = (path) => {
+    try {
+        const { publicURL, error } = supabase.storage.from('requestpics').getPublicUrl(path)
+        console.log(path)
+        console.log(publicURL)
+        
+        if (error) {
+            throw error
+        }
+        return publicURL;
+
+    } catch (error) {
+        alert('Error downloading image: ', error.message)
+    }
+}
+
 
 const Request = (props) => {
-    const {date, description, location, pax, time, title, onPress, image} = props;
+    const {req} = props;
+    //if no url provided
+    let uri;
+    if (req.Request_url == null) {
+        uri = require ('../assets/loid.jpg')
+    } else {
+        uri = getUri(req.Request_url);
+    }
 
     return (
         <TouchableOpacity style={styles.card} onPress = {onPress}>
-            <Image
-                style= {styles.thumb}
-                source={image}
-            />
+            {/* <Image
+                    source={{uri: uri}}
+                    style={styles.thumb}
+                /> */}
             <View style={styles.infoContainer}>
-                <Text style={styles.title}>{title}</Text>
-                <Text style={styles.timing}>Location: {location}</Text>
-                <Text style={styles.timing}>Date: {date}</Text>
-                <Text style={styles.timing}>Time: {time}</Text>
-                <Text style={styles.timing}>Pax: {pax}</Text>
+                <Text style={styles.title}>{req.Title}</Text>
+                <Text style={styles.timing}>Location: {req.Location}</Text>
+                <Text style={styles.timing}>Date: {req.Date}</Text>
+                <Text style={styles.timing}>Time: {req.Time}</Text>
+                <Text style={styles.timing}>Pax: {req.Pax}</Text>
+                <Text style={styles.username}>{req.username.Username}</Text>
             </View>
         </TouchableOpacity>
     )
