@@ -61,15 +61,9 @@ const TabRoutes = () => {
                     <MaterialCommunityIcons name="home" color={color} size={size} />
                 ),
             }} />
-            <Tab.Screen name="Request Screen" style={styles.header} component={RequestNavigation} options={{
-                tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="clipboard-list" color={color} size={size} />
-                ), headerRight: () => (
-                    <TouchableOpacity style={styles.button} onPress={() => { alert("you clicked me") }}>
-                        <Image style={styles.image} source={require("../assets/create.png")} />
-                    </TouchableOpacity>
-                ),
-            }} />
+            <Tab.Screen name="Request Screen" style={styles.header} component={RequestNavigation} options={{tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="clipboard-list" color={color} size={size} />
+          ), headerShown: false}}/> 
             <Tab.Screen name="Matching" component={MatchingPage} options={{
                 tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="account-group" color={color} size={size} />
