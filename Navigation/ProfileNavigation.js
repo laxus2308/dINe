@@ -11,18 +11,17 @@ const ProfileNavigation = () => {
         <Stack.Navigator
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: 'grey', height: 60,
-                }
+                    height: 60,
+                },
+                headerShown: false,
             }}>
             <Stack.Screen
                 name='Profile Page'
                 component={ProfilePage}
-                options={{ headerShown: false }}
             />
             <Stack.Screen
                 name='Update Profile Page'
                 component={UpdateProfilePage}
-            // options={{ headerShown: false }}
             />
         </Stack.Navigator>
     )

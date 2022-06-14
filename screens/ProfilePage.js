@@ -9,9 +9,26 @@ import {
 } from 'react-native';
 import Avatar from '../components/Avatar';
 import { supabase } from '../supabase';
-import { useIsFocused } from '@react-navigation/native';
 
 const ProfilePage = ({ navigation }) => {
+    const listenForChanges = () => {
+        const sub = supabase
+            .from('profiles')
+            .on('*', async (update) => {
+                await getProfile()
+            })
+            .subscribe();
+        return sub;
+    }
+
+    useEffect(() => {
+        const unsub = getProfile().then(() => {
+            return listenForChanges();
+        })
+
+        return async () => await unsub;
+    }, [])
+
     const [loading, setLoading] = useState(true);
     const [username, setUsername] = useState('');
     const [avatar_url, setAvatarUrl] = useState(null);
@@ -20,12 +37,6 @@ const ProfilePage = ({ navigation }) => {
     const [dietary, setDietary] = useState('');
     const [interests, setInterests] = useState('');
     const [cuisines, setCuisines] = useState('');
-
-    const isFocused = useIsFocused();
-
-    useEffect(() => {
-        getProfile()
-    }, [isFocused]);
 
     const getProfile = async () => {
         try {
@@ -60,17 +71,21 @@ const ProfilePage = ({ navigation }) => {
         }
     }
 
-
     const createProfile = async () => {
-        const user = supabase.auth.user()
+        try {
+            const user = supabase.auth.user()
 
-        const { data, error } = await supabase
-            .from('profiles')
-            .insert([
-                { id: user.id, Username: 'betatester' }
-            ])
+            const { data, error } = await supabase
+                .from('profiles')
+                .insert([
+                    { id: user.id, Username: 'betatester' }
+                ])
+        } catch(error) {
+            alert(error)
+        }
     }
-    const renderItem = ({ item }) => (
+
+    const tag = ({ item }) => (
         <View style={styles.tag}>
             <Text> {item} </Text>
         </View>
@@ -82,7 +97,7 @@ const ProfilePage = ({ navigation }) => {
         </Text>
     )
 
-    const pressHandler = () => {
+    const goUpdateProfilePage = () => {
         navigation.navigate('Update Profile Page')
     }
 
@@ -94,26 +109,26 @@ const ProfilePage = ({ navigation }) => {
                 <Text style={styles.profileDescription}> Faculty: {faculty}</Text>
                 <Text style={styles.profileDescription}> Age: {age}</Text>
                 <Text style={styles.profileDescription}> Dietary: {dietary}</Text>
-                <View style={{ height: 70 }}>
+                <View style={{ height: 70 , marginTop:'5%'}}>
                     <FlatList
-                        style={{ flex: 1 }}
+                        style={styles.flatList}
                         data={interests}
-                        renderItem={renderItem}
+                        renderItem={tag}
                         keyExtractor={item => item.toString()}
                         horizontal={true}
                         ListHeaderComponent={item => listHeaderComponent('Interests: ')}
 
                     />
                     <FlatList
-                        style={{ flex: 1 }}
+                        style={styles.flatList}
                         data={cuisines}
-                        renderItem={renderItem}
+                        renderItem={tag}
                         keyExtractor={item => item.toString()}
                         horizontal={true}
                         ListHeaderComponent={item => listHeaderComponent('Preferred Cuisines: ')}
                     />
                 </View>
-                <TouchableOpacity onPress={pressHandler} style={styles.updateProfileButoon}>
+                <TouchableOpacity onPress={goUpdateProfilePage} style={styles.updateProfileButoon}>
                     <Text> Update Profile </Text>
                 </TouchableOpacity>
             </View>
@@ -128,16 +143,17 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     profileDescription: {
-        marginTop: 15,
-        marginBottom: 10,
+        marginTop: '5%',
         alignItems: 'flex-start',
+        alignSelf: 'flex-start',
+        marginLeft: '10%',
     },
     tag: {
         backgroundColor: 'lightblue',
         padding: 5,
-        height: 30,
-        border: 1,
-        marginLeft: 20,
+        height:'80%',
+        borderRadius: 25,
+        marginLeft: 10,
     },
     updateProfileButoon: {
         marginTop: 30,
@@ -147,6 +163,11 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         padding: 10,
+    },
+    flatList : {
+        flex: 1,
+        marginLeft:'10%',
+
     }
 });
 

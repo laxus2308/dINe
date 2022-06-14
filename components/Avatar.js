@@ -57,13 +57,11 @@ const Avatar = ({ url }) => {
             if (url) {
                 const { data, error: deleteError } = await supabase.storage
                     .from('avatars')
-                    .remove([url + '.png'])
-                console.log(data)
-                console.log(deleteError)
+                    .remove([url])
                 if (deleteError) throw deleteError
             }
 
-            const filePath = `public/${user.id}/${Math.random()}`
+            const filePath = `public/${user.id}/profilepic`
             const { error: uploadError } = await supabase.storage
                 .from('avatars')
                 .upload(filePath, decode(base64File), {
@@ -116,7 +114,7 @@ const Avatar = ({ url }) => {
             return;
 
         } catch (error) {
-            console.log('Error downloading image: ', error.message)
+            alert('Error downloading image: ', error.message)
         }
     };
 

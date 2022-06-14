@@ -36,8 +36,7 @@ const RequestNavigation = () => {
               />
           </Stack.Navigator>
     );
-  }
+}
 
 
 export default RequestNavigation
-  
