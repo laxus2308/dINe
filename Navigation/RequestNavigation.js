@@ -1,19 +1,8 @@
 import React from 'react';
-import {Button} from 'react-native';
-import AccountPage from '../screens/AccountPage';
-import HomePage from '../screens/HomePage';
-import ProfilePage from '../screens/ProfilePage';
-import ChatPage from '../screens/ChatPage';
 import RequestBoard from '../screens/RequestBoard';
 import CreateRequestPage from '../screens/CreateRequestPage'
-import MatchingPage from '../screens/MatchingPage';
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ScreenStackHeaderRightView } from 'react-native-screens';
-import { StyleSheet } from 'react-native';
+import ViewRequestPage from '../screens/ViewRequestPage'
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +25,13 @@ const RequestNavigation = () => {
                   component={CreateRequestPage}
                   options={{
                       headerTitle: "Create Request",
+              }}
+              />
+              <Stack.Screen
+                  name='View Request'
+                  component={ViewRequestPage}
+                  options={{
+                      headerTitle: "View Request",
               }}
               />
           </Stack.Navigator>

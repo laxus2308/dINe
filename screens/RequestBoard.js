@@ -12,7 +12,7 @@ import Request from '../components/Request.js';
 import { supabase } from '../supabase.js';
 
 const RequestBoard = ({navigation}) => {
-
+  const [request_id, setRequest_id] = useState('');
   const [requests, setRequests] = useState([]);
 
   React.useLayoutEffect(() => {
@@ -49,7 +49,7 @@ const RequestBoard = ({navigation}) => {
       const { data, error } = await supabase.from('Requests')
       .select(`
       id,
-      key,
+      requestor_id,
       username:profiles (Username),
       created_at,
       Location,
@@ -77,6 +77,7 @@ const RequestBoard = ({navigation}) => {
       renderItem={({item}) => <Request req = {item}/>}
       numColumns={2}
       columnWrapperStyle={styles.row}
+      keyExtractor={(item)=> item.id}
     />
   )
 }

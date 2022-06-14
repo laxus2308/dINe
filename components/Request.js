@@ -1,39 +1,51 @@
 import React from 'react';
-import {Text, Image, View, StyleSheet, TouchableOpacity, onPress} from 'react-native';
-
-const getUri = (path) => {
-    try {
-        const { publicURL, error } = supabase.storage.from('requestpics').getPublicUrl(path)
-        console.log(path)
-        console.log(publicURL)
-        
-        if (error) {
-            throw error
-        }
-        return publicURL;
-
-    } catch (error) {
-        alert('Error downloading image: ', error.message)
-    }
-}
-
+import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
+import { supabase } from '../supabase';
+import { useNavigation } from '@react-navigation/native';
 
 const Request = (props) => {
+
     const {req} = props;
-    //if no url provided
+    const navigation = useNavigation();
+    const getUri = (path) => {
+        try {
+            const { publicURL, error } = supabase.storage.from('requestpics').getPublicUrl(path)
+            
+            if (error) {
+                throw error
+            }
+            return publicURL;
+    
+        } catch (error) {
+            alert('Error downloading image: ', error.message)
+            console.log(error)
+        }
+    }
+
     let uri;
+
     if (req.Request_url == null) {
         uri = require ('../assets/loid.jpg')
     } else {
         uri = getUri(req.Request_url);
+        console.log('uri', uri)
     }
 
     return (
-        <TouchableOpacity style={styles.card} onPress = {onPress}>
-            {/* <Image
-                    source={{uri: uri}}
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('View Request', {
+            id: req.id
+        })}>
+            {req.Request_url == null ? (
+                <Image
                     style={styles.thumb}
-                /> */}
+                    source={uri}
+                />
+            ) : (
+                <Image
+                    style={styles.thumb}
+                    source={{ uri: uri }}
+                />
+            )}
             <View style={styles.infoContainer}>
                 <Text style={styles.title}>{req.Title}</Text>
                 <Text style={styles.timing}>Location: {req.Location}</Text>
