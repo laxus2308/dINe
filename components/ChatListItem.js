@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
     StyleSheet,
     View,
@@ -26,7 +26,14 @@ const ChatListItem = (props) => {
             alert('Error downloading image: ', error.message)
         }
     }
-    const uri = getUri(chatRoom.avatar_url[0].Avatar_url);
+
+    //if no url provided
+    let uri;
+    if (chatRoom.avatar_url == null) {
+        uri = require ('../assets/857720.png')
+    } else {
+        uri = getUri(chatRoom.avatar_url[0].Avatar_url);
+    }
 
     const enterChat = () => {
         navigation.navigate('ChatRoomPage', {

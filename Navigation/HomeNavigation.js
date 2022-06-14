@@ -1,20 +1,17 @@
 import React from 'react';
+import { TouchableOpacity, Image, StyleSheet } from 'react-native';
+
 import HomePage from '../screens/HomePage';
-import ProfilePage from '../screens/ProfilePage';
 import ProfileNavigation from './ProfileNavigation';
-// import ChatRoomPage from '../screens/ChatRoomPage';
-// import ChatListPage from '../screens/ChatListPage';
 import ChatNavigation from '../Navigation/ChatNavigation';
-import RequestBoard from '../screens/RequestBoard';
 import MatchingPage from '../screens/MatchingPage';
+import RequestNavigation from './RequestNavigation';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import RequestNavigation from './RequestNavigation';
-import { TouchableOpacity, Image, StyleSheet } from 'react-native';
-import Styles from '../Style';
 import { supabase } from '../supabase';
 
 const Stack = createNativeStackNavigator();

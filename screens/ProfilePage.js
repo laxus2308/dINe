@@ -71,17 +71,21 @@ const ProfilePage = ({ navigation }) => {
         }
     }
 
-
     const createProfile = async () => {
-        const user = supabase.auth.user()
+        try {
+            const user = supabase.auth.user()
 
-        const { data, error } = await supabase
-            .from('profiles')
-            .insert([
-                { id: user.id, Username: 'betatester' }
-            ])
+            const { data, error } = await supabase
+                .from('profiles')
+                .insert([
+                    { id: user.id, Username: 'betatester' }
+                ])
+        } catch(error) {
+            alert(error)
+        }
     }
-    const renderItem = ({ item }) => (
+
+    const tag = ({ item }) => (
         <View style={styles.tag}>
             <Text> {item} </Text>
         </View>
@@ -109,7 +113,7 @@ const ProfilePage = ({ navigation }) => {
                     <FlatList
                         style={styles.flatList}
                         data={interests}
-                        renderItem={renderItem}
+                        renderItem={tag}
                         keyExtractor={item => item.toString()}
                         horizontal={true}
                         ListHeaderComponent={item => listHeaderComponent('Interests: ')}
@@ -118,7 +122,7 @@ const ProfilePage = ({ navigation }) => {
                     <FlatList
                         style={styles.flatList}
                         data={cuisines}
-                        renderItem={renderItem}
+                        renderItem={tag}
                         keyExtractor={item => item.toString()}
                         horizontal={true}
                         ListHeaderComponent={item => listHeaderComponent('Preferred Cuisines: ')}

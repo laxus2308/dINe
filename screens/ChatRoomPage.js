@@ -2,12 +2,7 @@ import React, {useState, useEffect, useRef} from 'react'
 import {
     View,
     StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
-    Text,
     FlatList,
-    KeyboardAvoidingView,
-    ScrollView,
 } from 'react-native';
 import Message from '../components/Message'
 import { supabase } from '../supabase'
@@ -55,7 +50,7 @@ const ChatRoomPage = () => {
             
             setMessages(data)
         } catch(error) {
-            console.log("Chat room page", error)
+            alert(error.message)
         }   
     }
       

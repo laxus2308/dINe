@@ -16,7 +16,7 @@ const Message = (props) => {
         return messageData.sender_id === supabase.auth.user().id;
     }
 
-    const get_username = async () => {
+    const getUsername = async () => {
         try {
             const { data: username, error } = await supabase
             .from('profiles')
@@ -34,7 +34,7 @@ const Message = (props) => {
      
 
     }
-    get_username()
+    getUsername()
     
 
     return (

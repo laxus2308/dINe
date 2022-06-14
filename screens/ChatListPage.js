@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
   View,
   StyleSheet,
-  TouchableWithoutFeedback,
-  Keyboard,
   Text,
-  Button,
   TouchableOpacity,
   FlatList,
 } from 'react-native';
@@ -16,12 +13,15 @@ const ChatListPage = () => {
   const [chatRooms, setChatRooms] = useState(null)
 
   const createRoom = async () => {
-    const {data, error} = await supabase.rpc('create_room', {
-      name: 'Chat test name'
-    }).single()
+    try {
+      const {data, error} = await supabase.rpc('create_room', {
+        name: 'Chat test name'
+      }).single()
 
-    // console.log('create room',data)
-    // console.log('create room error', error)
+      if (error) throw error
+    } catch (error) {
+      alert(error.message)
+    }
   }
   
   const listenForChanges = () => {
@@ -54,15 +54,10 @@ const ChatListPage = () => {
         avatar_url:profiles (Avatar_url)
       `)
       if (error) throw error
-      // console.log(data)
-      // console.log(data[0].avatar_url)
-      // console.log(data[0].avatar_url[0].Avatar_url)
-      // console.log("chat list", data)
       setChatRooms(data)
     } catch (error) {
-      console.log("Chat list page", error)
+      alert(error.message)
     }
-   
   }
 
   return (

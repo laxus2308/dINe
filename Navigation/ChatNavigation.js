@@ -2,8 +2,7 @@ import ChatRoomPage from '../screens/ChatRoomPage';
 import ChatListPage from '../screens/ChatListPage';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { 
-    View, 
+import {  
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
