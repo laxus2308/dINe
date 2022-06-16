@@ -102,13 +102,13 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: '10%',
     marginLeft: '130%',
-    height: '60%',
-    width: '65%',
+    height: '80%',
+    width: '100%',
     resizeMode: 'stretch',
   },
 
   button: {
-      flex:1/3
+      flex:1/3,
   },
 
 });
