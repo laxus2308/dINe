@@ -14,7 +14,20 @@ const ChatListItem = (props) => {
     const { chatRoom } = props;
     const navigation = useNavigation();
 
-    const getUri = (path) => {
+    const getRequestUri = (path) => {
+        try {
+            const { publicURL, error } = supabase.storage.from('requestpics').getPublicUrl(path)
+            if (error) {
+                throw error
+            }
+            return publicURL;
+
+        } catch (error) {
+            alert('Error downloading image: ', error.message)
+        }
+    }
+
+    const getProfileUri = (path) => {
         try {
             const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(path)
             if (error) {
@@ -27,12 +40,18 @@ const ChatListItem = (props) => {
         }
     }
 
+    
     //if no url provided
     let uri;
-    if (chatRoom.avatar_url == null) {
-        uri = require ('../assets/857720.png')
+
+    if (chatRoom.pic_url != null) {
+        // console.log(chatRoom.pic_url)
+        uri = getRequestUri(chatRoom.pic_url);
+        console.log("uri", uri)
+    } else if (chatRoom.avatar_url != null) {
+        uri = getProfileUri(chatRoom.avatar_url[0].Avatar_url)
     } else {
-        uri = getUri(chatRoom.avatar_url[0].Avatar_url);
+        uri = require('../assets/857720.png')
     }
 
     const enterChat = () => {
@@ -87,14 +106,14 @@ const styles = StyleSheet.create({
     },
     username: {
         fontSize: 20,
-        fontWeight: 'bold', 
+        fontWeight: 'bold',
     },
     content: {
         color: 'grey',
     },
     time: {
         marginTop: '8%',
-        marginRight:'3%',
+        marginRight: '3%',
     },
 })
 
