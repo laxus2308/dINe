@@ -3,6 +3,7 @@ import RequestBoard from '../screens/RequestBoard';
 import CreateRequestPage from '../screens/CreateRequestPage'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ViewRequestPage from '../screens/ViewRequestPage'
+import EditRequestPage from '../screens/EditRequestPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,13 @@ const RequestNavigation = () => {
                   component={ViewRequestPage}
                   options={{
                       headerTitle: "View Request",
+              }}
+              />
+              <Stack.Screen
+                  name='Edit Request'
+                  component={EditRequestPage}
+                  options={{
+                      headerTitle: "Edit Request",
               }}
               />
           </Stack.Navigator>

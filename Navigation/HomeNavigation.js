@@ -39,7 +39,7 @@ const HomeNavigation = () => {
 
 const DrawerRoutes = () => {
     return (
-        <Drawer.Navigator initialRouteName="Home" drawerContent={props => {
+        <Drawer.Navigator initialRouteName="Home" useLegacyImplementation={true} drawerContent={props => {
             return (
                 <DrawerContentScrollView {...props} >
                     <DrawerItemList {...props} />

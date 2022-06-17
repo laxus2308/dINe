@@ -10,10 +10,12 @@ import {
   } from 'react-native';
 import Request from '../components/Request.js';
 import { supabase } from '../supabase.js';
+import DuoToggleSwitch from "react-native-duo-toggle-switch";
 
 const RequestBoard = ({navigation}) => {
   const [request_id, setRequest_id] = useState('');
   const [requests, setRequests] = useState([]);
+  const [viewRequest, setViewRequest] = useState(true);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -74,10 +76,14 @@ const RequestBoard = ({navigation}) => {
       style={styles.requestsList}
       contentContainerStyle={styles.requestsListContainer}
       data={requests}
-      renderItem={({item}) => <Request req = {item}/>}
+      renderItem={({item}) => {return <Request req = {item}/>}}
       numColumns={2}
       columnWrapperStyle={styles.row}
       keyExtractor={(item)=> item.id}
+      ListHeaderComponent={() => 
+        <TouchableOpacity style={styles.appButtonContainer}>
+          <Text style={styles.appButtonText}>Edit Your Requests</Text>
+        </TouchableOpacity>}
     />
   )
 }
@@ -110,6 +116,30 @@ const styles = StyleSheet.create({
   button: {
       flex:1/3
   },
+
+  requestButtonContainer: {
+    flex: 1,
+    alignContent: 'center',
+    alignSelf: "center",
+    alignItems: "center",
+    marginLeft: 28
+  },
+
+  appButtonContainer: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12
+  },
+  
+  appButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase"
+  }
 
 });
 
