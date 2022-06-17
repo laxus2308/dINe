@@ -113,8 +113,8 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: '10%',
     marginLeft: '130%',
-    height: '80%',
-    width: '100%',
+    height: '60%',
+    width: '65%',
     resizeMode: 'stretch',
   },
 
