@@ -11,8 +11,19 @@ import {
 import Request from '../components/Request.js';
 import { supabase } from '../supabase.js';
 
+// const joinRequestRoom = async() => {
+//   try {
+//     const { error: joinRoomError } = await supabase.rpc('join_request_room', {
+//        request_id: // have to pass in request id, prob need to use Route to get rqeuest id
+//     })
+  
+//     if (joinRoomError) throw joinRoomError
+//   } catch (error) {
+//     alert(error)
+//   }
+// }
+
 const RequestBoard = ({navigation}) => {
-  const [request_id, setRequest_id] = useState('');
   const [requests, setRequests] = useState([]);
 
   React.useLayoutEffect(() => {
@@ -64,7 +75,7 @@ const RequestBoard = ({navigation}) => {
       if (error) throw error
       setRequests(data)
     } catch (error) {
-      console.log("Request page", error)
+      alert(error)
     }
    
   }

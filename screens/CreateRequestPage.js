@@ -119,6 +119,7 @@ const CreateRequestPage = ({ navigation }) => {
         Title: title,
         Request_url: request_url,
         datetime: dateTime,
+        current_pax: 1,
       }
 
       let { data, error } = await supabase
