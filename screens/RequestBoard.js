@@ -12,8 +12,19 @@ import Request from '../components/Request.js';
 import { supabase } from '../supabase.js';
 import DuoToggleSwitch from "react-native-duo-toggle-switch";
 
+// const joinRequestRoom = async() => {
+//   try {
+//     const { error: joinRoomError } = await supabase.rpc('join_request_room', {
+//        request_id: // have to pass in request id, prob need to use Route to get rqeuest id
+//     })
+  
+//     if (joinRoomError) throw joinRoomError
+//   } catch (error) {
+//     alert(error)
+//   }
+// }
+
 const RequestBoard = ({navigation}) => {
-  const [request_id, setRequest_id] = useState('');
   const [requests, setRequests] = useState([]);
   const [viewRequest, setViewRequest] = useState(true);
 
@@ -66,7 +77,7 @@ const RequestBoard = ({navigation}) => {
       if (error) throw error
       setRequests(data)
     } catch (error) {
-      console.log("Request page", error)
+      alert(error)
     }
    
   }
@@ -108,13 +119,13 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: '10%',
     marginLeft: '130%',
-    height: '60%',
-    width: '65%',
+    height: '80%',
+    width: '100%',
     resizeMode: 'stretch',
   },
 
   button: {
-      flex:1/3
+      flex:1/3,
   },
 
   requestButtonContainer: {

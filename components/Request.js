@@ -28,7 +28,6 @@ const Request = (props) => {
         uri = require ('../assets/loid.jpg')
     } else {
         uri = getUri(req.Request_url);
-        console.log('uri', uri)
     }
 
     return (

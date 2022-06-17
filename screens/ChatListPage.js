@@ -9,6 +9,7 @@ import {
 import ChatListItem from '../components/ChatListItem';
 import { supabase } from '../supabase';
 
+
 const ChatListPage = () => {
   const [chatRooms, setChatRooms] = useState(null)
 
@@ -51,7 +52,8 @@ const ChatListPage = () => {
         id,
         name,
         username:profiles ( Username ),
-        avatar_url:profiles (Avatar_url)
+        avatar_url:profiles (Avatar_url),
+        pic_url
       `)
       if (error) throw error
       setChatRooms(data)
