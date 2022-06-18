@@ -59,9 +59,6 @@ const CreateRequestPage = ({ navigation }) => {
   };
 
   const paxData = [{
-    label: "1",
-    value: 1
-  }, {
     label: "2",
     value: 2
   }, {
@@ -304,7 +301,7 @@ const styles = StyleSheet.create({
     width: "40%",
     borderRadius: 25,
     padding: 10,
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "center",
     marginBottom: '5%',
     backgroundColor: "#ffff00",

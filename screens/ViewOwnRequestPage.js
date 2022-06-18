@@ -2,29 +2,17 @@ import React, {useState, useEffect} from 'react'
 import {
     View,
     StyleSheet,
+    TouchableWithoutFeedback,
+    Keyboard,
     Text,
     FlatList,
-    Button,
-    TouchableOpacity,
-    Image
   } from 'react-native';
-import Request from '../components/Request.js';
-import { supabase } from '../supabase.js';
+import { supabase } from '../supabase';
+import Request from '../components/Request';
 
+const ViewOwnRequestPage = () => {
 
-const RequestBoard = ({navigation}) => {
-  const [requests, setRequests] = useState([]);
-  const [viewRequest, setViewRequest] = useState(true);
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('Create Request');}}>
-            <Image style={styles.image} source={require("../assets/create.png")}/>
-        </TouchableOpacity>
-    )
-    })
-  }, [navigation])
+  const [yourRequests, setYourRequests] = useState([]);
 
   const listenForChanges = () => {
     const mysub = supabase
@@ -44,6 +32,7 @@ const RequestBoard = ({navigation}) => {
     return async () => await unsub;
   }, [])
 
+  const user = supabase.auth.user();
 
   const getRequests = async () => {
     try {
@@ -60,10 +49,10 @@ const RequestBoard = ({navigation}) => {
       Description,
       Title,
       Request_url
-      `)
+      `).eq('requestor_id', user.id)
       .order('Date', { ascending: true }).order('Time', { ascending: true });
       if (error) throw error
-      setRequests(data)
+      setYourRequests(data)
     } catch (error) {
       alert(error)
     }
@@ -74,15 +63,11 @@ const RequestBoard = ({navigation}) => {
     <FlatList
       style={styles.requestsList}
       contentContainerStyle={styles.requestsListContainer}
-      data={requests}
+      data={yourRequests}
       renderItem={({item}) => {return <Request req = {item}/>}}
       numColumns={2}
       columnWrapperStyle={styles.row}
       keyExtractor={(item)=> item.id}
-      ListHeaderComponent={() => 
-        <TouchableOpacity onPress={() => navigation.navigate('View Own Request')} style={styles.appButtonContainer}>
-          <Text style={styles.appButtonText}>View Your Requests</Text>
-        </TouchableOpacity>}
     />
   )
 }
@@ -142,4 +127,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default RequestBoard
+export default ViewOwnRequestPage

@@ -10,11 +10,25 @@ import {
 import { supabase } from '../supabase';
 import { useRoute } from '@react-navigation/native';
 
-const ViewRequestPage = () => {
+const ViewRequestPage = ({navigation}) => {
     const route = useRoute();
     const request_id = route.params.id;
     const [requestData, setRequestData] = useState(null);
-    const [currentPax, setCurrentPax] = useState(0);
+
+    const joinRequestRoom = async() => {
+      try {
+        const { error: joinRoomError } = await supabase.rpc('join_request_room', {
+           request_id: route.params.id
+        })
+      
+        if (joinRoomError) throw joinRoomError
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    const user = supabase.auth.user();
+
     const getRequestData = async () => {
         try {
           const { data, error } = await supabase.from('Requests')
@@ -73,7 +87,6 @@ const ViewRequestPage = () => {
               </Text>
                 {(requestData[0].Request_url == null) ? (
                     <Image
-                    style={styles.title}
                     source={require('../assets/loid.jpg')}
                 />) : (
               <Image
@@ -95,13 +108,20 @@ const ViewRequestPage = () => {
               <Text style = {styles.description}>
                 Description: {requestData[0].Description}
               </Text>
-              <Button
-                //onPress={}
+              {user.id != requestData[0].requestor_id ? (
+                <Button
+                onPress={joinRequestRoom}
                 title="Join"
                 color="#841584"
-              />
+                />
+              ) : (
+              <Button
+                onPress={() => navigation.navigate('Edit Request', requestData)}
+                title="Edit"
+                color="#841584"
+                />)}
               <Text style = {styles.pax}>
-                Pax: {currentPax} / {requestData[0].Pax} 
+                Pax: {requestData[0].current_pax} / {requestData[0].Pax} 
               </Text>
             </View>
           )
