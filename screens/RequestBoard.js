@@ -14,7 +14,6 @@ import { supabase } from '../supabase.js';
 
 const RequestBoard = ({navigation}) => {
   const [requests, setRequests] = useState([]);
-  const [viewRequest, setViewRequest] = useState(true);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({

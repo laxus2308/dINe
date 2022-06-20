@@ -6,6 +6,7 @@ import {
     Image,
     Button,
     TouchableOpacity,
+    SafeAreaView
   } from 'react-native';
 import { supabase } from '../supabase';
 import { useRoute } from '@react-navigation/native';
@@ -14,6 +15,15 @@ const ViewRequestPage = ({navigation}) => {
     const route = useRoute();
     const request_id = route.params.id;
     const [requestData, setRequestData] = useState(null);
+
+    const deleteRequest = async() => {
+      try {
+        const { data, error } = await supabase.from('Requests').delete().match({ id: request_id })
+        if (error) throw error
+      } catch (error) {
+        console.log("Delete", error)
+      }
+    }
 
     const joinRequestRoom = async() => {
       try {
@@ -115,15 +125,26 @@ const ViewRequestPage = ({navigation}) => {
                 color="#841584"
                 />
               ) : (
-              <Button
-                onPress={() => navigation.navigate('Edit Request', requestData)}
+              <View style={{ flexDirection: "row", flex: 1 }}>
+              <View style={styles.buttonStyle}>
+              <Button 
+                onPress={() => navigation.navigate('Edit Request', {requestData: requestData})}
                 title="Edit"
                 color="#841584"
-                />)}
+                />
+              </View>
+              <View style={styles.buttonStyle}>
+                <Button
+                //onPress={deleteRequest}
+                title="Delete"
+                color="#dc143c"
+                />
+              </View>
+              </View>)}
               <Text style = {styles.pax}>
                 Pax: {requestData[0].current_pax} / {requestData[0].Pax} 
               </Text>
-            </View>
+              </View>
           )
      } else {
          return (
@@ -138,6 +159,11 @@ const ViewRequestPage = ({navigation}) => {
 
 const styles = StyleSheet.create({
 
+  buttonStyle: {
+    marginHorizontal: 30,
+    marginTop: 5
+  },
+  
   pax: {
     flex: 1,
     marginTop: '5%',

@@ -47,7 +47,7 @@ const RequestNavigation = () => {
                   name='Edit Request'
                   component={EditRequestPage}
                   options={{
-                      headerTitle: "Edit Requests",
+                      headerTitle: "Edit Request",
               }}
               />
           </Stack.Navigator>
