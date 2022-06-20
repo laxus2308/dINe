@@ -47,7 +47,6 @@ const ChatListItem = (props) => {
     if (chatRoom.pic_url != null) {
         // console.log(chatRoom.pic_url)
         uri = getRequestUri(chatRoom.pic_url);
-        console.log("uri", uri)
     } else if (chatRoom.avatar_url != null) {
         uri = getProfileUri(chatRoom.avatar_url[0].Avatar_url)
     } else {
