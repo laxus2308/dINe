@@ -11,12 +11,44 @@ import {
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+import { supabase } from '../supabase';
 
 const Stack = createNativeStackNavigator();
 
 
 const ChatNavigation = () => {
     const navigation = useNavigation();
+
+    const remove_chat = async(room_id) => {
+        try {
+            const { error} = await supabase.rpc('delete_chatroom', {
+              chatroom_id: room_id
+            })
+
+
+            if (error) {
+                throw error
+            }
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
+    const remove_messages = async() => {
+        try {
+            const{error: deleteMessageError} = await supabase.rpc('clear_messages')
+            if (deleteMessageError) {
+                throw deleteMessageError
+            }
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+    const exitChat = async (room_id) => {
+        await remove_chat(room_id);
+        await remove_messages();
+        navigation.pop();
+    }
 
     return (
         <Stack.Navigator
@@ -47,11 +79,14 @@ const ChatNavigation = () => {
                                     chatRoomId: route.params.id,
                                     chatName: route.params.name
                                 })}>
-                                    <Text ellipsizeMode='tail'  numberOfLines={1} style={styles.headerText}>  {route.params.name} </Text>
+                                    <Text ellipsizeMode='tail' numberOfLines={1} style={styles.headerText}>  {route.params.name} </Text>
                                 </TouchableOpacity>
                             </View>
                             <TouchableOpacity style={styles.dots}>
-                                <MaterialCommunityIcons name="dots-vertical" size={30} />
+                                <MaterialCommunityIcons name="dots-vertical" size={40} />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.dots} onPress={() => exitChat(route.params.id)}>
+                                <MaterialCommunityIcons name="exit-to-app" size={40} />
                             </TouchableOpacity>
                         </View>
                     ),
@@ -61,7 +96,7 @@ const ChatNavigation = () => {
                 name='ParticipantsPage'
                 component={ParticipantsPage}
                 options={{
-                    title:'Room details',
+                    title: 'Room details',
                 }}
 
             />
@@ -89,6 +124,7 @@ const styles = StyleSheet.create({
     },
     dots: {
         justifyContent: 'center',
+        alignLeft: '5%',
     },
     headerText: {
         alignSelf: 'center',
