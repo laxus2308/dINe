@@ -13,6 +13,7 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemL
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { supabase } from '../supabase';
+import MatchingNavigation from './MatchingNavigation';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -39,7 +40,7 @@ const HomeNavigation = () => {
 
 const DrawerRoutes = () => {
     return (
-        <Drawer.Navigator initialRouteName="Home" drawerContent={props => {
+        <Drawer.Navigator initialRouteName="Home" useLegacyImplementation={true} drawerContent={props => {
             return (
                 <DrawerContentScrollView {...props} >
                     <DrawerItemList {...props} />
@@ -64,10 +65,10 @@ const TabRoutes = () => {
             <Tab.Screen name="Request Screen" style={styles.header} component={RequestNavigation} options={{tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="clipboard-list" color={color} size={size} />
           ), headerShown: false}}/> 
-            <Tab.Screen name="Matching" component={MatchingPage} options={{
+            <Tab.Screen name="Matching" style={styles.header} component={MatchingNavigation} options={{
                 tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="account-group" color={color} size={size} />
-                ),
+                ), headerShown: false
             }} />
             <Tab.Screen name="Chat" component={ChatNavigation} options={{
                 tabBarIcon: ({ color, size }) => (

@@ -1,22 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState} from 'react'
 import {
-  View,
-  StyleSheet,
-  TextInput,
-  Text,
-  TouchableOpacity,
-  Image,
-  SafeAreaView,
-  ScrollView
-} from 'react-native';
+    View,
+    StyleSheet,
+    TouchableWithoutFeedback,
+    Keyboard,
+    Text,
+    ScrollView,
+    Image,
+    TouchableOpacity,
+    TextInput
+  } from 'react-native';
+import { supabase } from '../supabase';
+import { useRoute } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { supabase } from '../supabase';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer'
 import moment from 'moment'
 
-const CreateRequestPage = ({ navigation }) => {
+const EditRequestPage = ({navigation}) => {
+
+  const route = useRoute();
+  const request_id = route.params.requestData[0].id;
+
   const [uploading, setUploading] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -31,14 +37,6 @@ const CreateRequestPage = ({ navigation }) => {
   const [selectedDate, setSelectedDate] = useState(false);
 
   const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
-
-  const showDateTimePicker = () => {
-    setDateTimePickerVisibility(true);
-  };
-
-  const hideDateTimePicker = () => {
-    setDateTimePickerVisibility(false);
-  };
 
   const handleConfirm = (dateTime) => {
     setDateTime(dateTime);
@@ -81,10 +79,20 @@ const CreateRequestPage = ({ navigation }) => {
     value: 8
   },]
 
-  const submitRequest = async (e) => {
+  const showDateTimePicker = () => {
+    setDateTimePickerVisibility(true);
+  };
+
+  const hideDateTimePicker = () => {
+    setDateTimePickerVisibility(false);
+  };
+
+  const updateRequest = async (e) => {
     e.preventDefault();
+
     try {
       const user = supabase.auth.user()
+
       if (location == '') {
         alert("Please insert a location!")
         return;
@@ -107,6 +115,7 @@ const CreateRequestPage = ({ navigation }) => {
       }
 
       const updates = {
+        id: request_id,
         requestor_id: user.id,
         Location: location,
         Time: timePicked,
@@ -119,27 +128,18 @@ const CreateRequestPage = ({ navigation }) => {
         current_pax: 1,
       }
 
-      let { data, error } = await supabase
-        .from('Requests')
-        .insert([updates])
-
-
-      const { error: createRoomError } = await supabase.rpc('create_request_room', {
-        request_id: data[0].id
-      })
+      let { error } = await supabase.from('Requests').upsert(updates, {returning: 'minimal'})
 
       if (error) {
-        throw error
-      } else if (createRoomError) {
-        throw createRoomError
+          throw error
       }
-      navigation.pop();
+      navigation.pop()
 
-    } catch (error) {
-      alert(error.message)
-    }
-  };
+  } catch (error) {
+          alert(error.message)
+  }
 
+  }
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -181,6 +181,7 @@ const CreateRequestPage = ({ navigation }) => {
       setUploading(false)
     }
   }
+
 
   return (
     <View style={styles.container}>
@@ -264,8 +265,8 @@ const CreateRequestPage = ({ navigation }) => {
             }}
           />
         </View>
-        <TouchableOpacity style={styles.submitButton} onPress={submitRequest}>
-          <Text> Submit </Text>
+        <TouchableOpacity style={styles.submitButton} onPress={updateRequest}>
+          <Text> Update Request </Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -357,4 +358,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateRequestPage;
+export default EditRequestPage
