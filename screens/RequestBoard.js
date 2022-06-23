@@ -61,6 +61,7 @@ const RequestBoard = ({navigation}) => {
       Request_url
       `)
       .order('Date', { ascending: true }).order('Time', { ascending: true });
+      console.log(data)
       if (error) throw error
       setRequests(data)
     } catch (error) {
