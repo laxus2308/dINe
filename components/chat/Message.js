@@ -20,13 +20,13 @@ const Message = (props) => {
         try {
             const { data: username, error } = await supabase
             .from('profiles')
-            .select('Username')
+            .select('username')
             .eq('id', messageData.sender_id)
             .single()
     
             if (error) throw error
             // console.log(error)
-            setUsername(username.Username)
+            setUsername(username.username)
             // return username;
         } catch(error) {
             console.log('Message', error)

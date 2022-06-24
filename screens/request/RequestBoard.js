@@ -50,7 +50,7 @@ const RequestBoard = ({navigation}) => {
       .select(`
       id,
       requestor_id,
-      username:profiles (Username),
+      username:profiles (username),
       created_at,
       location,
       time,
@@ -66,7 +66,7 @@ const RequestBoard = ({navigation}) => {
       if (error) throw error
       setRequests(data)
     } catch (error) {
-      alert(error)
+      alert(error.message)
     }
    
   }

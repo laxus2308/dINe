@@ -42,8 +42,8 @@ const ParticipantsPage = () => {
             const { data, error } = await supabase
                 .from('room_participants')
                 .select(`
-                username: profiles(Username),
-                avatar_url: profiles(Avatar_url)
+                username: profiles(username),
+                avatar_url: profiles(avatar_url)
             `)
                 .eq('room_id', chatRoomId)
 
@@ -72,7 +72,7 @@ const ParticipantsPage = () => {
 
     const displayProfile = (profile) => {
         const profileUri = getProfileUri(profile.avatar_url.Avatar_url)
-        const username = profile.username.Username;
+        const username = profile.username.username;
 
         return (
             <View style={styles.profileContainer}>

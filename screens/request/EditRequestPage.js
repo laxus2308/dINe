@@ -180,6 +180,10 @@ const EditRequestPage = ({navigation}) => {
     }
   }
 
+  const getRequestData = async() => {
+    
+  }
+
 
   return (
     <View style={styles.container}>

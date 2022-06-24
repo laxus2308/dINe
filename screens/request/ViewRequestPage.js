@@ -41,7 +41,7 @@ const ViewRequestPage = ({ navigation }) => {
     try {
       const { data, error } = await supabase.from('requests')
         .select(`
-          username:profiles (Username), *
+          username:profiles (username), *
           `)
         .eq('id', request_id)
 
@@ -118,7 +118,7 @@ const ViewRequestPage = ({ navigation }) => {
             source={{ uri: getUri(requestData[0].Request_url) }}
           />)}
         <Text style={styles.detail}>
-          Created By: {requestData[0].username.Username}
+          Created By: {requestData[0].username.username}
         </Text>
         <Text style={styles.detail}>
           Location: {requestData[0].Location}

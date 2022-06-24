@@ -37,7 +37,7 @@ const ViewOwnRequestPage = () => {
   const getRequests = async () => {
     try {
       const { data, error } = await supabase.from('requests')
-      .select(`*, username:profiles (Username)`).eq('requestor_id', user.id)
+      .select(`*, username:profiles (username)`).eq('requestor_id', user.id)
       .order('datetime', { ascending: true });
       if (error) throw error
       setYourRequests(data)

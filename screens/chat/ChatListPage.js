@@ -51,8 +51,8 @@ const ChatListPage = () => {
       .select(`
         id,
         name,
-        username:profiles ( Username ),
-        avatar_url:profiles (Avatar_url),
+        username:profiles ( username ),
+        avatar_url:profiles (avatar_url),
         pic_url
       `)
       if (error) throw error
