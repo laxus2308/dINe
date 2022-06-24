@@ -14,7 +14,7 @@ import * as Location from 'expo-location';
 
 const QuickMatchPage = () => {
 
-    var [isSearching, setIsSearching] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
     const [longitude, setLongitude] = useState(null);
     const [latitude, setLatitude] = useState(null);
     const [searchId, setSearchId] = useState(null);
@@ -22,22 +22,22 @@ const QuickMatchPage = () => {
 
     const getLocation = async () => {
         try {
-          const { granted } = await Location.requestForegroundPermissionsAsync();
-          if (granted) {
-            const lastKnownPosition = await Location.getLastKnownPositionAsync();
-            if (!lastKnownPosition) {
+            const { granted } = await Location.requestForegroundPermissionsAsync();
+            if (granted) {
+                const lastKnownPosition = await Location.getLastKnownPositionAsync();
+                if (!lastKnownPosition) {
+                    return;
+                }
+                const { latitude, longitude } = lastKnownPosition.coords;
+                setLatitude(latitude);
+                setLongitude(longitude);
+            } else {
                 return;
             }
-            const { latitude, longitude } = lastKnownPosition.coords;
-            setLatitude(latitude);
-            setLongitude(longitude);
-          } else {
-            return;
-          }
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
+    };
 
     useEffect(() => {
         getLocation();
@@ -46,10 +46,10 @@ const QuickMatchPage = () => {
     // useEffect(() => {
     //     getData();
     // }, [])
-    
+
 
     // const refreshTime = 2000 //How frequently you want to refresh the data, in ms
-      
+
     // const getData = async () => {
     //     submitSearch();
     //     setIsSearching(true) 
@@ -59,7 +59,7 @@ const QuickMatchPage = () => {
     //     console.log("The data is " + userData)
     //     setIsSearching(false); 
     // }
-      
+
     // useEffect(() => {
     //     const comInterval = setInterval(getData, refreshTime);
     //     return () => clearInterval(comInterval) 
@@ -74,30 +74,30 @@ const QuickMatchPage = () => {
     //         .subscribe();
     //     return mysub;
     //   }
-    
+
     // useEffect(() => {
     //       const unsub = getUsers().then(() => {
     //           return listenForChanges();
     //       })
-    
+
     //     return async () => await unsub;
     // }, [])
 
-    
-    const getUsers = async (e) => {
+
+    const getUsers = async () => {
         try {
             const user = supabase.auth.user()
 
             let { data, error } = await supabase.from('quick_match').select().eq('searching', true).neq('profile_id', user.id)
 
             if (error) {
-                console.log(error)
+                throw(error)
             }
 
             if (data.length == 0) {
                 setTimeout(() => getUsers(), 5000);
             } else {
-                return data;
+                setUserData(data);
             }
 
             const today = new Date();
@@ -109,6 +109,7 @@ const QuickMatchPage = () => {
             console.log(error)
         }
     }
+
 
 
     const submitSearch = async (e) => {
@@ -124,22 +125,22 @@ const QuickMatchPage = () => {
                 searching: true
             }
 
-            await supabase.from('quick_match').update(updates).match({profile_id: user.id})
+            await supabase.from('quick_match').update(updates).match({ profile_id: user.id })
 
             getUsers();
 
             console.log("My saved data:")
             console.log(userData)
 
-                //var geodist = require('geodist');
+            //var geodist = require('geodist');
 
-                //var minDist = Number.NEGATIVE_INFINITY;
+            //var minDist = Number.NEGATIVE_INFINITY;
 
-                //var dist = geodist({lat: data.latitude, lon: data.longitude}, {lat: 33.7489, lon: -84.3881})
-            
-        }  catch(error) {
+            //var dist = geodist({lat: data.latitude, lon: data.longitude}, {lat: 33.7489, lon: -84.3881})
+
+        } catch (error) {
             console.log(error)
-        } 
+        }
     }
 
 
@@ -161,7 +162,7 @@ const QuickMatchPage = () => {
                 searching: false
             }
 
-            let { data, error } = await supabase.from('quick_match').update(updates).match({profile_id: user.id})
+            let { data, error } = await supabase.from('quick_match').update(updates).match({ profile_id: user.id })
 
             //console.log(data)
 
@@ -171,7 +172,7 @@ const QuickMatchPage = () => {
                 throw error
             }
 
-        }  catch(error) {
+        } catch (error) {
             console.log(error)
         }
 
@@ -181,19 +182,19 @@ const QuickMatchPage = () => {
     return (
         <View style={styles.container}>
             {isSearching ? (
-            <View>
-            <Button
-                title='Stop Search'
-                onPress={stopSearch}
-            />
-            </View>
-              ) : (
-            <View>
-            <Button
-                title= 'Search!'
-                onPress={submitSearch}
-            />
-            </View>
+                <View>
+                    <Button
+                        title='Stop Search'
+                        onPress={stopSearch}
+                    />
+                </View>
+            ) : (
+                <View>
+                    <Button
+                        title='Search!'
+                        onPress={submitSearch}
+                    />
+                </View>
             )}
         </View>
     )
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff8dc',
         alignItems: 'center',
         justifyContent: 'center',
-      },
+    },
 })
 
 

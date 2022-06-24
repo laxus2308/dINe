@@ -61,7 +61,7 @@ const Avatar = ({ url }) => {
                 if (deleteError) throw deleteError
             }
 
-            const filePath = `public/${user.id}/profilepic`
+            const filePath = `public/${user.id}/${Math.random()}`
             const { error: uploadError } = await supabase.storage
                 .from('avatars')
                 .upload(filePath, decode(base64File), {

@@ -11,33 +11,6 @@ import Avatar from '../components/Avatar';
 import { supabase } from '../supabase';
 
 const ProfilePage = ({ navigation }) => {
-    const listenForChanges = () => {
-        const sub = supabase
-            .from('profiles')
-            .on('*', async (update) => {
-                await getProfile()
-            })
-            .subscribe();
-        return sub;
-    }
-
-    useEffect(() => {
-        const unsub = getProfile().then(() => {
-            return listenForChanges();
-        })
-
-        return async () => await unsub;
-    }, [])
-
-    const [loading, setLoading] = useState(true);
-    const [username, setUsername] = useState('');
-    const [avatar_url, setAvatarUrl] = useState(null);
-    const [faculty, setFaculty] = useState('');
-    const [age, setAge] = useState('');
-    const [dietary, setDietary] = useState('');
-    const [interests, setInterests] = useState('');
-    const [cuisines, setCuisines] = useState('');
-
     const getProfile = async () => {
         try {
             setLoading(true)
@@ -70,6 +43,46 @@ const ProfilePage = ({ navigation }) => {
             setLoading(false)
         }
     }
+
+    //check for real time updates
+    useEffect(() => {
+        const sub = supabase
+            .from('profiles')
+            .on('*', async (update) => {
+                await getProfile()
+            })
+            .subscribe();
+        return () => {
+            supabase.removeSubscription(sub)
+        }
+        
+    }, [])
+
+    //get user details upon first navigate
+    useEffect(() => {
+        getProfile();
+    }, [])
+    
+
+    // useEffect(() => {
+    //     const unsub = getProfile().then(() => {
+    //         return listenForChanges();
+    //     })
+
+    //     return async () => await unsub;
+    // }, [])
+
+
+    const [loading, setLoading] = useState(true);
+    const [username, setUsername] = useState('');
+    const [avatar_url, setAvatarUrl] = useState(null);
+    const [faculty, setFaculty] = useState('');
+    const [age, setAge] = useState('');
+    const [dietary, setDietary] = useState('');
+    const [interests, setInterests] = useState('');
+    const [cuisines, setCuisines] = useState('');
+ 
+    
 
     const createProfile = async () => {
         try {
