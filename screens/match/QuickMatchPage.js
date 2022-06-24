@@ -9,7 +9,7 @@ import {
     Platform,
     Button
 } from 'react-native';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 import * as Location from 'expo-location';
 
 const QuickMatchPage = () => {

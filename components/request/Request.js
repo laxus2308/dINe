@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
 
 const Request = (props) => {
@@ -25,7 +25,7 @@ const Request = (props) => {
     let uri;
 
     if (req.Request_url == null) {
-        uri = require ('../assets/BlankImage.png')
+        uri = require ('../../assets/BlankImage.png')
     } else {
         uri = getUri(req.Request_url);
     }

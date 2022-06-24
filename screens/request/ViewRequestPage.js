@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   SafeAreaView
 } from 'react-native';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
 
 const ViewRequestPage = ({ navigation }) => {
@@ -111,7 +111,7 @@ const ViewRequestPage = ({ navigation }) => {
         </Text>
         {(requestData[0].Request_url == null) ? (
           <Image
-            source={require('../assets/loid.jpg')}
+            source={require('../../assets/BlankImage.png')}
           />) : (
           <Image
             style={styles.image}

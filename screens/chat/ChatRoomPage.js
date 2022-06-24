@@ -4,10 +4,10 @@ import {
     StyleSheet,
     FlatList,
 } from 'react-native';
-import Message from '../components/Message'
-import { supabase } from '../supabase'
+import Message from '../../components/chat/Message'
+import { supabase } from '../../supabase'
 import { useRoute } from '@react-navigation/native';
-import MessageInput from '../components/MessageInput';
+import MessageInput from '../../components/chat/MessageInput';
 
 
 const ChatRoomPage = () => {

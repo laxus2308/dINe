@@ -6,7 +6,7 @@ import {
     TextInput,
     StyleSheet,
 } from 'react-native';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 import 'react-native-url-polyfill/auto';
 
 

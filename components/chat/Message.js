@@ -5,7 +5,7 @@ import {
     Text,
 } from 'react-native';
 import moment from 'moment';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 
 
 const Message = (props) => {

@@ -7,8 +7,8 @@ import {
     SafeAreaView,
     FlatList,
 } from 'react-native';
-import Avatar from '../components/Avatar';
-import { supabase } from '../supabase';
+import Avatar from '../../components/profile/Avatar';
+import { supabase } from '../../supabase';
 
 const ProfilePage = ({ navigation }) => {
     const getProfile = async () => {

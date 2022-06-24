@@ -8,8 +8,8 @@ import {
     TouchableOpacity,
     Image
   } from 'react-native';
-import Request from '../components/Request.js';
-import { supabase } from '../supabase.js';
+import Request from '../../components/request/Request.js';
+import { supabase } from '../../supabase.js';
 
 
 const RequestBoard = ({navigation}) => {
@@ -19,7 +19,7 @@ const RequestBoard = ({navigation}) => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('Create Request');}}>
-            <Image style={styles.image} source={require("../assets/create.png")}/>
+            <Image style={styles.image} source={require("../../assets/create.png")}/>
         </TouchableOpacity>
     )
     })

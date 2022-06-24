@@ -7,7 +7,7 @@ import {
     TextInput,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 
 const UpdateProfilePage = ({ navigation }) => {
     const [username, setUsername] = useState('');

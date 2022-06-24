@@ -1,8 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import QuickMatchPage from '../screens/QuickMatchPage'
-import SpecificMatchPage from '../screens/SpecificMatchPage';
-import MatchingPage from '../screens/MatchingPage';
+import QuickMatchPage from '../screens/match/QuickMatchPage'
+import SpecificMatchPage from '../screens/match/SpecificMatchPage';
+import MatchingPage from '../screens/match/MatchingPage';
 
 const Stack = createNativeStackNavigator();
 

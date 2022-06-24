@@ -6,7 +6,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 
 
 const MessageInput = (props) => {

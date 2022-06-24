@@ -1,6 +1,6 @@
-import ChatRoomPage from '../screens/ChatRoomPage';
-import ChatListPage from '../screens/ChatListPage';
-import ParticipantsPage from '../screens/ParticipantsPage';
+import ChatRoomPage from '../screens/chat/ChatRoomPage';
+import ChatListPage from '../screens/chat/ChatListPage';
+import ParticipantsPage from '../screens/chat/ParticipantsPage';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {

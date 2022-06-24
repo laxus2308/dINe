@@ -6,7 +6,7 @@ import {
     TouchableOpacity,
     Text,
 } from 'react-native';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer'
 
