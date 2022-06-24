@@ -15,7 +15,7 @@ const ChatListPage = () => {
 
   const createRoom = async () => {
     try {
-      const {data, error} = await supabase.rpc('create_room', {
+      const { error} = await supabase.rpc('create_room', {
         name: 'Chat test name'
       }).single()
 

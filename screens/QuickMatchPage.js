@@ -22,22 +22,22 @@ const QuickMatchPage = () => {
 
     const getLocation = async () => {
         try {
-          const { granted } = await Location.requestForegroundPermissionsAsync();
-          if (granted) {
-            const lastKnownPosition = await Location.getLastKnownPositionAsync();
-            if (!lastKnownPosition) {
+            const { granted } = await Location.requestForegroundPermissionsAsync();
+            if (granted) {
+                const lastKnownPosition = await Location.getLastKnownPositionAsync();
+                if (!lastKnownPosition) {
+                    return;
+                }
+                const { latitude, longitude } = lastKnownPosition.coords;
+                setLatitude(latitude);
+                setLongitude(longitude);
+            } else {
                 return;
             }
-            const { latitude, longitude } = lastKnownPosition.coords;
-            setLatitude(latitude);
-            setLongitude(longitude);
-          } else {
-            return;
-          }
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
+    };
 
     useEffect(() => {
         getLocation();
@@ -46,10 +46,10 @@ const QuickMatchPage = () => {
     // useEffect(() => {
     //     getData();
     // }, [])
-    
+
 
     // const refreshTime = 2000 //How frequently you want to refresh the data, in ms
-      
+
     // const getData = async () => {
     //     submitSearch();
     //     setIsSearching(true) 
@@ -59,7 +59,7 @@ const QuickMatchPage = () => {
     //     console.log("The data is " + userData)
     //     setIsSearching(false); 
     // }
-      
+
     // useEffect(() => {
     //     const comInterval = setInterval(getData, refreshTime);
     //     return () => clearInterval(comInterval) 
@@ -74,15 +74,14 @@ const QuickMatchPage = () => {
     //         .subscribe();
     //     return mysub;
     //   }
-    
+
     // useEffect(() => {
     //       const unsub = getUsers().then(() => {
     //           return listenForChanges();
     //       })
-    
+
     //     return async () => await unsub;
     // }, [])
-
     
     // const getUsers = async (e) => {
     //     // try {
@@ -110,13 +109,13 @@ const QuickMatchPage = () => {
     //     // }
     // }
 
-
     // const submitSearch = async (e) => {
 
     //     setIsSearching(true);
 
     //     try {
     //         const user = supabase.auth.user()
+
 
     //         const updates = {
     //             longitude: longitude,
@@ -202,7 +201,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff8dc',
         alignItems: 'center',
         justifyContent: 'center',
-      },
+    },
 })
 
 

@@ -2,8 +2,6 @@ import React, {useState} from 'react'
 import {
     View,
     StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
     Text,
     ScrollView,
     Image,
