@@ -1,11 +1,11 @@
 import React from 'react'
 import {
-    View,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
-    Text,
-  } from 'react-native';
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Text,
+} from 'react-native';
 
 const HomePage = () => {
   return (
@@ -24,4 +24,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomePage
+export default HomePage;

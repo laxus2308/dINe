@@ -1,3 +1,4 @@
+//TO BE USED AS FIRST TIME LOGIN
 import React, { useState, useEffect } from 'react';
 import {
     View,
@@ -5,7 +6,7 @@ import {
     TextInput,
     StyleSheet,
 } from 'react-native';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 import 'react-native-url-polyfill/auto';
 
 
