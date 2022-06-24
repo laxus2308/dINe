@@ -5,10 +5,10 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import AuthTextInput from '../components/auth/AuthTextInput';
-import AuthButton from '../components/auth/AuthButton';
-import Styles from '../Style';
-import { supabase } from '../supabase';
+import AuthTextInput from '../../components/auth/AuthTextInput';
+import AuthButton from '../../components/auth/AuthButton';
+import Styles from '../../Style';
+import { supabase } from '../../supabase';
 
 const SignUpPage = () => {
   const [loading, setLoading] = useState(false);

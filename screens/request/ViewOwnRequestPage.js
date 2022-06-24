@@ -7,8 +7,8 @@ import {
     Text,
     FlatList,
   } from 'react-native';
-import { supabase } from '../supabase';
-import Request from '../components/Request';
+import { supabase } from '../../supabase';
+import Request from '../../components/request/Request';
 
 const ViewOwnRequestPage = () => {
 
@@ -16,7 +16,7 @@ const ViewOwnRequestPage = () => {
 
   const listenForChanges = () => {
     const mysub = supabase
-        .from('Requests')
+        .from('requests')
         .on('*', async (update) => {
             await getRequests()
         })
@@ -36,21 +36,9 @@ const ViewOwnRequestPage = () => {
 
   const getRequests = async () => {
     try {
-      const { data, error } = await supabase.from('Requests')
-      .select(`
-      id,
-      requestor_id,
-      username:profiles (Username),
-      created_at,
-      Location,
-      Time,
-      Date,
-      Pax,
-      Description,
-      Title,
-      Request_url
-      `).eq('requestor_id', user.id)
-      .order('Date', { ascending: true }).order('Time', { ascending: true });
+      const { data, error } = await supabase.from('requests')
+      .select(`*, username:profiles (Username)`).eq('requestor_id', user.id)
+      .order('datetime', { ascending: true });
       if (error) throw error
       setYourRequests(data)
     } catch (error) {

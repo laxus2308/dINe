@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import ChatListItem from '../components/ChatListItem';
-import { supabase } from '../supabase';
+import ChatListItem from '../../components/chat/ChatListItem';
+import { supabase } from '../../supabase';
 
 
 const ChatListPage = () => {

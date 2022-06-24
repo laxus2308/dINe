@@ -1,10 +1,10 @@
 import React from 'react';
 import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 
-import HomePage from '../screens/HomePage';
+import HomePage from '../screens/auth/HomePage';
 import ProfileNavigation from './ProfileNavigation';
 import ChatNavigation from '../Navigation/ChatNavigation';
-import MatchingPage from '../screens/MatchingPage';
+import MatchingPage from '../screens/match/MatchingPage';
 import RequestNavigation from './RequestNavigation';
 
 import { NavigationContainer } from '@react-navigation/native';

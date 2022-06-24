@@ -6,7 +6,7 @@ import {
     TouchableOpacity,
     Text,
 } from 'react-native';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -50,7 +50,7 @@ const ChatListItem = (props) => {
     } else if (chatRoom.avatar_url != null) {
         uri = getProfileUri(chatRoom.avatar_url[0].Avatar_url)
     } else {
-        uri = require('../assets/857720.png')
+        uri = require('../../assets/857720.png')
     }
 
     const enterChat = () => {

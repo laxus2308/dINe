@@ -7,8 +7,8 @@ import {
     SafeAreaView,
     FlatList,
 } from 'react-native';
-import Avatar from '../components/Avatar';
-import { supabase } from '../supabase';
+import Avatar from '../../components/profile/Avatar';
+import { supabase } from '../../supabase';
 
 const ProfilePage = ({ navigation }) => {
     const getProfile = async () => {
@@ -27,13 +27,13 @@ const ProfilePage = ({ navigation }) => {
             }
 
             if (data) {
-                setUsername(data.Username)
-                setAvatarUrl(data.Avatar_url)
-                setFaculty(data.Faculty)
-                setAge(data.Age)
-                setDietary(data.Dietary)
-                setInterests(data.Interests)
-                setCuisines(data.Cuisines)
+                setUsername(data.username)
+                setAvatarUrl(data.avatar_url)
+                setFaculty(data.faculty)
+                setAge(data.age)
+                setDietary(data.dietary)
+                setInterests(data.interests)
+                setCuisines(data.cuisines)
             } else {
                 createProfile()
             }
@@ -91,7 +91,7 @@ const ProfilePage = ({ navigation }) => {
             const { data, error } = await supabase
                 .from('profiles')
                 .insert([
-                    { id: user.id, Username: 'betatester' }
+                    { id: user.id, username: 'betatester' }
                 ])
         } catch(error) {
             alert(error)

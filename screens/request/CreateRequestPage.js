@@ -1,26 +1,22 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import {
-    View,
-    StyleSheet,
-    Text,
-    ScrollView,
-    Image,
-    TouchableOpacity,
-    TextInput
-  } from 'react-native';
-import { supabase } from '../supabase';
-import { useRoute } from '@react-navigation/native';
+  View,
+  StyleSheet,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
+  ScrollView
+} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { supabase } from '../../supabase';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer'
 import moment from 'moment'
 
-const EditRequestPage = ({navigation}) => {
-
-  const route = useRoute();
-  const request_id = route.params.requestData[0].id;
-
+const CreateRequestPage = ({ navigation }) => {
   const [uploading, setUploading] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -35,6 +31,14 @@ const EditRequestPage = ({navigation}) => {
   const [selectedDate, setSelectedDate] = useState(false);
 
   const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
+
+  const showDateTimePicker = () => {
+    setDateTimePickerVisibility(true);
+  };
+
+  const hideDateTimePicker = () => {
+    setDateTimePickerVisibility(false);
+  };
 
   const handleConfirm = (dateTime) => {
     setDateTime(dateTime);
@@ -77,20 +81,10 @@ const EditRequestPage = ({navigation}) => {
     value: 8
   },]
 
-  const showDateTimePicker = () => {
-    setDateTimePickerVisibility(true);
-  };
-
-  const hideDateTimePicker = () => {
-    setDateTimePickerVisibility(false);
-  };
-
-  const updateRequest = async (e) => {
+  const submitRequest = async (e) => {
     e.preventDefault();
-
     try {
       const user = supabase.auth.user()
-
       if (location == '') {
         alert("Please insert a location!")
         return;
@@ -113,31 +107,39 @@ const EditRequestPage = ({navigation}) => {
       }
 
       const updates = {
-        id: request_id,
         requestor_id: user.id,
-        Location: location,
-        Time: timePicked,
-        Date: datePicked,
-        Pax: pax,
-        Description: description,
-        Title: title,
-        Request_url: request_url,
+        location: location,
+        time: timePicked,
+        date: datePicked,
+        pax: pax,
+        description: description,
+        title: title,
+        request_url: request_url,
         datetime: dateTime,
         current_pax: 1,
       }
 
-      let { error } = await supabase.from('Requests').upsert(updates, {returning: 'minimal'})
+      let { data, error } = await supabase
+        .from('requests')
+        .insert([updates])
+
+
+      const { error: createRoomError } = await supabase.rpc('create_request_room', {
+        request_id: data[0].id
+      })
 
       if (error) {
-          throw error
+        throw error
+      } else if (createRoomError) {
+        throw createRoomError
       }
-      navigation.pop()
+      navigation.pop();
 
-  } catch (error) {
-          alert(error.message)
-  }
+    } catch (error) {
+      alert(error.message)
+    }
+  };
 
-  }
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -179,7 +181,6 @@ const EditRequestPage = ({navigation}) => {
       setUploading(false)
     }
   }
-
 
   return (
     <View style={styles.container}>
@@ -263,8 +264,8 @@ const EditRequestPage = ({navigation}) => {
             }}
           />
         </View>
-        <TouchableOpacity style={styles.submitButton} onPress={updateRequest}>
-          <Text> Update Request </Text>
+        <TouchableOpacity style={styles.submitButton} onPress={submitRequest}>
+          <Text> Submit </Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -356,4 +357,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditRequestPage
+export default CreateRequestPage;

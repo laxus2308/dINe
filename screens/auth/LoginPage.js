@@ -7,10 +7,10 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import AuthButton from '../components/auth/AuthButton';
-import AuthTextInput from '../components/auth/AuthTextInput';
-import Styles from '../Style';
-import { supabase } from '../supabase';
+import AuthButton from '../../components/auth/AuthButton';
+import AuthTextInput from '../../components/auth/AuthTextInput';
+import Styles from '../../Style';
+import { supabase } from '../../supabase';
 
 const LoginPage = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ const LoginPage = ({ navigation }) => {
       <View style={styles.container}>
         <Image
           style={styles.image}
-          source={require("../assets/857720.png")}
+          source={require("../../assets/857720.png")}
         />
         <StatusBar style="auto" />
         <AuthTextInput

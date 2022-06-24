@@ -1,10 +1,10 @@
 import React from 'react';
-import RequestBoard from '../screens/RequestBoard';
-import CreateRequestPage from '../screens/CreateRequestPage'
+import RequestBoard from '../screens/request/RequestBoard';
+import CreateRequestPage from '../screens/request/CreateRequestPage'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ViewRequestPage from '../screens/ViewRequestPage'
-import ViewOwnRequestPage from '../screens/ViewOwnRequestPage';
-import EditRequestPage from '../screens/EditRequestPage';
+import ViewRequestPage from '../screens/request/ViewRequestPage'
+import ViewOwnRequestPage from '../screens/request/ViewOwnRequestPage';
+import EditRequestPage from '../screens/request/EditRequestPage';
 
 const Stack = createNativeStackNavigator();
 

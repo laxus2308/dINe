@@ -7,7 +7,7 @@ import {
     TextInput,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 
 const UpdateProfilePage = ({ navigation }) => {
     const [username, setUsername] = useState('');
@@ -30,12 +30,12 @@ const UpdateProfilePage = ({ navigation }) => {
 
             const updates = {
                 id: user.id,
-                Username: username,
-                Faculty: faculty,
-                Age: age,
-                Dietary: dietary,
-                Interests: interests,
-                Cuisines: cuisines,
+                username: username,
+                faculty: faculty,
+                age: age,
+                dietary: dietary,
+                interests: interests,
+                cuisines: cuisines,
             }
 
             let { error } = await supabase

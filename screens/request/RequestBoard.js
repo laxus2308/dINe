@@ -8,8 +8,8 @@ import {
     TouchableOpacity,
     Image
   } from 'react-native';
-import Request from '../components/Request.js';
-import { supabase } from '../supabase.js';
+import Request from '../../components/request/Request.js';
+import { supabase } from '../../supabase.js';
 
 
 const RequestBoard = ({navigation}) => {
@@ -19,7 +19,7 @@ const RequestBoard = ({navigation}) => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('Create Request');}}>
-            <Image style={styles.image} source={require("../assets/create.png")}/>
+            <Image style={styles.image} source={require("../../assets/create.png")}/>
         </TouchableOpacity>
     )
     })
@@ -27,7 +27,7 @@ const RequestBoard = ({navigation}) => {
 
   const listenForChanges = () => {
     const mysub = supabase
-        .from('Requests')
+        .from('requests')
         .on('*', async (update) => {
             await getRequests()
         })
@@ -46,19 +46,19 @@ const RequestBoard = ({navigation}) => {
 
   const getRequests = async () => {
     try {
-      const { data, error } = await supabase.from('Requests')
+      const { data, error } = await supabase.from('requests')
       .select(`
       id,
       requestor_id,
       username:profiles (Username),
       created_at,
-      Location,
-      Time,
-      Date,
-      Pax,
-      Description,
-      Title,
-      Request_url,
+      location,
+      time,
+      date,
+      pax,
+      description,
+      title,
+      request_url,
       datetime
       `)
       .order('datetime', { ascending: true });

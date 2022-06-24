@@ -1,7 +1,7 @@
 import React from 'react';
-import LoginPage from '../screens/LoginPage';
-import ForgetPasswordPage from '../screens/ForgetPasswordPage';
-import SignUpPage from '../screens/SignUpPage';
+import LoginPage from '../screens/auth/LoginPage';
+import ForgetPasswordPage from '../screens/auth/ForgetPasswordPage';
+import SignUpPage from '../screens/auth/SignUpPage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
