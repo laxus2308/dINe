@@ -110,7 +110,6 @@ const styles = StyleSheet.create({
     chatHeader: {
         flexDirection: 'row',
         backgroundColor: 'yellow',
-        // height: '10%',
         width: '100%',
 
     },

@@ -25,7 +25,7 @@ const Request = (props) => {
     let uri;
 
     if (req.Request_url == null) {
-        uri = require ('../assets/loid.jpg')
+        uri = require ('../assets/BlankImage.png')
     } else {
         uri = getUri(req.Request_url);
     }
