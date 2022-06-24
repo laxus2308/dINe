@@ -25,41 +25,32 @@ const RequestBoard = ({navigation}) => {
     })
   }, [navigation])
 
-  const listenForChanges = () => {
-    const mysub = supabase
-        .from('requests')
-        .on('*', async (update) => {
-            await getRequests()
-        })
-        .subscribe();
-    return mysub;
-  }
-
-  useEffect(() => {
-      const unsub = getRequests().then(() => {
-          return listenForChanges();
-      })
-
-    return async () => await unsub;
+  
+    //check for real time updates
+    useEffect(() => {
+      const sub = supabase
+          .from('requests')
+          .on('*', async (update) => {
+              await getRequests()
+          })
+          .subscribe();
+      return () => {
+          supabase.removeSubscription(sub)
+      }
+      
   }, [])
 
+  //get request details upon first navigate
+  useEffect(() => {
+      getRequests();
+  }, [])
 
   const getRequests = async () => {
     try {
       const { data, error } = await supabase.from('requests')
       .select(`
-      id,
-      requestor_id,
       username:profiles (username),
-      created_at,
-      location,
-      time,
-      date,
-      pax,
-      description,
-      title,
-      request_url,
-      datetime
+      *
       `)
       .order('datetime', { ascending: true });
       console.log(data)
@@ -68,7 +59,6 @@ const RequestBoard = ({navigation}) => {
     } catch (error) {
       alert(error.message)
     }
-   
   }
 
   return (

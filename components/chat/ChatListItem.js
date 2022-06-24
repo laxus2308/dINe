@@ -48,7 +48,7 @@ const ChatListItem = (props) => {
         // console.log(chatRoom.pic_url)
         uri = getRequestUri(chatRoom.pic_url);
     } else if (chatRoom.avatar_url != null) {
-        uri = getProfileUri(chatRoom.avatar_url[0].Avatar_url)
+        uri = getProfileUri(chatRoom.avatar_url[0].avatar_url)
     } else {
         uri = require('../../assets/857720.png')
     }

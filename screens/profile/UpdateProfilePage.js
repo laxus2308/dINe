@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
     View,
     Text,
@@ -249,7 +249,36 @@ const UpdateProfilePage = ({ navigation }) => {
         setInterestsOpen(false);
     }, [])
 
+    const getProfile = async () => {
+        try {
+            const user = supabase.auth.user()
 
+            let { data, error, status } = await supabase
+                .from('profiles')
+                .select()
+                .eq('id', user.id)
+                .single()
+
+            if (error && status !== 406) {
+                throw error
+            }
+
+            if (data) {
+                setUsername(data.username)
+                setFaculty(data.faculty)
+                setAge(String(data.age))
+                setDietary(data.dietary)
+                setInterests(data.interests)
+                setCuisines(data.cuisines)
+            }
+        } catch (error) {
+            console.log(error)
+        } 
+    }
+    
+    useEffect(()=> {
+        getProfile();
+    }, [])
     return (
         <View>
             <View style={{ ...styles.verticalComponent, ...styles.bottomSeparator }}>

@@ -1,13 +1,13 @@
-import React, {useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-    View,
-    StyleSheet,
-    Text,
-    ScrollView,
-    Image,
-    TouchableOpacity,
-    TextInput
-  } from 'react-native';
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  TextInput
+} from 'react-native';
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -16,7 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer'
 import moment from 'moment'
 
-const EditRequestPage = ({navigation}) => {
+const EditRequestPage = ({ navigation }) => {
 
   const route = useRoute();
   const request_id = route.params.requestData[0].id;
@@ -30,6 +30,7 @@ const EditRequestPage = ({navigation}) => {
   const [timePicked, setTime] = useState('Select a time first');
   const [dateTime, setDateTime] = useState('');
   const [pax, setPax] = useState();
+  const [currPax, setCurrPax] = useState(1);
   const [paxOpen, setPaxOpen] = useState(false);
   const [request_url, setRequestUrl] = useState(null);
   const [selectedDate, setSelectedDate] = useState(false);
@@ -102,7 +103,7 @@ const EditRequestPage = ({navigation}) => {
       if (datePicked == 'Select a date') {
         alert("Please select a date!")
         return;
-      } 
+      }
       if (dateTime < moment()) {
         alert("Please select a proper time. Time set has already passed.")
         return;
@@ -113,8 +114,6 @@ const EditRequestPage = ({navigation}) => {
       }
 
       const updates = {
-        id: request_id,
-        requestor_id: user.id,
         location: location,
         time: timePicked,
         date: datePicked,
@@ -123,19 +122,19 @@ const EditRequestPage = ({navigation}) => {
         title: title,
         request_url: request_url,
         datetime: dateTime,
-        current_pax: 1,
+        current_pax: currPax,
       }
 
-      let { error } = await supabase.from('requests').upsert(updates, {returning: 'minimal'})
+      let { error } = await supabase.from('requests').upsert(updates, { returning: 'minimal' })
 
       if (error) {
-          throw error
+        throw error
       }
       navigation.pop()
 
-  } catch (error) {
-          alert(error.message)
-  }
+    } catch (error) {
+      alert(error.message)
+    }
 
   }
 
@@ -180,9 +179,49 @@ const EditRequestPage = ({navigation}) => {
     }
   }
 
-  const getRequestData = async() => {
-    
+  const getRequestData = async () => {
+    try {
+      const { data, error } = await supabase.from('requests')
+        .select('*')
+        .eq('id', request_id);
+
+      if (data) {
+        setTitle(data[0].title)
+        setDescription(data[0].description)
+        setLocation(data[0].location)
+        setDate(data[0].date)
+        setTime(data[0].time)
+        setDateTime(data[0].datetime)
+        setPax(data[0].pax)
+        setCurrPax(data[0].current_pax)
+        setRequestUrl(data[0].request_url)
+      }
+
+      if (request_url) {
+        setRequestUrl(getRequestUri(request_url))
+      }
+
+      if (error) throw error
+    } catch (error) {
+      alert(error.message)
+    }
   }
+
+  const getRequestUri = (path) => {
+    try {
+      const { publicURL, error } = supabase.storage.from('requestpics').getPublicUrl(path)
+      if (error) {
+        throw error
+      }
+      setImage(publicURL)
+
+    } catch (error) {
+      alert('Error downloading image: ', error.message)
+    }
+  }
+  useEffect(() => {
+    getRequestData()
+  }, [])
 
 
   return (
@@ -239,7 +278,7 @@ const EditRequestPage = ({navigation}) => {
             onConfirm={handleConfirm}
             onCancel={hideDateTimePicker}
             minimumDate={new Date()}
-            // minimumTime={moment().format("HH:mm:ss")}
+          // minimumTime={moment().format("HH:mm:ss")}
           />
         </View>
 

@@ -5,8 +5,6 @@ import {
   Text,
   Image,
   Button,
-  TouchableOpacity,
-  SafeAreaView
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
@@ -17,10 +15,8 @@ const ViewRequestPage = ({ navigation }) => {
   const [requestData, setRequestData] = useState(null);
 
   const deleteRequest = async () => {
-   
       navigation.navigate("Request Board")
-      const { data, error } = await supabase.from('requests').delete().match({ id: request_id })
-    
+      await supabase.from('requests').delete().match({ id: request_id })
   }
 
   const joinRequestRoom = async () => {
@@ -69,24 +65,7 @@ const ViewRequestPage = ({ navigation }) => {
 
   useEffect(()=> {
     getRequestData()
-  })
-  // const listenForChanges = () => {
-  //   mysub = supabase
-  //       .from(`Requests:id=eq.${request_id}`)
-  //       .on('*', async (update) => {
-  //           await getRequestData()
-  //       })
-  //       .subscribe();
-  //   return mysub;
-  // }
-
-  // useEffect(() => {
-  //     const unsub = getRequestData().then(() => {
-  //         return listenForChanges();
-  //     })
-
-  //   return async () => await unsub;
-  // }, [])
+  },[])
 
   const getUri = (path) => {
     try {
@@ -107,30 +86,30 @@ const ViewRequestPage = ({ navigation }) => {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>
-          {requestData[0].Title}
+          {requestData[0].title}
         </Text>
-        {(requestData[0].Request_url == null) ? (
+        {(requestData[0].request_url == null) ? (
           <Image
             source={require('../../assets/BlankImage.png')}
           />) : (
           <Image
             style={styles.image}
-            source={{ uri: getUri(requestData[0].Request_url) }}
+            source={{ uri: getUri(requestData[0].request_url) }}
           />)}
         <Text style={styles.detail}>
           Created By: {requestData[0].username.username}
         </Text>
         <Text style={styles.detail}>
-          Location: {requestData[0].Location}
+          Location: {requestData[0].location}
         </Text>
         <Text style={styles.detail}>
-          Scheduled Date: {requestData[0].Date}
+          Scheduled Date: {requestData[0].date}
         </Text>
         <Text style={styles.detail}>
-          Scheduled Time: {requestData[0].Time}
+          Scheduled Time: {requestData[0].time}
         </Text>
         <Text style={styles.description}>
-          Description: {requestData[0].Description}
+          Description: {requestData[0].description}
         </Text>
         {user.id != requestData[0].requestor_id ? (
           <Button
@@ -156,7 +135,7 @@ const ViewRequestPage = ({ navigation }) => {
             </View>
           </View>)}
         <Text style={styles.pax}>
-          Pax: {requestData[0].current_pax} / {requestData[0].Pax}
+          Pax: {requestData[0].current_pax} / {requestData[0].pax}
         </Text>
       </View>
     )

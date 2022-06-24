@@ -19,22 +19,23 @@ const ParticipantsPage = () => {
     const chatRoomId = route.params.chatRoomId;
     const chatName = route.params.chatName;
 
-    const listenForChanges = () => {
-        const mysub = supabase
+    //check for real time updates
+    useEffect(() => {
+        const sub = supabase
             .from('room_participants')
             .on('*', async (update) => {
                 await getParticipantsData()
             })
             .subscribe();
-        return mysub;
-    }
+        return () => {
+            supabase.removeSubscription(sub)
+        }
+        
+    }, [])
 
+    //get participants data upon first navigate
     useEffect(() => {
-        const unsub = getParticipantsData().then(() => {
-            return listenForChanges();
-        })
-
-        return async () => await unsub;
+        getParticipantsData();
     }, [])
 
     const getParticipantsData = async () => {

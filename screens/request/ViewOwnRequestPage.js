@@ -1,35 +1,35 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import {
-    View,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
-    Text,
-    FlatList,
-  } from 'react-native';
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Text,
+  FlatList,
+} from 'react-native';
 import { supabase } from '../../supabase';
 import Request from '../../components/request/Request';
 
 const ViewOwnRequestPage = () => {
 
   const [yourRequests, setYourRequests] = useState([]);
-
-  const listenForChanges = () => {
-    const mysub = supabase
-        .from('requests')
-        .on('*', async (update) => {
-            await getRequests()
-        })
-        .subscribe();
-    return mysub;
-  }
-
+  //check for real time updates
   useEffect(() => {
-      const unsub = getRequests().then(() => {
-          return listenForChanges();
+    const sub = supabase
+      .from('requests')
+      .on('*', async (update) => {
+        await getRequests()
       })
+      .subscribe();
+    return () => {
+      supabase.removeSubscription(sub)
+    }
 
-    return async () => await unsub;
+  }, [])
+
+  //get request details upon first navigate
+  useEffect(() => {
+    getRequests();
   }, [])
 
   const user = supabase.auth.user();
@@ -37,14 +37,14 @@ const ViewOwnRequestPage = () => {
   const getRequests = async () => {
     try {
       const { data, error } = await supabase.from('requests')
-      .select(`*, username:profiles (username)`).eq('requestor_id', user.id)
-      .order('datetime', { ascending: true });
+        .select(`*, username:profiles (username)`).eq('requestor_id', user.id)
+        .order('datetime', { ascending: true });
       if (error) throw error
       setYourRequests(data)
     } catch (error) {
       alert(error)
     }
-   
+
   }
 
   return (
@@ -52,10 +52,10 @@ const ViewOwnRequestPage = () => {
       style={styles.requestsList}
       contentContainerStyle={styles.requestsListContainer}
       data={yourRequests}
-      renderItem={({item}) => {return <Request req = {item}/>}}
+      renderItem={({ item }) => { return <Request req={item} /> }}
       numColumns={2}
       columnWrapperStyle={styles.row}
-      keyExtractor={(item)=> item.id}
+      keyExtractor={(item) => item.id}
     />
   )
 }
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-      flex:1/3,
+    flex: 1 / 3,
   },
 
   requestButtonContainer: {
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 12
   },
-  
+
   appButtonText: {
     fontSize: 18,
     color: "#fff",

@@ -63,16 +63,6 @@ const ProfilePage = ({ navigation }) => {
         getProfile();
     }, [])
     
-
-    // useEffect(() => {
-    //     const unsub = getProfile().then(() => {
-    //         return listenForChanges();
-    //     })
-
-    //     return async () => await unsub;
-    // }, [])
-
-
     const [loading, setLoading] = useState(true);
     const [username, setUsername] = useState('');
     const [avatar_url, setAvatarUrl] = useState(null);

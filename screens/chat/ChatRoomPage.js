@@ -17,24 +17,25 @@ const ChatRoomPage = () => {
 
     const [messages, setMessages] = useState(null);
 
-    const listenForChanges = () => {
-        const mysub = supabase
+    //check for real time updates
+    useEffect(() => {
+        const sub = supabase
             .from(`messages:room_id=eq.${room_id}`)
-            .on('*',  (payload) => {
+            .on('*', (payload) => {
                 setMessages(current => [payload.new, ...current])
             })
             .subscribe();
-        return mysub;
-    }
-    
-    useEffect(() => {
-        const unsub = getMessages().then(() => {
-            return listenForChanges();
-        })
-
-    return async () => await unsub;
+        return () => {
+            supabase.removeSubscription(sub)
+        }
+        
     }, [])
-    
+
+    //get messages upon first navigate
+    useEffect(() => {
+        getMessages();
+    }, [])
+
     const getMessages = async () => {
         try {
             const { data, error } = await supabase

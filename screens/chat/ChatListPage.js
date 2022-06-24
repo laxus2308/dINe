@@ -24,25 +24,25 @@ const ChatListPage = () => {
       alert(error.message)
     }
   }
-  
-  const listenForChanges = () => {
-    const mysub = supabase
+
+  //check for real time updates
+  useEffect(() => {
+    const sub = supabase
         .from('chat_rooms')
         .on('*', async (update) => {
             await getChatList()
         })
         .subscribe();
-    return mysub;
-  }
+    return () => {
+        supabase.removeSubscription(sub)
+    }
+    
+}, [])
 
-  useEffect(() => {
-      const unsub = getChatList().then(() => {
-          return listenForChanges();
-      })
-
-    return async () => await unsub;
-  }, [])
-
+//get chat lists upon first navigate
+useEffect(() => {
+    getChatList();
+}, [])
 
   const getChatList = async () => {
     try {
