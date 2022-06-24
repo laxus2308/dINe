@@ -108,19 +108,19 @@ const CreateRequestPage = ({ navigation }) => {
 
       const updates = {
         requestor_id: user.id,
-        Location: location,
-        Time: timePicked,
-        Date: datePicked,
-        Pax: pax,
-        Description: description,
-        Title: title,
-        Request_url: request_url,
+        location: location,
+        time: timePicked,
+        date: datePicked,
+        pax: pax,
+        description: description,
+        title: title,
+        request_url: request_url,
         datetime: dateTime,
         current_pax: 1,
       }
 
       let { data, error } = await supabase
-        .from('Requests')
+        .from('requests')
         .insert([updates])
 
 

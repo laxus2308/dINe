@@ -19,7 +19,7 @@ const ViewRequestPage = ({ navigation }) => {
   const deleteRequest = async () => {
    
       navigation.navigate("Request Board")
-      const { data, error } = await supabase.from('Requests').delete().match({ id: request_id })
+      const { data, error } = await supabase.from('requests').delete().match({ id: request_id })
     
   }
 
@@ -39,7 +39,7 @@ const ViewRequestPage = ({ navigation }) => {
 
   const getRequestData = async () => {
     try {
-      const { data, error } = await supabase.from('Requests')
+      const { data, error } = await supabase.from('requests')
         .select(`
           username:profiles (Username), *
           `)
@@ -57,7 +57,7 @@ const ViewRequestPage = ({ navigation }) => {
 
   useEffect(() => {
     const sub = supabase
-      .from(`Requests:id=eq.${request_id}`)
+      .from(`requests:id=eq.${request_id}`)
       .on('*', async (update) => {
         await getRequestData()
       })

@@ -24,17 +24,17 @@ const Request = (props) => {
 
     let uri;
 
-    if (req.Request_url == null) {
+    if (req.request_url == null) {
         uri = require ('../../assets/BlankImage.png')
     } else {
-        uri = getUri(req.Request_url);
+        uri = getUri(req.request_url);
     }
 
     return (
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('View Request', {
             id: req.id
         })}>
-            {req.Request_url == null ? (
+            {req.request_url == null ? (
                 <Image
                     style={styles.thumb}
                     source={uri}
@@ -46,11 +46,11 @@ const Request = (props) => {
                 />
             )}
             <View style={styles.infoContainer}>
-                <Text style={styles.title}>{req.Title}</Text>
-                <Text style={styles.timing}>Location: {req.Location}</Text>
-                <Text style={styles.timing}>Date: {req.Date}</Text>
-                <Text style={styles.timing}>Time: {req.Time}</Text>
-                <Text style={styles.timing}>Pax: {req.Pax}</Text>
+                <Text style={styles.title}>{req.title}</Text>
+                <Text style={styles.timing}>Location: {req.location}</Text>
+                <Text style={styles.timing}>Date: {req.date}</Text>
+                <Text style={styles.timing}>Time: {req.time}</Text>
+                <Text style={styles.timing}>Pax: {req.pax}</Text>
                 <Text style={styles.username}>{req.username.Username}</Text>
             </View>
         </TouchableOpacity>

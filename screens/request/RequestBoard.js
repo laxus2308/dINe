@@ -27,7 +27,7 @@ const RequestBoard = ({navigation}) => {
 
   const listenForChanges = () => {
     const mysub = supabase
-        .from('Requests')
+        .from('requests')
         .on('*', async (update) => {
             await getRequests()
         })
@@ -46,19 +46,19 @@ const RequestBoard = ({navigation}) => {
 
   const getRequests = async () => {
     try {
-      const { data, error } = await supabase.from('Requests')
+      const { data, error } = await supabase.from('requests')
       .select(`
       id,
       requestor_id,
       username:profiles (Username),
       created_at,
-      Location,
-      Time,
-      Date,
-      Pax,
-      Description,
-      Title,
-      Request_url,
+      location,
+      time,
+      date,
+      pax,
+      description,
+      title,
+      request_url,
       datetime
       `)
       .order('datetime', { ascending: true });

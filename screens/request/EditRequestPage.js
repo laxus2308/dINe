@@ -115,18 +115,18 @@ const EditRequestPage = ({navigation}) => {
       const updates = {
         id: request_id,
         requestor_id: user.id,
-        Location: location,
-        Time: timePicked,
-        Date: datePicked,
-        Pax: pax,
-        Description: description,
-        Title: title,
-        Request_url: request_url,
+        location: location,
+        time: timePicked,
+        date: datePicked,
+        pax: pax,
+        description: description,
+        title: title,
+        request_url: request_url,
         datetime: dateTime,
         current_pax: 1,
       }
 
-      let { error } = await supabase.from('Requests').upsert(updates, {returning: 'minimal'})
+      let { error } = await supabase.from('requests').upsert(updates, {returning: 'minimal'})
 
       if (error) {
           throw error

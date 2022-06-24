@@ -71,7 +71,7 @@ const Avatar = ({ url }) => {
 
             const { error } = await supabase
                 .from('profiles')
-                .update({ Avatar_url: filePath })
+                .update({ avatar_url: filePath })
                 .match({ id: user.id })
 
             if (uploadError) {
@@ -93,12 +93,12 @@ const Avatar = ({ url }) => {
             const user = supabase.auth.user()
             const { data, error } = await supabase
                 .from('profiles')
-                .select('Avatar_url')
+                .select('avatar_url')
                 .match({ id: user.id })
             if (error) {
                 throw error
             }
-            return data[0].Avatar_url
+            return data[0].avatar_url
         } catch (error) {
             alert(error.message)
         }

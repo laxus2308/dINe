@@ -30,12 +30,12 @@ const UpdateProfilePage = ({ navigation }) => {
 
             const updates = {
                 id: user.id,
-                Username: username,
-                Faculty: faculty,
-                Age: age,
-                Dietary: dietary,
-                Interests: interests,
-                Cuisines: cuisines,
+                username: username,
+                faculty: faculty,
+                age: age,
+                dietary: dietary,
+                interests: interests,
+                cuisines: cuisines,
             }
 
             let { error } = await supabase

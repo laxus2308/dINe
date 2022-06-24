@@ -16,7 +16,7 @@ const ViewOwnRequestPage = () => {
 
   const listenForChanges = () => {
     const mysub = supabase
-        .from('Requests')
+        .from('requests')
         .on('*', async (update) => {
             await getRequests()
         })
@@ -36,7 +36,7 @@ const ViewOwnRequestPage = () => {
 
   const getRequests = async () => {
     try {
-      const { data, error } = await supabase.from('Requests')
+      const { data, error } = await supabase.from('requests')
       .select(`*, username:profiles (Username)`).eq('requestor_id', user.id)
       .order('datetime', { ascending: true });
       if (error) throw error
