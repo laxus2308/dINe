@@ -58,9 +58,10 @@ const RequestBoard = ({navigation}) => {
       Pax,
       Description,
       Title,
-      Request_url
+      Request_url,
+      datetime
       `)
-      .order('Date', { ascending: true }).order('Time', { ascending: true });
+      .order('datetime', { ascending: true });
       console.log(data)
       if (error) throw error
       setRequests(data)
