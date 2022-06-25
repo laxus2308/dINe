@@ -13,6 +13,8 @@ const ViewRequestPage = ({ navigation }) => {
   const route = useRoute();
   const request_id = route.params.id;
   const [requestData, setRequestData] = useState(null);
+  const [chatId, setChatId] = useState('');
+  const [chatName, setChatName] = useState('');
 
   const deleteRequest = async () => {
       navigation.navigate("Request Board")
@@ -26,8 +28,18 @@ const ViewRequestPage = ({ navigation }) => {
       })
 
       if (joinRoomError) throw joinRoomError
+      
+      navigation.navigate('Chat', {screen:'ChatRoomPage', params: {
+        id:chatId,
+        name:chatName,
+      }})
     } catch (error) {
-      console.log(error);
+      if (error.message == "duplicate key value violates unique constraint \"room participants_pkey\"" ) {
+        alert("Already joined")
+      } else {
+        alert(error.message)
+      }
+      console.log(error.message);
     }
   }
 
@@ -42,7 +54,8 @@ const ViewRequestPage = ({ navigation }) => {
         .eq('id', request_id)
 
       setRequestData(data);
-
+      setChatId(data[0].chat_id);
+      setChatName(data[0].title);
 
       if (error) throw error
     } catch (error) {
