@@ -114,6 +114,7 @@ const EditRequestPage = ({ navigation }) => {
       }
 
       const updates = {
+        id: request_id,
         location: location,
         time: timePicked,
         date: datePicked,
@@ -125,7 +126,8 @@ const EditRequestPage = ({ navigation }) => {
         current_pax: currPax,
       }
 
-      let { error } = await supabase.from('requests').upsert(updates, { returning: 'minimal' })
+      const { error} = await supabase.rpc('update_request', updates).single()
+
 
       if (error) {
         throw error

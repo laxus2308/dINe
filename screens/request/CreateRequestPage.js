@@ -98,7 +98,7 @@ const CreateRequestPage = ({ navigation }) => {
         return;
       } 
       if (dateTime < moment()) {
-        alert("Please select a proper time. Time set has already passed.")
+        alert("Please select a proper date and time.")
         return;
       }
       if (pax == 0) {

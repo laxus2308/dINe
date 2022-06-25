@@ -51,7 +51,7 @@ const Request = (props) => {
                 <Text style={styles.timing}>Date: {req.date}</Text>
                 <Text style={styles.timing}>Time: {req.time}</Text>
                 <Text style={styles.timing}>Pax: {req.pax}</Text>
-                <Text style={styles.username}>{req.username.Username}</Text>
+                <Text style={styles.username}>{req.username.username}</Text>
             </View>
         </TouchableOpacity>
     )

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { render } from 'react-dom';
 import {
     View,
     Text,
@@ -9,8 +10,8 @@ import {
     Platform,
     Button
 } from 'react-native';
+import { set } from 'react-native-reanimated';
 import { supabase } from '../../supabase';
-import * as Location from 'expo-location';
 
 const QuickMatchPage = () => {
 
@@ -19,158 +20,96 @@ const QuickMatchPage = () => {
     const [latitude, setLatitude] = useState(null);
     const [searchId, setSearchId] = useState(null);
     const [userData, setUserData] = useState([]);
+    const [profileId, setProfileId] = useState(null);
+    const [match, setMatch] = useState(null);
+    const [test, setTest] = useState(false);
 
-    const getLocation = async () => {
+    
+    const getUsers = async (e) => {
+
         try {
-            const { granted } = await Location.requestForegroundPermissionsAsync();
-            if (granted) {
-                const lastKnownPosition = await Location.getLastKnownPositionAsync();
-                if (!lastKnownPosition) {
-                    return;
-                }
-                const { latitude, longitude } = lastKnownPosition.coords;
-                setLatitude(latitude);
-                setLongitude(longitude);
-            } else {
-                return;
+            const user = supabase.auth.user()
+
+            let {data, error} = await supabase.from('quick_match').select().eq('searching', true).neq('profile_id', user.id)
+
+            if (error) {
+                console.log(error)
             }
+
+            if (data.length == 0) {
+                console.log(data)
+                if (test) {
+                    setTimeout(() => getUsers(), 5000);
+                }
+            } else {
+                stopSearch();
+                setUserData(data);
+                console.log(userData);
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        } 
+    }
+
+    useEffect(() => {
+        getUsers()
+    }, []);
+
+
+    const submitSearch = async (e) => {
+        setIsSearching(true);
+
+        try {
+
+        const user = supabase.auth.user()
+
+        setTest(true);
+
+        console.log(test);
+
+        const updates = {
+            searching: true
+        }
+
+        await supabase.from('quick_match').update(updates).match({profile_id: user.id})
+
+        getUsers()
+
+        if (userData.length != 0) {
+            console.log(userData[0].profile_id)
+        }
+
         } catch (error) {
             console.log(error);
         }
-    };
-
-    useEffect(() => {
-        getLocation();
-    }, []);
-
-    // useEffect(() => {
-    //     getData();
-    // }, [])
+    }
 
 
-    // const refreshTime = 2000 //How frequently you want to refresh the data, in ms
+    const stopSearch = async (e) => {
 
-    // const getData = async () => {
-    //     submitSearch();
-    //     setIsSearching(true) 
-    //     const data = await supabase.from('quick_match').select().eq('searching', true).then(data => {
-    //         setUserData(data);
-    //     })
-    //     console.log("The data is " + userData)
-    //     setIsSearching(false); 
-    // }
+        try {
+            const user = supabase.auth.user()
 
-    // useEffect(() => {
-    //     const comInterval = setInterval(getData, refreshTime);
-    //     return () => clearInterval(comInterval) 
-    // },[])
+            const updates = {
+                searching: false
+            }
 
-    // const listenForChanges = () => {
-    //     const mysub = supabase
-    //         .from('quick_match')
-    //         .on('*', async (update) => {
-    //             await getUsers()
-    //         })
-    //         .subscribe();
-    //     return mysub;
-    //   }
+            let { data, error } = await supabase.from('quick_match').update(updates).match({profile_id: user.id})
 
-    // useEffect(() => {
-    //       const unsub = getUsers().then(() => {
-    //           return listenForChanges();
-    //       })
+            if (error) {
+                throw error
+            }
 
-    //     return async () => await unsub;
-    // }, [])
-    
-    // const getUsers = async (e) => {
-    //     // try {
-    //     //     const user = supabase.auth.user()
+        }  catch(error) {
+            console.log(error)
+        }
 
-    //         return await supabase.from('quick_match').select().eq('searching', true).neq('profile_id', user.id)
-
-    //     //     if (error) {
-    //     //         console.log(error)
-    //     //     }
-
-    //     //     if (data.length == 0) {
-    //     //         setTimeout(() => getUsers(), 5000);
-    //     //     } else {
-    //     //         return data;
-    //     //     }
-
-    //     //     const today = new Date();
-
-    //     //     console.log("Retrieved from database at " + today)
-    //     //     console.log(userData)
-
-    //     // } catch (error) {
-    //     //     console.log(error)
-    //     // }
-    // }
-
-    // const submitSearch = async (e) => {
-
-    //     setIsSearching(true);
-
-    //     try {
-    //         const user = supabase.auth.user()
+        setIsSearching(false);
 
 
-    //         const updates = {
-    //             longitude: longitude,
-    //             latitude: latitude,
-    //             searching: true
-    //         }
-
-    //         await supabase.from('quick_match').update(updates).match({profile_id: user.id})
-
-    //         while (userData.length == 0) {
-    //             let { data, error } = getUsers();
-    //             setTimeout(() => getUsers(), 5000);
-    //             setUserData(data);
-    //         }
-
-    //         // getUsers();
-
-    //         // console.log("My saved data:")
-    //         // console.log(userData)
-
-    //             //var geodist = require('geodist');
-
-    //             //var minDist = Number.NEGATIVE_INFINITY;
-
-    //             //var dist = geodist({lat: data.latitude, lon: data.longitude}, {lat: 33.7489, lon: -84.3881})
-            
-    //     }  catch(error) {
-    //         console.log(error)
-    //     } 
-    // }
-
-
-    // const stopSearch = async (e) => {
-    //     e.preventDefault();
-
-    //     try {
-    //         const user = supabase.auth.user()
-
-    //         const updates = {
-    //             searching: false
-    //         }
-
-    //         let { data, error } = await supabase.from('quick_match').update(updates).match({profile_id: user.id})
-
-    //         setIsSearching(false);
-
-    //         if (error) {
-    //             throw error
-    //         }
-
-    //     }  catch(error) {
-    //         console.log(error)
-    //     }
-
-    // }
+    }
 
 
     return (
