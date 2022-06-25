@@ -104,6 +104,7 @@ const ViewRequestPage = ({ navigation }) => {
         {(requestData[0].request_url == null) ? (
           <Image
             source={require('../../assets/BlankImage.png')}
+            style={styles.image}
           />) : (
           <Image
             style={styles.image}

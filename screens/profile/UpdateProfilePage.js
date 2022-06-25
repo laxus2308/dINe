@@ -263,13 +263,14 @@ const UpdateProfilePage = ({ navigation }) => {
                 throw error
             }
 
+            console.log(data)
             if (data) {
                 setUsername(data.username)
                 setFaculty(data.faculty)
                 setAge(String(data.age))
                 setDietary(data.dietary)
-                setInterests(data.interests)
-                setCuisines(data.cuisines)
+                setInterests(data.interests?data.interests:[])
+                setCuisines(data.cuisines?data.cuisines:[])
             }
         } catch (error) {
             console.log(error)
@@ -282,7 +283,7 @@ const UpdateProfilePage = ({ navigation }) => {
     return (
         <View>
             <View style={{ ...styles.verticalComponent, ...styles.bottomSeparator }}>
-                <Text style={{ flex: 1 / 4 }}> Name </Text>
+                <Text style={{ flex: 1 / 3 }}> Name </Text>
                 <TextInput
                     placeholder={"Insert your name here"}
                     value={username}
@@ -291,7 +292,7 @@ const UpdateProfilePage = ({ navigation }) => {
                 />
             </View>
             <View style={{ ...styles.verticalComponent, ...styles.bottomSeparator }}>
-                <Text style={{ flex: 1 / 4 }}> Age </Text>
+                <Text style={{ flex: 1 / 3 }}> Age </Text>
                 <TextInput
                     placeholder={"Insert your age here"}
                     value={age}
@@ -314,7 +315,7 @@ const UpdateProfilePage = ({ navigation }) => {
             </View>
 
             <View style={{ ...styles.verticalComponent, ...styles.bottomSeparator }}>
-                <Text style={{ flex: 1 / 4 }}> Dietary {'\n'} restrictions </Text>
+                <Text style={{ flex: 1 / 3 }}> Dietary {'\n'} restrictions </Text>
                 <TextInput
                     placeholder={"Any allergies / intolerance"}
                     value={dietary}
