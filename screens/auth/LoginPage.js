@@ -39,7 +39,7 @@ const LoginPage = ({ navigation }) => {
       <View style={styles.container}>
         <Image
           style={styles.image}
-          source={require("../../assets/857720.png")}
+          source={require("../../assets/logo.png")}
         />
         <StatusBar style="auto" />
         <AuthTextInput

@@ -104,14 +104,13 @@ const Avatar = ({ url }) => {
         }
     }
 
-    const downloadImage = async (path) => {
+    const downloadImage = (path) => {
         try {
-            const { publicURL, error } = await supabase.storage.from('avatars').getPublicUrl(path)
+            const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(path)
             if (error) {
                 throw error
             }
             setImage(publicURL)
-            return;
 
         } catch (error) {
             alert('Error downloading image: ', error.message)
