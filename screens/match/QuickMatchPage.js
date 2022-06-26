@@ -26,7 +26,7 @@ const QuickMatchPage = () => {
             const sub = supabase
             .from('quick_match')
             .on('*', async (update) => {
-                if (update.new.searching == true) {
+                if (update.new.searching == true && update.new.profile_id != supabase.auth.user().id) {
                     foundMatchWithCreateRoom(update.new.profile_id)
                 }
             })
@@ -58,17 +58,13 @@ const QuickMatchPage = () => {
     const foundMatchWithCreateRoom = async(profileId) => {
         //rpc
         try {
-            const { data, error} = await supabase.rpc('create_match_room', {
-                profile_id: profileId
-            });
+            // const { data, error} = await supabase.rpc('create_match_room', {
+            //     profile_id: profileId
+            // });
             await foundMatch();
-
-            if (error) throw error
-
-            console.log(data)
             navigation.navigate('Match Found', {screen: 'MatchFoundPage', params: {
                 id: profileId,
-                chatId: data.id,
+                // chatId: data.id,
             }})
         } catch (error) {
             console.log(error.message)

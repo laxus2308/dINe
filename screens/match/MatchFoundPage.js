@@ -69,11 +69,11 @@ const MatchFoundPage = () => {
                 source={{ uri: profilePic }}
                 style={styles.avatar}
             />
-            <Button style={styles.content}
+            {/* <Button style={styles.content}
                 title= 'Join Chat'
                 color= 'purple'
                 //onPress={};
-            />
+            /> */}
         </View>
     )
 
