@@ -29,11 +29,12 @@ const RequestBoard = ({ navigation }) => {
   //check for real time updates
   useEffect(() => {
     const sub = supabase
-      .from('requests')
+      .from('*')
       .on('*', async (update) => {
         await getRequests()
       })
       .subscribe();
+
     return () => {
       supabase.removeSubscription(sub)
     }

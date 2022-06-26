@@ -11,6 +11,15 @@ import Avatar from '../../components/profile/Avatar';
 import { supabase } from '../../supabase';
 
 const ProfilePage = ({ navigation }) => {
+    const [loading, setLoading] = useState(true);
+    const [username, setUsername] = useState('');
+    const [avatar_url, setAvatarUrl] = useState(null);
+    const [faculty, setFaculty] = useState('');
+    const [age, setAge] = useState('');
+    const [dietary, setDietary] = useState('');
+    const [interests, setInterests] = useState('');
+    const [cuisines, setCuisines] = useState('');
+
     const getProfile = async () => {
         try {
             setLoading(true)
@@ -34,9 +43,7 @@ const ProfilePage = ({ navigation }) => {
                 setDietary(data.dietary)
                 setInterests(data.interests)
                 setCuisines(data.cuisines)
-            } else {
-                createProfile()
-            }
+            } 
         } catch (error) {
             alert(error.message)
         } finally {
@@ -62,31 +69,6 @@ const ProfilePage = ({ navigation }) => {
     useEffect(() => {
         getProfile();
     }, [])
-    
-    const [loading, setLoading] = useState(true);
-    const [username, setUsername] = useState('');
-    const [avatar_url, setAvatarUrl] = useState(null);
-    const [faculty, setFaculty] = useState('');
-    const [age, setAge] = useState('');
-    const [dietary, setDietary] = useState('');
-    const [interests, setInterests] = useState('');
-    const [cuisines, setCuisines] = useState('');
- 
-    
-
-    const createProfile = async () => {
-        try {
-            const user = supabase.auth.user()
-
-            const { data, error } = await supabase
-                .from('profiles')
-                .insert([
-                    { id: user.id, username: 'betatester' }
-                ])
-        } catch(error) {
-            alert(error.message)
-        }
-    }
 
     const tag = ({ item }) => (
         <View style={styles.tag}>

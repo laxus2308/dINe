@@ -17,9 +17,21 @@ const SignUpPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const signUpWithEmailAndPassword = async (e) => {
+    const checkForE = (email) => {
+      return email.charAt(0) == "e";
+    }
+
+    const checkForNus = (email) => {
+      return email.includes('u.nus.edu');
+    }
+
+    const checkLength = (email) => {
+      return email.length == 18;
+    }
+
     if (signUpPassword !== confirmPassword) {
       alert('Passwords must be the same!')
-    } else if (!signUpEmail.includes('u.nus.edu')) {
+    } else if (!checkForE(signUpEmail) || !checkForNus || !checkLength) {
       alert('Nus email required!')
     } else {
       e.preventDefault()
@@ -30,9 +42,15 @@ const SignUpPage = () => {
           email: signUpEmail,
           password: signUpPassword,
         })
-        if (error) throw error
+
+
+        if (error) {
+          throw error
+        }
         alert('Check your email for the login link!')
       } catch (error) {
+        console.log(error.message)
+        console.log(error)
         alert(error.error_description || error.message)
       } finally {
         setLoading(false)
