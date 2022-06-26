@@ -31,12 +31,9 @@ const Message = (props) => {
         } catch(error) {
             console.log('Message', error)
         }
-     
-
     }
     getUsername()
     
-
     return (
         <View style={[
             styles.container,
@@ -48,7 +45,6 @@ const Message = (props) => {
             <Text style={styles.time}> {moment(messageData.created_at).fromNow()} </Text>
         </View>
     )
-
 }
 
 const styles = StyleSheet.create({

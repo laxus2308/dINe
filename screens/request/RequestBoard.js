@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import {
-  View,
   StyleSheet,
   Text,
   FlatList,
   Button,
   TouchableOpacity,
-  Image
 } from 'react-native';
 import Request from '../../components/request/Request.js';
 import { supabase } from '../../supabase.js';

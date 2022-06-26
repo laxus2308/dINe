@@ -4,9 +4,9 @@ import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
 
 const Request = (props) => {
-
     const {req} = props;
     const navigation = useNavigation();
+    
     const getUri = (path) => {
         try {
             const { publicURL, error } = supabase.storage.from('requestpics').getPublicUrl(path)

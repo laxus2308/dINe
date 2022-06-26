@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import AuthTextInput from '../../components/auth/AuthTextInput';
 import AuthButton from '../../components/auth/AuthButton';
-import Styles from '../../Style';
+import Styles from './Style';
 import { supabase } from '../../supabase';
 
 const SignUpPage = () => {

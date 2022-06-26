@@ -1,4 +1,4 @@
-//TO BE USED AS FIRST TIME LOGIN
+//TO BE CHNAGED AS FIRST TIME LOGIN
 import React, { useState, useEffect } from 'react';
 import {
     View,

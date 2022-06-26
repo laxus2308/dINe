@@ -47,7 +47,6 @@ const Avatar = ({ url }) => {
         return <Text> No access to Internal Storage </Text>
     }
 
-
     const uploadAvatar = async (base64File) => {
         try {
             setUploading(true)
@@ -55,7 +54,7 @@ const Avatar = ({ url }) => {
 
             const url = await getExistingImage();
             if (url) {
-                const { data, error: deleteError } = await supabase.storage
+                const { error: deleteError } = await supabase.storage
                     .from('avatars')
                     .remove([url])
                 if (deleteError) throw deleteError

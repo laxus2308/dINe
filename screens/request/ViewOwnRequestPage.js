@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
-  View,
   StyleSheet,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Text,
   FlatList,
 } from 'react-native';
 import { supabase } from '../../supabase';

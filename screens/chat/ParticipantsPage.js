@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
-import { set } from 'react-native-reanimated';
 
 const ParticipantsPage = () => {
     const [participants, setParticipants] = useState(null);

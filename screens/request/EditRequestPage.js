@@ -90,8 +90,6 @@ const EditRequestPage = ({ navigation }) => {
     e.preventDefault();
 
     try {
-      const user = supabase.auth.user()
-
       if (location == '') {
         alert("Please insert a location!")
         return;

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import AuthButton from '../../components/auth/AuthButton';
 import AuthTextInput from '../../components/auth/AuthTextInput';
-import Styles from '../../Style';
+import Styles from './Style';
 import { supabase } from '../../supabase';
 
 const LoginPage = ({ navigation }) => {
