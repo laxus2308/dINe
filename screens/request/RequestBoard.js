@@ -21,9 +21,6 @@ const RequestBoard = ({ navigation }) => {
           onPress={()=>{navigation.navigate('Create Request');}}
           color='lightblue'
         />
-        //<TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('Create Request');}}>
-            //<Image style={styles.image} source={require("../../assets/create.png")}/>
-        //</TouchableOpacity>
     )
     })
   }, [navigation])
@@ -96,7 +93,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-around"
   },
-
 
   requestButtonContainer: {
     flex: 1,

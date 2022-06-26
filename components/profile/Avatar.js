@@ -25,7 +25,7 @@ const Avatar = ({ url }) => {
     }, [])
 
     useEffect(() => {
-        if (url) downloadImage(url)
+        if (url) {downloadImage(url)};
     }, [url])
 
     const pickImage = async () => {
@@ -36,6 +36,7 @@ const Avatar = ({ url }) => {
             quality: 1,
             base64: true,
         });
+
 
         if (!result.cancelled) {
             setImage(result.uri);
@@ -109,7 +110,7 @@ const Avatar = ({ url }) => {
             if (error) {
                 throw error
             }
-            setImage(publicURL)
+            setImage(publicURL);
 
         } catch (error) {
             alert('Error downloading image: ', error.message)

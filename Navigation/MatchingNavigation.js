@@ -3,10 +3,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import QuickMatchPage from '../screens/match/QuickMatchPage'
 import SpecificMatchPage from '../screens/match/SpecificMatchPage';
 import MatchingPage from '../screens/match/MatchingPage';
+import MatchFoundPage from '../screens/match/MatchFoundPage';
+
 
 const Stack = createNativeStackNavigator();
 
 const MatchingNavigation = () => {
+
     return (
         <Stack.Navigator
             screenOptions={{
@@ -19,6 +22,12 @@ const MatchingNavigation = () => {
                 component={MatchingPage}
                 options={{
                     headerTitle: "Matching",
+            }}/>
+            <Stack.Screen
+                name='Match Found'
+                component={MatchFoundPage}
+                options={{
+                    headerTitle: "Match Found!",
             }}/>
             <Stack.Screen
                 name='Quick Match Page'

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { render } from 'react-dom';
 import {
     View,
     Text,
@@ -10,23 +9,20 @@ import {
     Platform,
     Button
 } from 'react-native';
-import { set } from 'react-native-reanimated';
 import { supabase } from '../../supabase';
+import { useNavigation } from '@react-navigation/native';
 
 const QuickMatchPage = () => {
 
     const [isSearching, setIsSearching] = useState(false);
-    const [longitude, setLongitude] = useState(null);
-    const [latitude, setLatitude] = useState(null);
-    const [searchId, setSearchId] = useState(null);
-    const [userData, setUserData] = useState([]);
-    const [profileId, setProfileId] = useState(null);
-    const [match, setMatch] = useState(null);
-    const [test, setTest] = useState(false);
 
-    
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        console.log('Loading');
+    }, [navigation])
+
     const getUsers = async (e) => {
-
         try {
             const user = supabase.auth.user()
 
@@ -37,57 +33,64 @@ const QuickMatchPage = () => {
             }
 
             if (data.length == 0) {
-                console.log(data)
-                if (test) {
-                    setTimeout(() => getUsers(), 5000);
-                }
+                //console.log(data);
+                setTimeout(() => getUsers(), 5000);
             } else {
-                stopSearch();
-                setUserData(data);
-                console.log(userData);
+                console.log(data);
+                const profile_id = data[0].profile_id;
+                const getUsername = async () => {
+                    try {
+                        setIsSearching(false);
+                        const user = supabase.auth.user()
+
+                        const updates = {
+                            searching: false
+                        }
+
+                        await supabase.from('quick_match').update(updates).match({profile_id: user.id})
+                        //console.log(id);
+                        navigation.navigate('Match Found', {screen: 'MatchFoundPage', params: {
+                            id: profile_id,
+                        }})
+            
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+                getUsername();
             }
 
 
         } catch (error) {
             console.log(error)
-        } 
+        }
     }
-
-    useEffect(() => {
-        getUsers()
-    }, []);
 
 
     const submitSearch = async (e) => {
+
         setIsSearching(true);
 
         try {
+            const user = supabase.auth.user()
 
-        const user = supabase.auth.user()
 
-        setTest(true);
+            const updates = {
+                searching: true
+            }
 
-        console.log(test);
+            await supabase.from('quick_match').update(updates).match({profile_id: user.id})
 
-        const updates = {
-            searching: true
-        }
-
-        await supabase.from('quick_match').update(updates).match({profile_id: user.id})
-
-        getUsers()
-
-        if (userData.length != 0) {
-            console.log(userData[0].profile_id)
-        }
-
-        } catch (error) {
-            console.log(error);
-        }
+            getUsers();
+            
+        }  catch(error) {
+            console.log(error)
+        } 
     }
 
 
     const stopSearch = async (e) => {
+        e.preventDefault();
 
         try {
             const user = supabase.auth.user()
@@ -108,7 +111,6 @@ const QuickMatchPage = () => {
 
         setIsSearching(false);
 
-
     }
 
 
@@ -118,14 +120,14 @@ const QuickMatchPage = () => {
             <View>
             <Button
                 title='Stop Search'
-                //onPress={stopSearch}
+                onPress={stopSearch}
             />
             </View>
               ) : (
             <View>
             <Button
                 title= 'Search!'
-                //onPress={submitSearch}
+                onPress={submitSearch}
             />
             </View>
             )}
