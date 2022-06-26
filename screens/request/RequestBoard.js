@@ -34,8 +34,16 @@ const RequestBoard = ({ navigation }) => {
         await getRequests()
       })
       .subscribe();
+
+      const subName = supabase
+        .from('profiles')
+        .on('*', async(update) => {
+          await getRequests()
+        })
+
     return () => {
       supabase.removeSubscription(sub)
+      supabase.removeSubscription(subName)
     }
 
   }, [])

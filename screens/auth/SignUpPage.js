@@ -30,7 +30,19 @@ const SignUpPage = () => {
           email: signUpEmail,
           password: signUpPassword,
         })
-        if (error) throw error
+
+        const { error: createError } = await supabase
+            .from('profiles')
+            .insert([
+                { id: user.id, username: 'betatester' }
+            ])
+          
+        if (error) {
+          throw error
+        } else if (createError) {
+          throw createError
+        }
+        
         alert('Check your email for the login link!')
       } catch (error) {
         alert(error.error_description || error.message)
