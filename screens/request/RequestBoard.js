@@ -18,9 +18,11 @@ const RequestBoard = ({navigation}) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('Create Request');}}>
-            <Image style={styles.image} source={require("../../assets/create.png")}/>
-        </TouchableOpacity>
+        <Button
+          title='Create'
+          onPress={()=>{navigation.navigate('Create Request');}}
+          color='lightblue'
+        />
     )
     })
   }, [navigation])
@@ -92,19 +94,6 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     justifyContent: "space-around"
-  },
-
-  image: {
-    padding: 10,
-    margin: '10%',
-    marginLeft: '130%',
-    height: '60%',
-    width: '65%',
-    resizeMode: 'stretch',
-  },
-
-  button: {
-      flex:1/3,
   },
 
   requestButtonContainer: {

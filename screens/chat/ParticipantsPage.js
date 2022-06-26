@@ -72,7 +72,7 @@ const ParticipantsPage = () => {
     }
 
     const displayProfile = (profile) => {
-        const profileUri = getProfileUri(profile.avatar_url.Avatar_url)
+        const profileUri = getProfileUri(profile.avatar_url.avatar_url)
         const username = profile.username.username;
 
         return (

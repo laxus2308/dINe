@@ -20,6 +20,7 @@ const MatchingPage = ({navigation}) => {
       <Button
         title= 'SPECIFIC MATCH'
         onPress={() => navigation.navigate('Specific Match Page')}
+        color='red'
       />
     </View>
   )
