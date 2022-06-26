@@ -11,12 +11,14 @@ import {
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
-import Avatar from '../../components/profile/Avatar';
+import { useNavigation } from '@react-navigation/native';
 
 const MatchFoundPage = () => {
 
     const route = useRoute();
+    const navigation = useNavigation();
     const matchId = route.params.params.id;
+    const roomId = route.params.params.chatId;
     const [username, setUsername] = useState('');
     const [profilePic, setProfilePic] = useState(null);
 
@@ -51,6 +53,12 @@ const MatchFoundPage = () => {
         }
     }
 
+    const enterRoom = () => {
+        navigation.navigate('Chat', {screen:'ChatRoomPage', params: {
+            id:roomId,
+            name:chatName,
+          }})
+    }
 
     return (
         <View style={styles.container}>

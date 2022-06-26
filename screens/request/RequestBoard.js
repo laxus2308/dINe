@@ -53,7 +53,7 @@ const RequestBoard = ({ navigation }) => {
       *
       `)
         .order('datetime', { ascending: true });
-      console.log(data)
+
       if (error) throw error
       setRequests(data)
     } catch (error) {

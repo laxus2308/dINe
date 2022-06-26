@@ -15,13 +15,68 @@ import { useNavigation } from '@react-navigation/native';
 const QuickMatchPage = () => {
 
     const [isSearching, setIsSearching] = useState(false);
-
     const navigation = useNavigation();
 
     useEffect(() => {
         console.log('Loading');
     }, [navigation])
 
+    useEffect(() => {
+        if (isSearching) {
+            const sub = supabase
+            .from('quick_match')
+            .on('*', async (update) => {
+                if (update.new.searching == true) {
+                    foundMatchWithCreateRoom(update.new.profile_id)
+                }
+            })
+            .subscribe();
+          return () => {
+            supabase.removeSubscription(sub)
+          }
+        }
+      }, [isSearching])
+
+      const foundMatch = async (profileId) => {
+        try {
+            setIsSearching(false);
+            const user = supabase.auth.user()
+
+            const updates = {
+                searching: false
+            }
+
+            await supabase.from('quick_match').update(updates).match({profile_id: user.id})
+            //console.log(id);
+            
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const foundMatchWithCreateRoom = async(profileId) => {
+        //rpc
+        try {
+            const { data, error} = await supabase.rpc('create_match_room', {
+                profile_id: profileId
+            });
+            await foundMatch();
+
+            if (error) throw error
+
+            console.log(data)
+            navigation.navigate('Match Found', {screen: 'MatchFoundPage', params: {
+                id: profileId,
+                chatId: data.id,
+            }})
+        } catch (error) {
+            console.log(error.message)
+        }
+
+    }
+
+    
     const getUsers = async (e) => {
         try {
             const user = supabase.auth.user()
@@ -34,30 +89,16 @@ const QuickMatchPage = () => {
 
             if (data.length == 0) {
                 //console.log(data);
-                setTimeout(() => getUsers(), 5000);
+                // setTimeout(() => getUsers(), 5000);
+
+  
             } else {
                 console.log(data);
-                const profile_id = data[0].profile_id;
-                const getUsername = async () => {
-                    try {
-                        setIsSearching(false);
-                        const user = supabase.auth.user()
-
-                        const updates = {
-                            searching: false
-                        }
-
-                        await supabase.from('quick_match').update(updates).match({profile_id: user.id})
-                        //console.log(id);
-                        navigation.navigate('Match Found', {screen: 'MatchFoundPage', params: {
-                            id: profile_id,
-                        }})
-            
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-                getUsername();
+                const profileId = data[0].profile_id;
+                foundMatch(profileId);
+                navigation.navigate('Match Found', {screen: 'MatchFoundPage', params: {
+                    id: profileId,
+                }})
             }
 
 
