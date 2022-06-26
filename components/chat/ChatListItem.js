@@ -27,30 +27,13 @@ const ChatListItem = (props) => {
         }
     }
 
-    const getProfileUri = (path) => {
-        try {
-            const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(path)
-            if (error) {
-                throw error
-            }
-            return publicURL;
-
-        } catch (error) {
-            alert('Error downloading image: ', error.message)
-        }
-    }
-
-    
     //if no url provided
     let uri;
 
-    if (chatRoom.pic_url != null) {
-        // console.log(chatRoom.pic_url)
-        uri = getRequestUri(chatRoom.pic_url);
-    } else if (chatRoom.avatar_url != null) {
-        uri = getProfileUri(chatRoom.avatar_url[0].avatar_url)
+    if (chatRoom.pic_url == null) {
+        uri = require ('../../assets/BlankImage.png')
     } else {
-        uri = require('../../assets/857720.png')
+        uri = getRequestUri(chatRoom.pic_url);
     }
 
     const enterChat = () => {
@@ -63,7 +46,16 @@ const ChatListItem = (props) => {
     return (
         <TouchableOpacity style={styles.chatMessageContainer} onPress={enterChat}>
             <View style={styles.leftContainer}>
-                <Image source={{ uri: uri }} style={styles.avatar} />
+                { chatRoom.pic_url == null ? (
+                    <Image
+                    style={styles.avatar}
+                    source={uri}
+                />) : (
+                    <Image
+                    style={styles.avatar}
+                    source={{ uri: uri }}
+                /> )
+                }
                 <View style={styles.midContainer}>
                     <Text style={styles.username}> {chatRoom.name} </Text>
                     {/* <Text style={styles.content} ellipsizeMode='tail'  numberOfLines={1}>{chatRoom.lastMessage.content}</Text> */}

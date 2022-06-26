@@ -37,7 +37,7 @@ const Avatar = ({ url }) => {
             base64: true,
         });
 
-        
+
         if (!result.cancelled) {
             setImage(result.uri);
             uploadAvatar(result.base64);

@@ -38,7 +38,7 @@ const ProfilePage = ({ navigation }) => {
                 createProfile()
             }
         } catch (error) {
-            console.log(error)
+            alert(error.message)
         } finally {
             setLoading(false)
         }
@@ -84,7 +84,7 @@ const ProfilePage = ({ navigation }) => {
                     { id: user.id, username: 'betatester' }
                 ])
         } catch(error) {
-            alert(error)
+            alert(error.message)
         }
     }
 

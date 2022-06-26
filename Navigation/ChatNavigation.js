@@ -47,7 +47,7 @@ const ChatNavigation = () => {
     const exitChat = async (room_id) => {
         await remove_chat(room_id);
         await remove_messages();
-        navigation.pop();
+        navigation.navigate('ChatListPage');
     }
 
     return (

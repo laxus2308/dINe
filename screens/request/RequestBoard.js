@@ -1,18 +1,18 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import {
-    View,
-    StyleSheet,
-    Text,
-    FlatList,
-    Button,
-    TouchableOpacity,
-    Image
-  } from 'react-native';
+  View,
+  StyleSheet,
+  Text,
+  FlatList,
+  Button,
+  TouchableOpacity,
+  Image
+} from 'react-native';
 import Request from '../../components/request/Request.js';
 import { supabase } from '../../supabase.js';
 
 
-const RequestBoard = ({navigation}) => {
+const RequestBoard = ({ navigation }) => {
   const [requests, setRequests] = useState([]);
 
   React.useLayoutEffect(() => {
@@ -27,34 +27,34 @@ const RequestBoard = ({navigation}) => {
     })
   }, [navigation])
 
-  
-    //check for real time updates
-    useEffect(() => {
-      const sub = supabase
-          .from('requests')
-          .on('*', async (update) => {
-              await getRequests()
-          })
-          .subscribe();
-      return () => {
-          supabase.removeSubscription(sub)
-      }
-      
+
+  //check for real time updates
+  useEffect(() => {
+    const sub = supabase
+      .from('requests')
+      .on('*', async (update) => {
+        await getRequests()
+      })
+      .subscribe();
+    return () => {
+      supabase.removeSubscription(sub)
+    }
+
   }, [])
 
   //get request details upon first navigate
   useEffect(() => {
-      getRequests();
+    getRequests();
   }, [])
 
   const getRequests = async () => {
     try {
       const { data, error } = await supabase.from('requests')
-      .select(`
+        .select(`
       username:profiles (username),
       *
       `)
-      .order('datetime', { ascending: true });
+        .order('datetime', { ascending: true });
       console.log(data)
       if (error) throw error
       setRequests(data)
@@ -68,11 +68,11 @@ const RequestBoard = ({navigation}) => {
       style={styles.requestsList}
       contentContainerStyle={styles.requestsListContainer}
       data={requests}
-      renderItem={({item}) => {return <Request req = {item}/>}}
+      renderItem={({ item }) => { return <Request req={item} /> }}
       numColumns={2}
       columnWrapperStyle={styles.row}
-      keyExtractor={(item)=> item.id}
-      ListHeaderComponent={() => 
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={() =>
         <TouchableOpacity onPress={() => navigation.navigate('View Own Request')} style={styles.appButtonContainer}>
           <Text style={styles.appButtonText}>View Your Requests</Text>
         </TouchableOpacity>}
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 12
   },
-  
+
   appButtonText: {
     fontSize: 18,
     color: "#fff",

@@ -18,7 +18,6 @@ const Request = (props) => {
     
         } catch (error) {
             alert('Error downloading image: ', error.message)
-            console.log(error)
         }
     }
 
