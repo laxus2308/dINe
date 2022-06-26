@@ -35,15 +35,15 @@ const RequestBoard = ({ navigation }) => {
       })
       .subscribe();
 
-      const subName = supabase
-        .from('profiles')
-        .on('*', async(update) => {
-          await getRequests()
-        })
+    // const subName = supabase
+    //   .from('profiles')
+    //   .on('*', async(update) => {
+    //     await getRequests()
+    //   })
 
     return () => {
       supabase.removeSubscription(sub)
-      supabase.removeSubscription(subName)
+      // supabase.removeSubscription(subName)
     }
 
   }, [])
