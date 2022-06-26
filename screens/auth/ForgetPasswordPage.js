@@ -5,10 +5,10 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
 } from 'react-native';
-import AuthTextInput from '../components/auth/AuthTextInput';
-import AuthButton from '../components/auth/AuthButton';
-import { supabase } from '../supabase';
-import Styles from '../Style';
+import AuthTextInput from '../../components/auth/AuthTextInput';
+import AuthButton from '../../components/auth/AuthButton';
+import { supabase } from '../../supabase';
+import Styles from './Style';
 
 const ForgetPasswordPage = () => {
     const [email, setEmail] = useState('');

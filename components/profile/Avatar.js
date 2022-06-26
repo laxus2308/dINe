@@ -6,7 +6,7 @@ import {
     TouchableOpacity,
     Text,
 } from 'react-native';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer'
 
@@ -25,7 +25,7 @@ const Avatar = ({ url }) => {
     }, [])
 
     useEffect(() => {
-        if (url) downloadImage(url)
+        if (url) {downloadImage(url)};
     }, [url])
 
     const pickImage = async () => {
@@ -37,6 +37,7 @@ const Avatar = ({ url }) => {
             base64: true,
         });
 
+
         if (!result.cancelled) {
             setImage(result.uri);
             uploadAvatar(result.base64);
@@ -47,21 +48,30 @@ const Avatar = ({ url }) => {
         return <Text> No access to Internal Storage </Text>
     }
 
-
     const uploadAvatar = async (base64File) => {
         try {
             setUploading(true)
             const user = supabase.auth.user()
+
+            const url = await getExistingImage();
+            if (url) {
+                const { error: deleteError } = await supabase.storage
+                    .from('avatars')
+                    .remove([url])
+                if (deleteError) throw deleteError
+            }
+
             const filePath = `public/${user.id}/${Math.random()}`
             const { error: uploadError } = await supabase.storage
                 .from('avatars')
                 .upload(filePath, decode(base64File), {
-                    contentType: 'image/png'
+                    contentType: 'image/png',
+                    // upsert: 'false'
                 })
 
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('profiles')
-                .update({ Avatar_url: filePath })
+                .update({ avatar_url: filePath })
                 .match({ id: user.id })
 
             if (uploadError) {
@@ -78,17 +88,32 @@ const Avatar = ({ url }) => {
         }
     }
 
-    const downloadImage = async (path) => {
+    const getExistingImage = async () => {
         try {
-            const { publicURL, error } = await supabase.storage.from('avatars').getPublicUrl(path)
+            const user = supabase.auth.user()
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('avatar_url')
+                .match({ id: user.id })
             if (error) {
                 throw error
             }
-            setImage(publicURL)
-            return;
+            return data[0].avatar_url
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
+    const downloadImage = (path) => {
+        try {
+            const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(path)
+            if (error) {
+                throw error
+            }
+            setImage(publicURL);
 
         } catch (error) {
-            console.log('Error downloading image: ', error.message)
+            alert('Error downloading image: ', error.message)
         }
     };
 
@@ -106,7 +131,7 @@ const Avatar = ({ url }) => {
                 />
             )}
             <TouchableOpacity
-                style={styles.loginButton}
+                style={styles.Button}
                 onPress={() => pickImage()}>
                 <Text> Import from gallery </Text>
             </TouchableOpacity>
@@ -125,10 +150,10 @@ const styles = StyleSheet.create({
         height: 200,
         resizeMode: 'contain',
     },
-    loginButton: {
-        width: "80%",
+    Button: {
         borderRadius: 25,
         height: 50,
+        padding: 10,
         alignItems: "center",
         justifyContent: "center",
         marginTop: 10,

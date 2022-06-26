@@ -1,16 +1,17 @@
 import React from 'react'
 import {
-    View,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
-    Text,
-  } from 'react-native';
+  View,
+  StyleSheet,
+  Image,
+} from 'react-native';
 
 const HomePage = () => {
   return (
     <View style={styles.container}>
-      <Text>A cool home page</Text>
+      <Image 
+      source={require("../../assets/logo.png")}
+      style={styles.image}
+      />
     </View>
   )
 }
@@ -22,6 +23,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  image: {
+    width: 300,
+    height: 250,
+    resizeMode: 'contain'
+  }
 });
 
-export default HomePage
+export default HomePage;
