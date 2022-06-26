@@ -31,7 +31,7 @@ const SignUpPage = () => {
 
     if (signUpPassword !== confirmPassword) {
       alert('Passwords must be the same!')
-    } else if (!checkForE(signUpEmail) && !checkForNus && !checkLength) {
+    } else if (!checkForE(signUpEmail) || !checkForNus || !checkLength) {
       alert('Nus email required!')
     } else {
       e.preventDefault()
@@ -43,21 +43,14 @@ const SignUpPage = () => {
           password: signUpPassword,
         })
 
-        const { error: createError } = await supabase
-            .from('profiles')
-            .insert([
-                { id: supabase.auth.user.id, 
-                  username: 'betatester' }
-            ])
-          
+
         if (error) {
           throw error
-        } else if (createError) {
-          throw createError
         }
-
         alert('Check your email for the login link!')
       } catch (error) {
+        console.log(error.message)
+        console.log(error)
         alert(error.error_description || error.message)
       } finally {
         setLoading(false)
