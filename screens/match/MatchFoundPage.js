@@ -14,11 +14,10 @@ import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 
 const MatchFoundPage = () => {
-
     const route = useRoute();
     const navigation = useNavigation();
     const matchId = route.params.params.id;
-    const roomId = route.params.params.chatId;
+    // const roomId = route.params.params.chatId;
     const [username, setUsername] = useState('');
     const [profilePic, setProfilePic] = useState(null);
 
@@ -33,7 +32,10 @@ const MatchFoundPage = () => {
             setUsername(data[0].username);
             setProfilePic(getProfileUri(data[0].avatar_url));
 
-            console.log(data)
+            // console.log(data)
+            if (error) {
+                throw error
+            }
 
         } catch (error) {
             console.log(error);
@@ -53,12 +55,12 @@ const MatchFoundPage = () => {
         }
     }
 
-    const enterRoom = () => {
-        navigation.navigate('Chat', {screen:'ChatRoomPage', params: {
-            id:roomId,
-            name:chatName,
-          }})
-    }
+    // const enterRoom = () => {
+    //     navigation.navigate('Chat', {screen:'ChatRoomPage', params: {
+    //         id:roomId,
+    //         name:chatName,
+    //       }})
+    // }
 
     return (
         <View style={styles.container}>

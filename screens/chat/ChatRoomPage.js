@@ -28,7 +28,18 @@ const ChatRoomPage = () => {
         return () => {
             supabase.removeSubscription(sub)
         }
-        
+    }, [])
+
+    useEffect(() => {
+        const sub = supabase
+            .from(`room_participants:room_id=eq.${room_id}`)
+            .on('*', (payload) => {
+                
+            })
+            .subscribe();
+        return () => {
+            supabase.removeSubscription(sub)
+        }
     }, [])
 
     //get messages upon first navigate
@@ -55,6 +66,9 @@ const ChatRoomPage = () => {
         }   
     }
       
+    const showNewUser = () => {
+        
+    }
 
     return (
         <View>
