@@ -13,13 +13,14 @@ const Message = (props) => {
     const [username, setUsername] = useState('')
 
     const joinGroupMessage = () => {
-        return messageData.is_bot == true;
+        console.log(messageData)
+        return messageData.is_bot;
     }
     
     if (joinGroupMessage()) {
         return (
             <View style = {styles.botMsgContainer}>
-                <Text style={styles.botMsg}> {messageData.sender_id} has joined the chatroom.</Text>
+                <Text style={styles.botMsg}> {messageData.content}</Text>
             </View>
         )
     } else {
@@ -81,13 +82,16 @@ const styles = StyleSheet.create({
     },
     botMsg: {
         fontSize: 13,
+        alignSelf:'center',
     },
     botMsgContainer: {
         backgroundColor: 'lightblue',
-        flex: '70%',
-
+        width: '75%',
+        alignSelf: 'center',
+        borderRadius: 30,
+        padding: 5,
+        marginVertical: '1%',
     }
-
 })
 
 export default Message;

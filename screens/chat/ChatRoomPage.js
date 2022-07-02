@@ -30,17 +30,17 @@ const ChatRoomPage = () => {
         }
     }, [])
 
-    useEffect(() => {
-        const sub = supabase
-            .from(`room_participants:room_id=eq.${room_id}`)
-            .on('*', (payload) => {
+    // useEffect(() => {
+    //     const sub = supabase
+    //         .from(`room_participants:room_id=eq.${room_id}`)
+    //         .on('*', (payload) => {
                 
-            })
-            .subscribe();
-        return () => {
-            supabase.removeSubscription(sub)
-        }
-    }, [])
+    //         })
+    //         .subscribe();
+    //     return () => {
+    //         supabase.removeSubscription(sub)
+    //     }
+    // }, [])
 
     //get messages upon first navigate
     useEffect(() => {
@@ -54,7 +54,8 @@ const ChatRoomPage = () => {
             .select(`
               content,
               sender_id,
-              created_at
+              created_at,
+              is_bot
             `)
             .eq('room_id', room_id)
             .order('created_at', {ascending:false})
@@ -64,10 +65,6 @@ const ChatRoomPage = () => {
         } catch(error) {
             alert(error.message)
         }   
-    }
-      
-    const showNewUser = () => {
-        
     }
 
     return (
