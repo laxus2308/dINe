@@ -13,7 +13,6 @@ const Message = (props) => {
     const [username, setUsername] = useState('')
 
     const joinGroupMessage = () => {
-        console.log(messageData)
         return messageData.is_bot;
     }
     

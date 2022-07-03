@@ -34,10 +34,9 @@ const ChatListItem = (props) => {
     }
 
     let lastMessage = ""
-    let timing, sender
+    let sender
     if (chatRoom.message) {
         lastMessage = chatRoom.message.content
-        timing = moment(chatRoom.message.created_at).fromNow()
         sender = chatRoom.message.sender_id
         getUsername(sender)
     }
@@ -95,7 +94,7 @@ const ChatListItem = (props) => {
                     </View>
                 )}
             </View>
-            <Text style={styles.time}> {timing}</Text>
+            { chatRoom.message != null? (<Text style={styles.time}> {moment(chatRoom.message.created_at).fromNow()}</Text>) : <></>}
         </TouchableOpacity>
     )
 }

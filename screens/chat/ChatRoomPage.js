@@ -30,18 +30,6 @@ const ChatRoomPage = () => {
         }
     }, [])
 
-    // useEffect(() => {
-    //     const sub = supabase
-    //         .from(`room_participants:room_id=eq.${room_id}`)
-    //         .on('*', (payload) => {
-                
-    //         })
-    //         .subscribe();
-    //     return () => {
-    //         supabase.removeSubscription(sub)
-    //     }
-    // }, [])
-
     //get messages upon first navigate
     useEffect(() => {
         getMessages();
