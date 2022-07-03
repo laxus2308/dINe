@@ -136,9 +136,10 @@ const styles = StyleSheet.create({
         marginLeft: '2%',
     },
     time: {
-        marginTop: '8%',
+        marginTop: '10%',
         marginRight: '3%',
         flex: 1 / 4,
+        fontSize:10,
     },
 })
 
