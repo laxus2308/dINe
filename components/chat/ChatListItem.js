@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     View,
@@ -8,11 +8,39 @@ import {
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 
 
 const ChatListItem = (props) => {
     const { chatRoom } = props;
     const navigation = useNavigation();
+    const [username, setUsername] = useState('')
+
+    const getUsername = async (senderId) => {
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('username')
+                .match({
+                    id: senderId
+                })
+
+            if (error) throw error
+            if (data) setUsername(data[0].username)
+
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
+    let lastMessage = ""
+    let timing, sender
+    if (chatRoom.message) {
+        lastMessage = chatRoom.message.content
+        timing = moment(chatRoom.message.created_at).fromNow()
+        sender = chatRoom.message.sender_id
+        getUsername(sender)
+    }
 
     const getRequestUri = (path) => {
         try {
@@ -31,7 +59,7 @@ const ChatListItem = (props) => {
     let uri;
 
     if (chatRoom.pic_url == null) {
-        uri = require ('../../assets/BlankImage.png')
+        uri = require('../../assets/BlankImage.png')
     } else {
         uri = getRequestUri(chatRoom.pic_url);
     }
@@ -46,27 +74,30 @@ const ChatListItem = (props) => {
     return (
         <TouchableOpacity style={styles.chatMessageContainer} onPress={enterChat}>
             <View style={styles.leftContainer}>
-                { chatRoom.pic_url == null ? (
+                {chatRoom.pic_url == null ? (
                     <Image
-                    style={styles.avatar}
-                    source={uri}
-                />) : (
+                        style={styles.avatar}
+                        source={uri}
+                    />) : (
                     <Image
-                    style={styles.avatar}
-                    source={{ uri: uri }}
-                /> )
+                        style={styles.avatar}
+                        source={{ uri: uri }}
+                    />)
                 }
-                <View style={styles.midContainer}>
-                    <Text style={styles.username}> {chatRoom.name} </Text>
-                    {/* <Text style={styles.content} ellipsizeMode='tail'  numberOfLines={1}>{chatRoom.lastMessage.content}</Text> */}
-                </View>
+                {chatRoom.message != null ? (
+                    <View style={styles.midContainer}>
+                        <Text style={styles.username}> {chatRoom.name} </Text>
+                        <Text style={styles.content} ellipsizeMode='tail' numberOfLines={1}>{username}: {lastMessage}</Text>
+                    </View>
+                ) : (
+                    <View style={styles.midContainer}>
+                        <Text style={styles.username}> {chatRoom.name} </Text>
+                    </View>
+                )}
             </View>
-
-            {/* <Text style={styles.time}> {chatRoom.lastMessage.created_at}</Text> */}
+            <Text style={styles.time}> {timing}</Text>
         </TouchableOpacity>
     )
-
-
 }
 
 const styles = StyleSheet.create({
@@ -101,10 +132,13 @@ const styles = StyleSheet.create({
     },
     content: {
         color: 'grey',
+        fontSize: 15,
+        marginLeft: '2%',
     },
     time: {
         marginTop: '8%',
         marginRight: '3%',
+        flex: 1 / 4,
     },
 })
 

@@ -53,9 +53,11 @@ useEffect(() => {
         name,
         username:profiles ( username ),
         avatar_url:profiles (avatar_url),
-        pic_url
+        pic_url,
+        message: messages!last_message_id(content, created_at, sender_id)
       `)
       if (error) throw error
+
       setChatRooms(data)
     } catch (error) {
       alert(error.message)

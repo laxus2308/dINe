@@ -19,16 +19,20 @@ const MessageInput = (props) => {
             return
         } 
         try {
-            const user = supabase.auth.user()
-            const { error } = await supabase
-            .from('messages')
-            .insert([
-                { 
-                room_id:room_id,
+            const {error} = await supabase.rpc('send_message', {
+                room_id: room_id,
                 content: message,
-                sender_id: user.id,
-                }
-            ])
+            })
+
+            // const { error } = await supabase
+            // .from('messages')
+            // .insert([
+            //     { 
+            //     room_id:room_id,
+            //     content: message,
+            //     sender_id: user.id,
+            //     }
+            // ])
             if(error) throw error
         } catch (error) {
             console.log('Message input', error)
