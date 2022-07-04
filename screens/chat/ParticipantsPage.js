@@ -11,7 +11,7 @@ import {
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
 
-const ParticipantsPage = () => {
+const ParticipantsPage = ({navigation}) => {
     const [participants, setParticipants] = useState(null);
 
     const route = useRoute();
@@ -43,11 +43,12 @@ const ParticipantsPage = () => {
                 .from('room_participants')
                 .select(`
                 username: profiles(username),
-                avatar_url: profiles(avatar_url)
+                avatar_url: profiles(avatar_url),
+                profile_id
             `)
                 .eq('room_id', chatRoomId)
 
-            // console.log(data)
+            //console.log(data)
             setParticipants(data)
             if (error) throw error
 
@@ -81,7 +82,11 @@ const ParticipantsPage = () => {
                     style={styles.avatar}
                 />
                 <View style={styles.usernameContainer}>
-                    <TouchableOpacity style={{flex:1}}>
+                    <TouchableOpacity style={{flex:1}} onPress={() => navigation.navigate('ViewProfilePage', {screen:'ViewProfilePage', 
+                    params: { 
+                        profile_id: profile.profile_id,
+                        temp: true,
+                    }})}>
                         <Text style={styles.username}>{username} </Text>
                     </TouchableOpacity>
 
