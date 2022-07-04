@@ -40,6 +40,7 @@ const ChatNavigation = () => {
             }
         } catch (error) {
             alert(error.message)
+            console.log(error)
         }
     }
     

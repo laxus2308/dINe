@@ -17,6 +17,7 @@ const ChatRoomPage = () => {
 
     const [messages, setMessages] = useState(null);
 
+    const user = supabase.auth.user();
     //check for real time updates
     useEffect(() => {
         const sub = supabase
@@ -33,6 +34,7 @@ const ChatRoomPage = () => {
     //get messages upon first navigate
     useEffect(() => {
         getMessages();
+        resetUnreadCounter();
     }, [])
 
     const getMessages = async () => {
@@ -53,6 +55,26 @@ const ChatRoomPage = () => {
         } catch(error) {
             alert(error.message)
         }   
+    }
+
+    const resetUnreadCounter = async() => {
+        try {
+
+            console.log(room_id)
+            console.log(user.id)
+            const {data, error} = await supabase
+            .from('chat_unread')
+            .update({unread: 0})
+            .match({room_id: room_id, 
+                    user_id: user.id})
+
+            console.log(error)
+            console.log(data)
+            if (error) throw error
+        } catch (error) {
+            // alert(error.message)
+          
+        }
     }
 
     return (
