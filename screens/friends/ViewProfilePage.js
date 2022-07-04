@@ -131,7 +131,7 @@ const ViewProfilePage = () => {
     const checkIfPendingRequest = async() => {
         try {
             const user = supabase.auth.user()
-            const {data, error} = await supabase.from('friend_requests').select().eq('requestor_id', user.id);
+            const {data, error} = await supabase.from('friend_requests').select().eq('requestor_id', user.id).eq('secondary_id', route.params.params.profile_id);
             if (data.length != 0) {
                 setIsPendingRequest(true);
             }
@@ -143,7 +143,7 @@ const ViewProfilePage = () => {
     const checkFriend = async() => {
         try {
             const user = supabase.auth.user()
-            const {data, error} = await supabase.from('friend_relations').select().eq('first_id', user.id);
+            const {data, error} = await supabase.from('friend_relations').select().eq('first_id', user.id).eq('second_id', route.params.params.profile_id);
             console.log(data)
             if (data.length != 0) {
                 setisFriends(true);
@@ -156,13 +156,27 @@ const ViewProfilePage = () => {
     const sendFriendRequest = async() => {
         try {
             const user = supabase.auth.user()
-            const updates = {
-                requestor_id: user.id,
-                secondary_id: route.params.params.profile_id
+            const {data, error} = await supabase.from('friend_requests').select()
+            .eq('secondary_id', user.id)
+            .eq('requestor_id', route.params.params.profile_id);
+            if (data.length != 0) {
+                await supabase.from('friend_requests').select()
+                .eq('secondary_id', user.id)
+                .eq('requestor_id', route.params.params.profile_id);
+                const updates = {
+                    first_id: user.id,
+                    second_id: route.params.params.profile_id,
+                }
+                await supabase.from('friend_relations').insert([updates]);
+            } else {
+                const updates = {
+                    requestor_id: user.id,
+                    secondary_id: route.params.params.profile_id,
+                }
+                await supabase.from('friend_requests').insert([updates]);
+                setIsPendingRequest(true);
+                alert("Friend Request Sent!")
             }
-            const {data, error} = await supabase.from('friend_requests').insert([updates]);
-            setIsPendingRequest(true);
-            alert("Friend Request Sent!")
         } catch (error) {
             console.log(error);
         }
