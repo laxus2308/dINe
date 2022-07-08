@@ -67,7 +67,7 @@ const RequestBoard = ({ navigation }) => {
       style={styles.requestsList}
       contentContainerStyle={styles.requestsListContainer}
       data={requests}
-      renderItem={({ item }) => { return <Request req={item} /> }}
+      renderItem={({ item }) => { if (item.current_pax != item.pax)return <Request req={item} /> }}
       numColumns={2}
       columnWrapperStyle={styles.row}
       keyExtractor={(item) => item.id}

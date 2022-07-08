@@ -12,6 +12,7 @@ import { supabase } from '../../supabase';
 
 const ChatListPage = () => {
   const [chatRooms, setChatRooms] = useState(null)
+  const [refreshing, setRefreshing] = useState(false)
 
   const createRoom = async () => {
     try {
@@ -69,6 +70,11 @@ useEffect(() => {
         style={styles.flatListItem}
         data={chatRooms}
         renderItem={({item}) => <ChatListItem chatRoom = {item}/>}
+        onRefresh= {async()=> {
+          setRefreshing(true)
+          await getChatList().then(()=> setRefreshing(false))
+        }}
+        refreshing={refreshing}
       />
       <TouchableOpacity onPress={createRoom} style={{marginBottom:100}}>
             <Text> Test for add chat </Text>
