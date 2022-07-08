@@ -59,17 +59,12 @@ const ChatRoomPage = () => {
 
     const resetUnreadCounter = async() => {
         try {
-
-            console.log(room_id)
-            console.log(user.id)
             const {data, error} = await supabase
             .from('chat_unread')
             .update({unread: 0})
             .match({room_id: room_id, 
                     user_id: user.id})
 
-            console.log(error)
-            console.log(data)
             if (error) throw error
         } catch (error) {
             // alert(error.message)

@@ -28,7 +28,7 @@ const ChatListPage = () => {
   //check for real time updates
   useEffect(() => {
     const sub = supabase
-        .from('chat_rooms')
+        .from('*')
         .on('*', async (update) => {
             await getChatList()
         })

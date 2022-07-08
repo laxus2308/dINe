@@ -14,7 +14,9 @@ import moment from 'moment';
 const ChatListItem = (props) => {
     const { chatRoom } = props;
     const navigation = useNavigation();
-    const [username, setUsername] = useState('')
+    const [username, setUsername] = useState('');
+    const [unread, setUnread] = useState();
+    const user = supabase.auth.user();
 
     const getUsername = async (senderId) => {
         try {
@@ -33,12 +35,33 @@ const ChatListItem = (props) => {
         }
     }
 
+    const getUnread = async() => {
+        try {
+            const { data, error } = await supabase
+            .from('chat_unread')
+            .select('unread')
+            .match({
+                room_id: chatRoom.id,
+                user_id: user.id,
+            })
+            .single()
+       
+            if (error) throw error
+            // console.log(data)
+            if (data) setUnread(data.unread)
+        } catch (error) {
+            alert(error.message)
+            // console.log('error', error)
+        }
+    }
+
     let lastMessage = ""
     let sender
     if (chatRoom.message) {
         lastMessage = chatRoom.message.content
         sender = chatRoom.message.sender_id
         getUsername(sender)
+        getUnread()
     }
 
     const getRequestUri = (path) => {
@@ -94,7 +117,15 @@ const ChatListItem = (props) => {
                     </View>
                 )}
             </View>
-            { chatRoom.message != null? (<Text style={styles.time}> {moment(chatRoom.message.created_at).fromNow()}</Text>) : <></>}
+            {chatRoom.message != null ? (
+                <View style = {styles.rightContainer}>
+                    <Text style={styles.timeWithMessage}> {moment(chatRoom.message.created_at).fromNow()}</Text>
+                    <Text> {unread}</Text>
+                </View>
+
+            ) : (
+                <></>
+            )}
         </TouchableOpacity>
     )
 }
@@ -134,12 +165,17 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginLeft: '2%',
     },
-    time: {
-        marginTop: '10%',
+    timeWithMessage: {
+        // marginTop: '10%',
         marginRight: '3%',
         flex: 1 / 4,
-        fontSize:10,
+        fontSize: 10,
     },
+    rightContainer: {
+        flexDirection:'column',
+        justifyContent:'space-evenly',
+
+    }
 })
 
 export default ChatListItem;
