@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     View,
@@ -8,11 +8,61 @@ import {
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 
 
 const ChatListItem = (props) => {
     const { chatRoom } = props;
     const navigation = useNavigation();
+    const [username, setUsername] = useState('');
+    const [unread, setUnread] = useState();
+    const user = supabase.auth.user();
+
+    const getUsername = async (senderId) => {
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('username')
+                .match({
+                    id: senderId
+                })
+
+            if (error) throw error
+            if (data) setUsername(data[0].username)
+
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
+    const getUnread = async() => {
+        try {
+            const { data, error } = await supabase
+            .from('chat_unread')
+            .select('unread')
+            .match({
+                room_id: chatRoom.id,
+                user_id: user.id,
+            })
+            .single()
+       
+            if (error) throw error
+            // console.log(data)
+            if (data) setUnread(data.unread)
+        } catch (error) {
+            alert(error.message)
+            // console.log('error', error)
+        }
+    }
+
+    let lastMessage = ""
+    let sender
+    if (chatRoom.message) {
+        lastMessage = chatRoom.message.content
+        sender = chatRoom.message.sender_id
+        getUsername(sender)
+        getUnread()
+    }
 
     const getRequestUri = (path) => {
         try {
@@ -31,7 +81,7 @@ const ChatListItem = (props) => {
     let uri;
 
     if (chatRoom.pic_url == null) {
-        uri = require ('../../assets/BlankImage.png')
+        uri = require('../../assets/BlankImage.png')
     } else {
         uri = getRequestUri(chatRoom.pic_url);
     }
@@ -46,27 +96,38 @@ const ChatListItem = (props) => {
     return (
         <TouchableOpacity style={styles.chatMessageContainer} onPress={enterChat}>
             <View style={styles.leftContainer}>
-                { chatRoom.pic_url == null ? (
+                {chatRoom.pic_url == null ? (
                     <Image
-                    style={styles.avatar}
-                    source={uri}
-                />) : (
+                        style={styles.avatar}
+                        source={uri}
+                    />) : (
                     <Image
-                    style={styles.avatar}
-                    source={{ uri: uri }}
-                /> )
+                        style={styles.avatar}
+                        source={{ uri: uri }}
+                    />)
                 }
-                <View style={styles.midContainer}>
-                    <Text style={styles.username}> {chatRoom.name} </Text>
-                    {/* <Text style={styles.content} ellipsizeMode='tail'  numberOfLines={1}>{chatRoom.lastMessage.content}</Text> */}
-                </View>
+                {chatRoom.message != null ? (
+                    <View style={styles.midContainer}>
+                        <Text style={styles.username}> {chatRoom.name} </Text>
+                        <Text style={styles.content} ellipsizeMode='tail' numberOfLines={1}>{username}: {lastMessage}</Text>
+                    </View>
+                ) : (
+                    <View style={styles.midContainer}>
+                        <Text style={styles.username}> {chatRoom.name} </Text>
+                    </View>
+                )}
             </View>
+            {chatRoom.message != null ? (
+                <View style = {styles.rightContainer}>
+                    <Text style={styles.timeWithMessage}> {moment(chatRoom.message.created_at).fromNow()}</Text>
+                    <Text> {unread}</Text>
+                </View>
 
-            {/* <Text style={styles.time}> {chatRoom.lastMessage.created_at}</Text> */}
+            ) : (
+                <></>
+            )}
         </TouchableOpacity>
     )
-
-
 }
 
 const styles = StyleSheet.create({
@@ -101,11 +162,20 @@ const styles = StyleSheet.create({
     },
     content: {
         color: 'grey',
+        fontSize: 15,
+        marginLeft: '2%',
     },
-    time: {
-        marginTop: '8%',
+    timeWithMessage: {
+        // marginTop: '10%',
         marginRight: '3%',
+        flex: 1 / 4,
+        fontSize: 10,
     },
+    rightContainer: {
+        flexDirection:'column',
+        justifyContent:'space-around',
+
+    }
 })
 
 export default ChatListItem;

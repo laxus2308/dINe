@@ -17,6 +17,8 @@ const QuickMatchPage = () => {
     const [isSearching, setIsSearching] = useState(false);
     const navigation = useNavigation();
 
+    const user = supabase.auth.user()
+
     useEffect(() => {
         console.log('Loading');
     }, [navigation])
@@ -37,18 +39,10 @@ const QuickMatchPage = () => {
         }
       }, [isSearching])
 
-      const foundMatch = async (profileId) => {
+      const foundMatch = async () => {
         try {
             setIsSearching(false);
-            const user = supabase.auth.user()
-
-            const updates = {
-                searching: false
-            }
-
-            await supabase.from('quick_match').update(updates).match({profile_id: user.id})
-            //console.log(id);
-            
+            await stopSearch();
 
         } catch (error) {
             console.log(error);
@@ -56,87 +50,74 @@ const QuickMatchPage = () => {
     }
 
     const foundMatchWithCreateRoom = async(profileId) => {
-        //rpc
         try {
-            // const { data, error} = await supabase.rpc('create_match_room', {
-            //     profile_id: profileId
-            // });
+            const { data, error} = await supabase.rpc('create_match_room', {
+                profile_id: profileId
+            });
             await foundMatch();
+           
             navigation.navigate('Match Found', {screen: 'MatchFoundPage', params: {
                 id: profileId,
                 // chatId: data.id,
             }})
+
+            if (error){
+                throw error
+            }
         } catch (error) {
             console.log(error.message)
         }
-
     }
 
-    
-    const getUsers = async (e) => {
+    const getUsers = async () => {
         try {
-            const user = supabase.auth.user()
-
             let {data, error} = await supabase.from('quick_match').select().eq('searching', true).neq('profile_id', user.id)
 
             if (error) {
                 console.log(error)
             }
 
-            if (data.length == 0) {
-                //console.log(data);
-                // setTimeout(() => getUsers(), 5000);
-
-  
-            } else {
-                console.log(data);
+            if (data.length != 0) {
+                // console.log(data);
                 const profileId = data[0].profile_id;
                 foundMatch(profileId);
                 navigation.navigate('Match Found', {screen: 'MatchFoundPage', params: {
                     id: profileId,
                 }})
             }
-
-
         } catch (error) {
             console.log(error)
         }
     }
 
 
-    const submitSearch = async (e) => {
-
+    const submitSearch = async () => {
         setIsSearching(true);
 
         try {
-            const user = supabase.auth.user()
-
-
             const updates = {
                 searching: true
             }
 
-            await supabase.from('quick_match').update(updates).match({profile_id: user.id})
-
-            getUsers();
+            let { error } = await supabase.from('quick_match').update(updates).match({profile_id: user.id})
             
+            if (error) {
+                throw error
+            }
+            getUsers();
         }  catch(error) {
             console.log(error)
         } 
     }
 
 
-    const stopSearch = async (e) => {
-        e.preventDefault();
-
+    const stopSearch = async () => {
         try {
-            const user = supabase.auth.user()
-
             const updates = {
                 searching: false
             }
 
-            let { data, error } = await supabase.from('quick_match').update(updates).match({profile_id: user.id})
+            let { error } = await supabase.from('quick_match').update(updates).match({profile_id: user.id})
 
             if (error) {
                 throw error

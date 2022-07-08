@@ -25,8 +25,6 @@ const ChatNavigation = () => {
             const { error} = await supabase.rpc('delete_chatroom', {
               chatroom_id: room_id
             })
-
-
             if (error) {
                 throw error
             }
@@ -43,8 +41,10 @@ const ChatNavigation = () => {
             }
         } catch (error) {
             alert(error.message)
+            console.log(error)
         }
     }
+    
     const exitChat = async (room_id) => {
         await remove_chat(room_id);
         await remove_messages();

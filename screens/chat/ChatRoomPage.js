@@ -17,6 +17,7 @@ const ChatRoomPage = () => {
 
     const [messages, setMessages] = useState(null);
 
+    const user = supabase.auth.user();
     //check for real time updates
     useEffect(() => {
         const sub = supabase
@@ -28,12 +29,12 @@ const ChatRoomPage = () => {
         return () => {
             supabase.removeSubscription(sub)
         }
-        
     }, [])
 
     //get messages upon first navigate
     useEffect(() => {
         getMessages();
+        resetUnreadCounter();
     }, [])
 
     const getMessages = async () => {
@@ -43,7 +44,8 @@ const ChatRoomPage = () => {
             .select(`
               content,
               sender_id,
-              created_at
+              created_at,
+              is_bot
             `)
             .eq('room_id', room_id)
             .order('created_at', {ascending:false})
@@ -54,7 +56,21 @@ const ChatRoomPage = () => {
             alert(error.message)
         }   
     }
-      
+
+    const resetUnreadCounter = async() => {
+        try {
+            const {data, error} = await supabase
+            .from('chat_unread')
+            .update({unread: 0})
+            .match({room_id: room_id, 
+                    user_id: user.id})
+
+            if (error) throw error
+        } catch (error) {
+            // alert(error.message)
+          
+        }
+    }
 
     return (
         <View>

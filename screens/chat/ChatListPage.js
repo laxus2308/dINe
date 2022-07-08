@@ -12,6 +12,7 @@ import { supabase } from '../../supabase';
 
 const ChatListPage = () => {
   const [chatRooms, setChatRooms] = useState(null)
+  const [refreshing, setRefreshing] = useState(false)
 
   const createRoom = async () => {
     try {
@@ -28,7 +29,7 @@ const ChatListPage = () => {
   //check for real time updates
   useEffect(() => {
     const sub = supabase
-        .from('chat_rooms')
+        .from('*')
         .on('*', async (update) => {
             await getChatList()
         })
@@ -55,6 +56,7 @@ useEffect(() => {
         message: messages!last_message_id(content, created_at, sender_id)
       `).order('created_at', { foreignTable: 'messages!last_message_id', ascending: false });
       if (error) throw error
+
       setChatRooms(data)
     } catch (error) {
       alert(error.message)
@@ -67,6 +69,11 @@ useEffect(() => {
         style={styles.flatListItem}
         data={chatRooms}
         renderItem={({item}) => <ChatListItem chatRoom = {item}/>}
+        onRefresh= {async()=> {
+          setRefreshing(true)
+          await getChatList().then(()=> setRefreshing(false))
+        }}
+        refreshing={refreshing}
       />
       <TouchableOpacity onPress={createRoom} style={{marginBottom:100}}>
             <Text> Test for add chat </Text>
