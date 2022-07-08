@@ -15,7 +15,6 @@ import User from '../../components/friends/User';
 const HomePage = () => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friendList, setFriendList] = useState([]);
-  const [userList, setUserList] = useState([]);
 
   //check for real time updates
   useEffect(() => {
@@ -24,6 +23,7 @@ const HomePage = () => {
       .on('*', async (update) => {
         await getFriendRequests()
         await getFriendList()
+        await getUserList()
       })
       .subscribe();
 
@@ -41,16 +41,11 @@ const HomePage = () => {
     getFriendList();
   }, [])
 
-  useEffect(() => {
-    getUserList();
-  }, [])
-
   const getFriendRequests = async () => {
     const user = supabase.auth.user()
     try {
       const { data, error } = await supabase.from('friend_requests')
         .select().eq('secondary_id', user.id)
-      //console.log(data);
       if (error) throw error
       setFriendRequests(data)
     } catch (error) {
@@ -63,21 +58,8 @@ const HomePage = () => {
     try {
       const { data, error } = await supabase.from('friend_relations')
         .select().eq('first_id', user.id)
-      console.log(data)
       if (error) throw error
       setFriendList(data)
-    } catch (error) {
-      alert(error.message)
-    }
-  }
-
-  const getUserList = async () => {
-    const user = supabase.auth.user()
-    try {
-      const { data, error } = await supabase.from('profiles')
-        .select().neq('id', user.id)
-      if (error) throw error
-      setUserList(data)
     } catch (error) {
       alert(error.message)
     }
@@ -128,20 +110,6 @@ const HomePage = () => {
           style={styles.flatList}
           ItemSeparatorComponent={ItemDivider}
         />
-        <Text style = {styles.header}>Discover</Text>
-        <View
-          style={{
-            borderBottomColor: 'black',
-            borderBottomWidth: StyleSheet.hairlineWidth,
-          }}
-        />
-        <FlatList
-          data={userList}
-          renderItem={({ item }) => { return <User User={item} /> }}
-          keyExtractor={(item) => item.id}
-          style={styles.flatList}
-          ItemSeparatorComponent={ItemDivider}
-        />
       </View>
     )
 }
@@ -157,7 +125,6 @@ const styles = StyleSheet.create({
   header: {
     fontWeight: 'bold',
     fontSize: 15,
-    textAlign:'center'
   }
 });
 
