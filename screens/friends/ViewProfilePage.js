@@ -160,7 +160,7 @@ const ViewProfilePage = () => {
             .eq('secondary_id', user.id)
             .eq('requestor_id', route.params.params.profile_id);
             if (data.length != 0) {
-                await supabase.from('friend_requests').select()
+                await supabase.from('friend_requests').delete()
                 .eq('secondary_id', user.id)
                 .eq('requestor_id', route.params.params.profile_id);
                 const updates = {
@@ -168,6 +168,11 @@ const ViewProfilePage = () => {
                     second_id: route.params.params.profile_id,
                 }
                 await supabase.from('friend_relations').insert([updates]);
+                const updates2 = {
+                    first_id: route.params.params.profile_id,
+                    second_id: user.id,
+                }
+                await supabase.from('friend_relations').insert([updates2]);
             } else {
                 const updates = {
                     requestor_id: user.id,

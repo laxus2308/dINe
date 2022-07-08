@@ -4,8 +4,8 @@ import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
 import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
 
-const FriendRequest = (props, {navigation}) => {
-    const {FriendReq} = props;
+const User = (props) => {
+    const {User} = props;
     const [profileImage, setProfileImage] = useState(null);
     const [username, setUsername] = useState(null);
     const navigator = useNavigation();
@@ -15,8 +15,9 @@ const FriendRequest = (props, {navigation}) => {
     })
 
     const getDetails = async() => {
+        const myId = supabase.auth.user();
         try {
-            const {data, error} = await supabase.from('profiles').select().eq('id', FriendReq.requestor_id)
+            const {data, error} = await supabase.from('profiles').select().eq('id', User.id)
             if (data) {
                 setProfileImage(getProfileUri(data[0].avatar_url))
                 setUsername(data[0].username)
@@ -38,62 +39,34 @@ const FriendRequest = (props, {navigation}) => {
         }
     }
 
-    const acceptFriendRequest = async() => {
-        const user = supabase.auth.user();
-        try {
-            await supabase.from('friend_requests').delete().eq('requestor_id', FriendReq.requestor_id)
-            const updates = {
-                first_id: user.id,
-                second_id: FriendReq.requestor_id,
-            }
-            await supabase.from('friend_relations').insert([updates]);
-            const updates2 = {
-                first_id: FriendReq.requestor_id,
-                second_id: user.id,
-            }
-            await supabase.from('friend_relations').insert([updates2]);
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const declineFriendRequest = async() => {
-        try {
-            const {data, error} = await supabase.from('friend_requests').delete().eq('requestor_id', FriendReq.requestor_id)
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     return (
         <View style={styles.requestContainer}>
             <TouchableOpacity onPress={() => navigator.navigate('ViewProfilePage', {screen:'ViewProfilePage', 
                 params: { 
-                    profile_id: FriendReq.requestor_id,
-                    temp: false,
+                    profile_id: User.id,
+                    temp: true,
                     }})}>
-            <Image
-                source={{ uri: profileImage }}
-                style={styles.avatar}
-            />
+                <Image
+                    source={{ uri: profileImage }}
+                    style={styles.avatar}
+                />
             </TouchableOpacity>
             <View style={styles.textContainer}>
-                <TouchableOpacity onPress={() => navigator.navigate('ViewProfilePage', {screen:'ViewProfilePage', 
+            <TouchableOpacity onPress={() => navigator.navigate('ViewProfilePage', {screen:'ViewProfilePage', 
                 params: { 
-                    profile_id: FriendReq.requestor_id,
-                    temp: false,
+                    profile_id: User.id,
+                    temp: true,
                     }})}>
-                    <Text style={styles.title}>{username}</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.textContainer2}>
-            <TouchableOpacity onPress={acceptFriendRequest}> 
-                <Image source={require('../../assets/greentick.png')} style = {styles.button} />          
-            </TouchableOpacity>
-            <TouchableOpacity onPress={declineFriendRequest}> 
-                <Image source={require('../../assets/redcross.png')} style = {styles.button} />          
+                <Text style={styles.title}>{username}</Text>
             </TouchableOpacity>
             </View>
+            {/* <View style={styles.textContainer2}>
+            <TouchableOpacity //onPress={goToChat}
+            >
+                <Image source={require('../../assets/chat.png')} style = {styles.button} />       
+            </TouchableOpacity>
+            </View> */}
         </View>
     )
 }
@@ -141,4 +114,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default FriendRequest;
+export default User;
