@@ -55,7 +55,6 @@ useEffect(() => {
         pic_url,
         message: messages!last_message_id(content, created_at, sender_id)
       `).order('created_at', { foreignTable: 'messages!last_message_id', ascending: false });
-
       if (error) throw error
 
       setChatRooms(data)

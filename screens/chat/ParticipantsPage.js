@@ -11,7 +11,7 @@ import {
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
 
-const ParticipantsPage = () => {
+const ParticipantsPage = ({navigation}) => {
     const [participants, setParticipants] = useState(null);
 
     const route = useRoute();
@@ -43,11 +43,12 @@ const ParticipantsPage = () => {
                 .from('room_participants')
                 .select(`
                 username: profiles(username),
-                avatar_url: profiles(avatar_url)
+                avatar_url: profiles(avatar_url),
+                profile_id
             `)
                 .eq('room_id', chatRoomId)
 
-            // console.log(data)
+            //console.log(data)
             setParticipants(data)
             if (error) throw error
 
@@ -73,6 +74,7 @@ const ParticipantsPage = () => {
     const displayProfile = (profile) => {
         const profileUri = getProfileUri(profile.avatar_url.avatar_url)
         const username = profile.username.username;
+        const user = supabase.auth.user();
 
         return (
             <View style={styles.profileContainer}>
@@ -80,12 +82,25 @@ const ParticipantsPage = () => {
                     source={{ uri: profileUri }}
                     style={styles.avatar}
                 />
-                <View style={styles.usernameContainer}>
-                    <TouchableOpacity style={{flex:1}}>
-                        <Text style={styles.username}>{username} </Text>
-                    </TouchableOpacity>
-
-                </View>
+                {(() => {
+                if (user.id == profile.profile_id) {
+                    return (
+                        <View style={styles.usernameContainer}>
+                            <Text style={styles.username}>{username} </Text>
+                        </View>
+                    )
+                } else {
+                    return (
+                    <View style={styles.usernameContainer}>
+                        <TouchableOpacity style={{flex:1}} onPress={() => navigation.navigate('ViewProfilePage', {screen:'ViewProfilePage', 
+                        params: { 
+                            profile_id: profile.profile_id,
+                            temp: true,
+                        }})}>
+                            <Text style={styles.username}>{username} </Text>
+                        </TouchableOpacity>
+                    </View>)
+                }})()}
             </View>
         )
     }
@@ -127,7 +142,7 @@ const styles = StyleSheet.create({
     },
     username: {
         fontSize: 25,
-
+        flex: 1
     },
     flatListHeader: {
         width: '100%',

@@ -12,6 +12,7 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { supabase } from '../supabase';
+import ViewProfilePage from '../screens/friends/ViewProfilePage'
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +63,13 @@ const ChatNavigation = () => {
                 component={ChatListPage}
                 options={{
                     title: 'Chats',
+                }}
+            />
+            <Stack.Screen
+                name='ViewProfilePage'
+                component={ViewProfilePage}
+                options={{
+                    title: 'View Profile',
                 }}
             />
             <Stack.Screen

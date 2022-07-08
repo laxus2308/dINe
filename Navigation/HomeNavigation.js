@@ -11,12 +11,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { supabase } from '../supabase';
 import MatchingNavigation from './MatchingNavigation';
+import ViewProfilePage from '../screens/friends/ViewProfilePage';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 const HomeNavigation = () => {
+    
     return (
         <NavigationContainer>
             <Stack.Navigator
@@ -30,6 +32,13 @@ const HomeNavigation = () => {
                     component={TabRoutes}
                     options={{ headerShown: false }}
                 />
+                <Stack.Screen
+                    name='ViewProfilePage'
+                    component={ViewProfilePage}
+                    options={{
+                        title: 'View Profile',
+                    }}
+            />
             </Stack.Navigator>
         </NavigationContainer>
     );

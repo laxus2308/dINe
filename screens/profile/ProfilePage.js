@@ -101,7 +101,7 @@ const ProfilePage = ({ navigation }) => {
                         renderItem={tag}
                         keyExtractor={item => item.toString()}
                         horizontal={true}
-                        ListHeaderComponent={item => <Text style={styles.container}>Testing</Text>}
+                        ListHeaderComponent={item => <Text style={styles.container}>Interests</Text>}
                     />
                     <FlatList
                         style={styles.flatList}
