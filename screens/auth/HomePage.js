@@ -23,7 +23,6 @@ const HomePage = () => {
       .on('*', async (update) => {
         await getFriendRequests()
         await getFriendList()
-        await getUserList()
       })
       .subscribe();
 

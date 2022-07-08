@@ -15,6 +15,29 @@ const Message = (props) => {
     const joinGroupMessage = () => {
         return messageData.is_bot;
     }
+
+    const getUsername = async () => {
+        try {
+            const { data: username, error } = await supabase
+            .from('profiles')
+            .select('username')
+            .eq('id', messageData.sender_id)
+            .single()
+    
+            if (error) throw error
+            // console.log(error)
+            setUsername(username.username)
+            // return username;
+        } catch(error) {
+            console.log('Message', error)
+        }
+    }
+
+    useEffect(()=> {
+        if (joinGroupMessage()) {
+            getUsername();
+        }
+    }, [])
     
     if (joinGroupMessage()) {
         return (
@@ -26,27 +49,6 @@ const Message = (props) => {
         const isMyMessage = () => {
             return messageData.sender_id === supabase.auth.user().id;
         }
-
-        const getUsername = async () => {
-            try {
-                const { data: username, error } = await supabase
-                .from('profiles')
-                .select('username')
-                .eq('id', messageData.sender_id)
-                .single()
-        
-                if (error) throw error
-                // console.log(error)
-                setUsername(username.username)
-                // return username;
-            } catch(error) {
-                console.log('Message', error)
-            }
-        }
-        
-        useEffect(()=> {
-            getUsername();
-        }, [])
 
         return (
             <View style={[
