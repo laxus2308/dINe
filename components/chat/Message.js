@@ -1,4 +1,4 @@
-import React, {useState}from 'react'
+import React, {useEffect, useState}from 'react'
 import {
     View,
     StyleSheet,
@@ -43,7 +43,10 @@ const Message = (props) => {
                 console.log('Message', error)
             }
         }
-        getUsername()
+        
+        useEffect(()=> {
+            getUsername();
+        }, [])
 
         return (
             <View style={[

@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     },
     rightContainer: {
         flexDirection:'column',
-        justifyContent:'space-evenly',
+        justifyContent:'space-around',
 
     }
 })
