@@ -16,6 +16,14 @@ const Message = (props) => {
         return messageData.is_bot;
     }
 
+    if (joinGroupMessage()) {
+        return (
+            <View style = {styles.botMsgContainer}>
+                <Text style={styles.botMsg}> {messageData.content}</Text>
+            </View>
+        )
+    } 
+
     const getUsername = async () => {
         try {
             const { data: username, error } = await supabase
@@ -33,36 +41,25 @@ const Message = (props) => {
         }
     }
 
-    useEffect(()=> {
-        if (joinGroupMessage()) {
-            getUsername();
-        }
-    }, [])
-    
-    if (joinGroupMessage()) {
-        return (
-            <View style = {styles.botMsgContainer}>
-                <Text style={styles.botMsg}> {messageData.content}</Text>
-            </View>
-        )
-    } else {
-        const isMyMessage = () => {
-            return messageData.sender_id === supabase.auth.user().id;
-        }
+    const isMyMessage = () => {
+        return messageData.sender_id === supabase.auth.user().id;
+    }
 
-        return (
-            <View style={[
-                styles.container,
-                { backgroundColor: isMyMessage() ? 'lightyellow' : 'lightgreen' ,
-                    alignSelf: isMyMessage() ? 'flex-end' : 'flex-start'}
-            ]}>          
-                <Text style={styles.name}> {username}</Text>
-                <Text style={styles.content}> {messageData.content}</Text>
-                <Text style={styles.time}> {moment(messageData.created_at).fromNow()} </Text>
-            </View>
-        )
-    }    
-}
+    getUsername();
+
+    return (
+        <View style={[
+            styles.container,
+            { backgroundColor: isMyMessage() ? 'lightyellow' : 'lightgreen' ,
+                alignSelf: isMyMessage() ? 'flex-end' : 'flex-start'}
+        ]}>          
+            <Text style={styles.name}> {username}</Text>
+            <Text style={styles.content}> {messageData.content}</Text>
+            <Text style={styles.time}> {moment(messageData.created_at).fromNow()} </Text>
+        </View>
+    )
+}    
+
 
 const styles = StyleSheet.create({
     container: {

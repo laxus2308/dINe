@@ -22,6 +22,8 @@ const User = (props) => {
                 setProfileImage(getProfileUri(data[0].avatar_url))
                 setUsername(data[0].username)
             }
+
+            if (error) throw error
         } catch (error) {
             console.log(error)
         }
@@ -30,15 +32,12 @@ const User = (props) => {
     const getProfileUri = (path) => {
         try {
             const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(path)
-            if (error) {
-                throw error
-            }
+            if (error) throw error
             return publicURL;
         } catch (error) {
             alert('Error downloading image: ', error.message)
         }
     }
-
 
     return (
         <View style={styles.requestContainer}>

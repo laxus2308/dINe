@@ -12,6 +12,7 @@ import { supabase } from '../../supabase';
 const MessageInput = (props) => {
     const [message, setMessage] = useState('');
     const {room_id} = props;
+    const [sending, setSending] = useState(false);
 
     const sendMessage = async () => {
         if (!message) {
@@ -19,6 +20,7 @@ const MessageInput = (props) => {
             return
         } 
         try {
+            setSending(true);
             const {error} = await supabase.rpc('send_message', {
                 room_id: room_id,
                 content: message,
@@ -26,9 +28,10 @@ const MessageInput = (props) => {
             
             if(error) throw error
         } catch (error) {
-            console.log('Message input', error)
+            alert(error.message)
         } finally {
-            setMessage('')
+            setMessage('');
+            setSending(false);
         }
     }
 
@@ -43,7 +46,7 @@ const MessageInput = (props) => {
                 onChangeText={(message) => setMessage(message)}
                 // multiline
             />
-            <TouchableOpacity  style={styles.icon} onPress={sendMessage}>
+            <TouchableOpacity  style={styles.icon} onPress={sendMessage} disabled= {sending}>
                 <MaterialCommunityIcons name='send' size ={30}/>
             </TouchableOpacity>
         </View>

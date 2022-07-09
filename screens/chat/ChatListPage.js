@@ -29,7 +29,7 @@ const ChatListPage = () => {
   //check for real time updates
   useEffect(() => {
     const sub = supabase
-        .from('*')
+        .from('chat_rooms')
         .on('*', async (update) => {
             await getChatList()
         })
@@ -37,7 +37,6 @@ const ChatListPage = () => {
     return () => {
         supabase.removeSubscription(sub)
     }
-    
 }, [])
 
 //get chat lists upon first navigate

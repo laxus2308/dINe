@@ -16,8 +16,8 @@ const ChatRoomPage = () => {
     const flatListRef = useRef();
 
     const [messages, setMessages] = useState(null);
-
     const user = supabase.auth.user();
+    
     //check for real time updates
     useEffect(() => {
         const sub = supabase
@@ -67,8 +67,7 @@ const ChatRoomPage = () => {
 
             if (error) throw error
         } catch (error) {
-            // alert(error.message)
-          
+            alert(error.message)
         }
     }
 
