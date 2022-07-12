@@ -6,10 +6,11 @@ import {
     TouchableOpacity,
     SafeAreaView,
     FlatList,
-    Image
+    Image,
+    ToastAndroid
 } from 'react-native';
 import { supabase } from '../../supabase';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const ViewProfilePage = () => {
     const route = useRoute();
@@ -23,9 +24,11 @@ const ViewProfilePage = () => {
     const [profilePic, setProfilePic] = useState(null);
     const [isPendingRequest, setIsPendingRequest] = useState(false);
     const [isFriends, setisFriends] = useState(false);
+    const navigation = useNavigation();
+
+    const [token, setToken] = useState(null);
 
     const getProfile = async () => {
-        console.log(route.params.params.profile_id)
         try {
             setLoading(true)
 
@@ -140,11 +143,22 @@ const ViewProfilePage = () => {
         }
     }
 
+    const deleteFriend = async() => {
+        try {
+            const user = supabase.auth.user()
+            await supabase.from('friend_relations').delete().eq('first_id', user.id).eq('second_id', route.params.params.profile_id);
+            await supabase.from('friend_relations').delete().eq('first_id', route.params.params.profile_id).eq('second_id', user.id);
+            ToastAndroid.show('Friend Deleted!', ToastAndroid.LONG)
+            navigation.pop()
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const checkFriend = async() => {
         try {
             const user = supabase.auth.user()
             const {data, error} = await supabase.from('friend_relations').select().eq('first_id', user.id).eq('second_id', route.params.params.profile_id);
-            console.log(data)
             if (data.length != 0) {
                 setisFriends(true);
             }
@@ -153,9 +167,30 @@ const ViewProfilePage = () => {
         }
     }
 
+    const sendPushNotification = async(token, text) => {
+        const message = {
+          to: token,
+          sound: 'default',
+          title: 'New Friend Request',
+          body: text,
+          data: { someData: 'goes here' },
+        };
+      
+        await fetch('https://exp.host/--/api/v2/push/send', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Accept-encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(message),
+        });
+      }
+
     const sendFriendRequest = async() => {
         try {
             const user = supabase.auth.user()
+            const myUsername = await supabase.from('profiles').select().eq('id', user.id);
             const {data, error} = await supabase.from('friend_requests').select()
             .eq('secondary_id', user.id)
             .eq('requestor_id', route.params.params.profile_id);
@@ -179,8 +214,12 @@ const ViewProfilePage = () => {
                     secondary_id: route.params.params.profile_id,
                 }
                 await supabase.from('friend_requests').insert([updates]);
+                const {data, error} = await supabase.from('profiles').select().eq("id", route.params.params.profile_id)
+                if (data[0].notification_token) {
+                    sendPushNotification(data[0].notification_token, myUsername.body[0].username + " has sent you a friend request");
+                }
                 setIsPendingRequest(true);
-                alert("Friend Request Sent!")
+                ToastAndroid.show('Friend Request Sent!', ToastAndroid.LONG)
             }
         } catch (error) {
             console.log(error);
@@ -218,12 +257,14 @@ const ViewProfilePage = () => {
                 </View>
                 <View>
                     {(() => {
-                        if (route.params.params.temp) {
-                            if (isFriends) {
-                                return (
-                                    <Text style={styles.FriendText}>Already Friends</Text>
-                                )
-                            } else if (isPendingRequest) {
+                        if (isFriends) {
+                            return (
+                                <TouchableOpacity style={styles.DeleteButton} onPress={deleteFriend}>
+                                    <Text style={styles.text}> Delete Friend </Text>
+                                </TouchableOpacity>
+                            )
+                        } else if (route.params.params.temp) {
+                            if (isPendingRequest) {
                                 return (
                                     <Text style={styles.FriendText}>Friend Request Sent</Text>
                                 )
@@ -267,6 +308,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginTop: 20,
         backgroundColor: "#696969",
+    },
+    
+    DeleteButton: {
+        width: "80%",
+        borderRadius: 25,
+        height: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20,
+        backgroundColor: "red",
     },
 
     container: {

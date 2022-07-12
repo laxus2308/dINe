@@ -5,6 +5,7 @@ import {
   Text,
   Image,
   Button,
+  ToastAndroid,
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
@@ -19,6 +20,7 @@ const ViewRequestPage = ({ navigation }) => {
   const deleteRequest = async () => {
       navigation.navigate("Request Board")
       await supabase.from('requests').delete().match({ id: request_id })
+      ToastAndroid.show('Request Deleted!', ToastAndroid.LONG);
   }
 
   const joinRequestRoom = async () => {

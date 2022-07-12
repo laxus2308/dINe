@@ -17,7 +17,6 @@ const Friend = (props) => {
     const getDetails = async() => {
         try {
             const {data, error} = await supabase.from('profiles').select().eq('id', Friend.second_id)
-            console.log(Friend.second_id)
             if (data) {
                 setProfileImage(getProfileUri(data[0].avatar_url))
                 setUsername(data[0].username)

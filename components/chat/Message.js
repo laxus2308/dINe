@@ -34,7 +34,7 @@ const Message = (props) => {
     }
 
     useEffect(()=> {
-        if (joinGroupMessage()) {
+        if (!joinGroupMessage()) {
             getUsername();
         }
     }, [])
