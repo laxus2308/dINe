@@ -35,17 +35,17 @@ const ChatListItem = (props) => {
         }
     }
 
-    const getUnread = async() => {
+    const getUnread = async () => {
         try {
             const { data, error } = await supabase
-            .from('chat_unread')
-            .select('unread')
-            .match({
-                room_id: chatRoom.id,
-                user_id: user.id,
-            })
-            .single()
-       
+                .from('chat_unread')
+                .select('unread')
+                .match({
+                    room_id: chatRoom.id,
+                    user_id: user.id,
+                })
+                .single()
+
             if (error) throw error
             // console.log(data)
             if (data) setUnread(data.unread)
@@ -118,9 +118,9 @@ const ChatListItem = (props) => {
                 )}
             </View>
             {chatRoom.message != null ? (
-                <View style = {styles.rightContainer}>
+                <View style={styles.rightContainer}>
                     <Text style={styles.timeWithMessage}> {moment(chatRoom.message.created_at).fromNow()}</Text>
-                    <Text> {unread}</Text>
+                    <Text style={styles.unread}> {unread}</Text>
                 </View>
 
             ) : (
@@ -172,10 +172,18 @@ const styles = StyleSheet.create({
         fontSize: 10,
     },
     rightContainer: {
-        flexDirection:'column',
-        justifyContent:'space-around',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
 
+    },
+    unread: {
+        borderRadius: 40,
+        backgroundColor: 'lightblue',
+        width: '40%',
+        alignSelf: 'center',
+        textAlign: 'center',
     }
+
 })
 
 export default ChatListItem;
