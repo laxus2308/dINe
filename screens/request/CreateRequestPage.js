@@ -96,7 +96,7 @@ const CreateRequestPage = ({ navigation }) => {
       if (datePicked == 'Select a date') {
         alert("Please select a date!")
         return;
-      } 
+      }
       if (dateTime < moment()) {
         alert("Please select a proper date and time.")
         return;
@@ -123,10 +123,11 @@ const CreateRequestPage = ({ navigation }) => {
         .from('requests')
         .insert([updates])
 
-
-      const { error: createRoomError } = await supabase.rpc('create_request_room', {
-        request_id: data[0].id
+      const {  error: createRoomError } = await supabase.rpc('create_request_room', {
+                request_id: data[0].id
       })
+    
+      
 
       if (error) {
         throw error
@@ -161,8 +162,6 @@ const CreateRequestPage = ({ navigation }) => {
     try {
       setUploading(true)
       const user = supabase.auth.user()
-
-
       const filePath = `public/${user.id}/${Math.random()}`
       setRequestUrl(filePath)
 
@@ -236,7 +235,7 @@ const CreateRequestPage = ({ navigation }) => {
             onConfirm={handleConfirm}
             onCancel={hideDateTimePicker}
             minimumDate={new Date()}
-            // minimumTime={moment().format("HH:mm:ss")}
+          // minimumTime={moment().format("HH:mm:ss")}
           />
         </View>
 
@@ -277,18 +276,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff8dc',
   },
-
   container2: {
     alignItems: 'center'
   },
-
   verticalComponent: {
     flexDirection: 'row',
     alignItems: 'center',
     zIndex: -1,
     marginTop: 10,
   },
-
   bottomSeparator: {
     marginTop: 10,
     marginBottom: 10,
@@ -296,7 +292,6 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
     zIndex: -1,
   },
-
   date: {
     width: "40%",
     borderRadius: 25,
@@ -306,7 +301,6 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
     backgroundColor: "#ffff00",
   },
-
   submitButton: {
     justifyContent: 'center',
     alignItems: "center",
@@ -326,7 +320,6 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: 'contain',
   },
-
   Button: {
     borderRadius: 25,
     height: 50,
@@ -336,22 +329,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: "#ffff00",
   },
-
   leftContainer: {
     width: '60%',
     flexDirection: 'column',
   },
-
   dateContainer: {
     marginBottom: '10%',
     flexDirection: 'row',
     flex: 1 / 3,
   },
-
   grey: {
     color: 'grey',
   },
-
   black: {
     color: 'black',
   },

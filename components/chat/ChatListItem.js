@@ -10,7 +10,6 @@ import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 
-
 const ChatListItem = (props) => {
     const { chatRoom } = props;
     const navigation = useNavigation();
@@ -64,9 +63,9 @@ const ChatListItem = (props) => {
         getUnread()
     }
 
-    const getRequestUri = (path) => {
+    const getChatUri = (path) => {
         try {
-            const { publicURL, error } = supabase.storage.from('requestpics').getPublicUrl(path)
+            const { publicURL, error } = supabase.storage.from('chatroompics').getPublicUrl(path)
             if (error) {
                 throw error
             }
@@ -83,7 +82,7 @@ const ChatListItem = (props) => {
     if (chatRoom.pic_url == null) {
         uri = require('../../assets/BlankImage.png')
     } else {
-        uri = getRequestUri(chatRoom.pic_url);
+        uri = getChatUri(chatRoom.pic_url);
     }
 
     const enterChat = () => {

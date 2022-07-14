@@ -8,6 +8,7 @@ const Friend = (props) => {
     const { Friend } = props;
     const [profileImage, setProfileImage] = useState(null);
     const [username, setUsername] = useState();
+    const [chatName, setChatName] = useState();
     const [chatId, setChatId] = useState();
     const navigation = useNavigation();
 
@@ -47,7 +48,7 @@ const Friend = (props) => {
         try {
             const { data, error } = await supabase
                 .from('friend_relations')
-                .select('chat_id')
+                .select('chat_id, chat_rooms(name)')
                 .match({
                     first_id: user.id,
                     second_id: Friend.second_id
@@ -57,6 +58,7 @@ const Friend = (props) => {
                 await createChat();
             }else {
                 setChatId(data.chat_id)
+                setChatName(data.chat_rooms.name)
             }
             if (error) throw error
         } catch (error) {
@@ -71,6 +73,7 @@ const Friend = (props) => {
                 profile_id: Friend.second_id
             })
             setChatId(data.id)
+            setChatName(data.name)
 
             if (error) throw error
         } catch(error) {
@@ -80,11 +83,12 @@ const Friend = (props) => {
 
     useEffect(()=> {
         if(chatId) {
+            console.log(chatName,"chatname")
             navigation.navigate("Chat", {
                 screen: "ChatRoomPage", 
                 params: {
                     id: chatId,
-                    name: username,
+                    name: chatName,
                 }})
         }
     },[chatId] )
