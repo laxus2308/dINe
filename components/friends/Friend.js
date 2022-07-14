@@ -11,6 +11,7 @@ const Friend = (props) => {
     const [chatName, setChatName] = useState();
     const [chatId, setChatId] = useState();
     const navigation = useNavigation();
+    const [click, setClick] = useState(false);
 
     const user = supabase.auth.user();
 
@@ -46,6 +47,7 @@ const Friend = (props) => {
 
     const getChat = async () => {
         try {
+            setClick(true)
             const { data, error } = await supabase
                 .from('friend_relations')
                 .select('chat_id, chat_rooms(name)')
@@ -83,7 +85,8 @@ const Friend = (props) => {
 
     useEffect(()=> {
         if(chatId) {
-            console.log(chatName,"chatname")
+            // console.log(chatName,"chatname")
+            setClick(false)
             navigation.navigate("Chat", {
                 screen: "ChatRoomPage", 
                 params: {
@@ -91,7 +94,7 @@ const Friend = (props) => {
                     name: chatName,
                 }})
         }
-    },[chatId] )
+    },[chatId, chatName,click] )
     // const goToChat = () => {
     //     getChat().then(()=> navigation.navigate("Chat", {
     //         screen: "ChatRoomPage", 
