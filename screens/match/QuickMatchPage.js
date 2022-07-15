@@ -28,9 +28,8 @@ const QuickMatchPage = () => {
             const sub = supabase
                 .from('quick_match')
                 .on('*', async (update) => {
-                    console.log(update)
                     if (update.new.searching == true && update.new.profile_id != supabase.auth.user().id) {
-                        foundMatch(update.new.profile_id)
+                        await foundMatchWithCreateRoom(update.new.profile_id)
                     }
                 })
                 .subscribe();
@@ -40,10 +39,22 @@ const QuickMatchPage = () => {
         }
     }, [isSearching])
 
-    const foundMatch = async (profileId) => {
+    const foundMatch = async () => {
         try {
             setIsSearching(false);
             await stopSearch();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const foundMatchWithCreateRoom = async (profileId) => {
+        try {
+            const { data, error} = await supabase.rpc('q_match', {
+                profile_id: profileId
+            });
+            await foundMatch();
 
             navigation.navigate('Match Found', {
                 screen: 'MatchFoundPage', params: {
@@ -51,8 +62,11 @@ const QuickMatchPage = () => {
                 }
             })
 
+            if (error) {
+                throw error
+            }
         } catch (error) {
-            console.log(error);
+            console.log(error.message)
         }
     }
 
@@ -67,12 +81,18 @@ const QuickMatchPage = () => {
             if (data.length != 0) {
                 // console.log(data);
                 const profileId = data[0].profile_id;
-                await foundMatch(profileId);
+                await foundMatch();
+                navigation.navigate('Match Found', {
+                    screen: 'MatchFoundPage', params: {
+                        id: profileId,
+                    }
+                })
             }
         } catch (error) {
             console.log(error)
         }
     }
+
 
     const submitSearch = async () => {
         setIsSearching(true);
@@ -99,6 +119,7 @@ const QuickMatchPage = () => {
             const updates = {
                 searching: false
             }
+
             let { error } = await supabase.from('quick_match').update(updates).match({ profile_id: user.id })
 
             if (error) {
@@ -108,8 +129,11 @@ const QuickMatchPage = () => {
         } catch (error) {
             console.log(error)
         }
+
         setIsSearching(false);
+
     }
+
 
     return (
         <View style={styles.container}>
