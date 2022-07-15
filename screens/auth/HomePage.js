@@ -141,7 +141,7 @@ const HomePage = () => {
       <FlatList
         windowSize={10}
         data={friendList}
-        renderItem={({ item }) => { return <Friend Friend={item} /> }}
+        renderItem={({ item }) => { return <Friend friend={item} /> }}
         keyExtractor={(item) => item.id}
         style={styles.flatList}
         ItemSeparatorComponent={ItemDivider}
