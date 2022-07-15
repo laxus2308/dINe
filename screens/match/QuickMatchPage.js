@@ -51,9 +51,10 @@ const QuickMatchPage = () => {
 
     const foundMatchWithCreateRoom = async (profileId) => {
         try {
-            const { data, error} = await supabase.rpc('q_match', {
+            const {  error} = await supabase.rpc('match_friends', {
                 profile_id: profileId
             });
+            // console.log(data)
             await foundMatch();
 
             navigation.navigate('Match Found', {
