@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
-  ScrollView
+  ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -134,6 +135,8 @@ const CreateRequestPage = ({ navigation }) => {
       } else if (createRoomError) {
         throw createRoomError
       }
+      ToastAndroid.show("Request created!", ToastAndroid.LONG)
+
       navigation.pop();
 
     } catch (error) {

@@ -5,6 +5,7 @@ import {
   Text,
   Image,
   Button,
+  ToastAndroid,
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
@@ -17,6 +18,7 @@ const ViewRequestPage = ({ navigation }) => {
   const [chatName, setChatName] = useState('');
 
   const deleteRequest = async () => {
+      ToastAndroid.show("Request deleted!", ToastAndroid.LONG)
       navigation.navigate("Request Board")
       await supabase.from('requests').delete().match({ id: request_id })
   }

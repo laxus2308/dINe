@@ -12,6 +12,7 @@ import { supabase } from '../../supabase.js';
 
 const RequestBoard = ({ navigation }) => {
   const [requests, setRequests] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -75,6 +76,11 @@ const RequestBoard = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate('View Own Request')} style={styles.appButtonContainer}>
           <Text style={styles.appButtonText}>View Your Requests</Text>
         </TouchableOpacity>}
+      onRefresh= {async()=> {
+        setRefreshing(true)
+        await getRequests().then(()=> setRefreshing(false))
+      }}
+      refreshing={refreshing}
     />
   )
 }

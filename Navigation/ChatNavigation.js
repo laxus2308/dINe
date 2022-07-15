@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     Text,
     View,
+    ToastAndroid,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
@@ -48,6 +49,7 @@ const ChatNavigation = () => {
     const exitChat = async (room_id) => {
         await remove_chat(room_id);
         await remove_messages();
+        ToastAndroid.show("Chat deleted!", ToastAndroid.LONG)
         navigation.navigate('ChatListPage');
     }
 

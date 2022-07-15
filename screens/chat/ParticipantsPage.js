@@ -227,7 +227,6 @@ const ParticipantsPage = ({ navigation }) => {
     }
 
     const changeChatName = async () => {
-        setEdit(false)
         try {
             const { error } = await supabase
                 .from('chat_rooms')
@@ -236,6 +235,9 @@ const ParticipantsPage = ({ navigation }) => {
             if (error) throw error
         }catch (error) {
             alert(error.message)
+        } finally {
+            setEdit(false)
+            ToastAndroid.show("Chat Name edited!", ToastAndroid.LONG)
         }
     }
 
