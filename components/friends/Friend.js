@@ -5,7 +5,7 @@ import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
 
 const Friend = (props) => {
-    const { Friend } = props;
+    const { friend } = props;
     const [profileImage, setProfileImage] = useState(null);
     const [username, setUsername] = useState();
     const [chatName, setChatName] = useState();
@@ -22,7 +22,7 @@ const Friend = (props) => {
 
     const getDetails = async () => {
         try {
-            const { data, error } = await supabase.from('profiles').select().eq('id', Friend.second_id)
+            const { data, error } = await supabase.from('profiles').select().eq('id', friend.second_id)
             if (data) {
                 setProfileImage(getProfileUri(data[0].avatar_url))
                 setUsername(data[0].username)
@@ -53,7 +53,7 @@ const Friend = (props) => {
                 .select('chat_id, chat_rooms(name)')
                 .match({
                     first_id: user.id,
-                    second_id: Friend.second_id
+                    second_id: friend.second_id
                 })
                 .single()
             if (data.chat_id == null) {
@@ -72,7 +72,7 @@ const Friend = (props) => {
     const createChat = async () => {
         try {
             const { data, error } = await supabase.rpc('create_chat_room', {
-                profile_id: Friend.second_id
+                profile_id: friend.second_id
             })
             setChatId(data.id)
             setChatName(data.name)
@@ -109,7 +109,7 @@ const Friend = (props) => {
             <TouchableOpacity onPress={() => navigation.navigate('ViewProfilePage', {
                 screen: 'ViewProfilePage',
                 params: {
-                    profile_id: Friend.second_id,
+                    profile_id: friend.second_id,
                     temp: false,
                 }
             })}>
@@ -122,7 +122,7 @@ const Friend = (props) => {
                 <TouchableOpacity onPress={() => navigation.navigate('ViewProfilePage', {
                     screen: 'ViewProfilePage',
                     params: {
-                        profile_id: Friend.second_id,
+                        profile_id: friend.second_id,
                         temp: false,
                     }
                 })}>
