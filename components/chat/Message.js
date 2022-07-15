@@ -38,15 +38,18 @@ const Message = (props) => {
             // return username;
         } catch(error) {
             console.log('Message', error)
-        }
+        } 
     }
 
     const isMyMessage = () => {
         return messageData.sender_id === supabase.auth.user().id;
     }
-
-    getUsername();
-
+    
+    useEffect(()=> {
+        getUsername();
+    })
+    // getUsername()
+    
     return (
         <View style={[
             styles.container,

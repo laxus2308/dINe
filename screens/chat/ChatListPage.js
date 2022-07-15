@@ -16,7 +16,7 @@ const ChatListPage = () => {
 
   const createRoom = async () => {
     try {
-      const { error} = await supabase.rpc('create_room', {
+      const { error } = await supabase.rpc('create_room', {
         name: 'Chat test name'
       }).single()
 
@@ -29,26 +29,39 @@ const ChatListPage = () => {
   //check for real time updates
   useEffect(() => {
     const sub = supabase
-        .from('chat_rooms')
-        .on('*', async (update) => {
-            await getChatList()
-        })
-        .subscribe();
+      .from('chat_rooms')
+      .on('*', async (update) => {
+        await getChatList()
+      })
+      .subscribe();
     return () => {
-        supabase.removeSubscription(sub)
+      supabase.removeSubscription(sub)
     }
-}, [])
+  }, [])
 
-//get chat lists upon first navigate
-useEffect(() => {
+  useEffect(() => {
+    const sub = supabase
+      .from('chat_unread')
+      .on('*', async (update) => {
+        await getChatList()
+      })
+      .subscribe();
+    return () => {
+      supabase.removeSubscription(sub)
+    }
+  }, [])
+
+
+  //get chat lists upon first navigate
+  useEffect(() => {
     getChatList();
-}, [])
+  }, [])
 
   const getChatList = async () => {
     try {
       const { data, error } = await supabase
-      .from('chat_rooms')
-      .select(`
+        .from('chat_rooms')
+        .select(`
         id,
         name,
         pic_url,
@@ -67,16 +80,16 @@ useEffect(() => {
       <FlatList
         style={styles.flatListItem}
         data={chatRooms}
-        renderItem={({item}) => <ChatListItem chatRoom = {item}/>}
-        onRefresh= {async()=> {
+        renderItem={({ item }) => <ChatListItem chatRoom={item} />}
+        onRefresh={async () => {
           setRefreshing(true)
-          await getChatList().then(()=> setRefreshing(false))
+          await getChatList().then(() => setRefreshing(false))
         }}
         refreshing={refreshing}
       />
-      <TouchableOpacity onPress={createRoom} style={{marginBottom:100}}>
-            <Text> Test for add chat </Text>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={createRoom} style={{ marginBottom: 100 }}>
+        <Text> Test for add chat </Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -89,7 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   flatListItem: {
-    width:'100%',
+    width: '100%',
   }
 });
 
