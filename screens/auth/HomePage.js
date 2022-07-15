@@ -5,16 +5,68 @@ import {
   StyleSheet,
   Image,
   Text,
-  FlatList
+  FlatList,
+  Platform
 } from 'react-native';
 import { supabase } from '../../supabase';
 import FriendRequest from '../../components/friends/FriendRequest';
 import Friend from '../../components/friends/Friend';
-import User from '../../components/friends/User';
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true
+  }),
+});
 
 const HomePage = () => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friendList, setFriendList] = useState([]);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+}, []);
+
+
+  //Get the token
+  const registerForPushNotificationsAsync = async() =>{
+    const user = supabase.auth.user();
+    let token;
+
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+    }
+
+    //Ensure that android users will be shown notification at the top
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync("default", {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+      });
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+
+    const updates = {
+      notification_token: token
+    }
+    
+    let {data, error} = await supabase.from('profiles').update([updates]).eq('id', user.id);
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+
+}
 
   //check for real time updates
   useEffect(() => {
