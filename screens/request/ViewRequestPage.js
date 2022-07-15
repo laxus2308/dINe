@@ -21,6 +21,7 @@ const ViewRequestPage = ({ navigation }) => {
       ToastAndroid.show("Request deleted!", ToastAndroid.LONG)
       navigation.navigate("Request Board")
       await supabase.from('requests').delete().match({ id: request_id })
+      ToastAndroid.show('Request Deleted!', ToastAndroid.LONG);
   }
 
   const joinRequestRoom = async () => {

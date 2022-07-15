@@ -68,11 +68,11 @@ useEffect(() => {
         style={styles.flatListItem}
         data={chatRooms}
         renderItem={({item}) => <ChatListItem chatRoom = {item}/>}
-        onRefresh= {async()=> {
-          setRefreshing(true)
-          await getChatList().then(()=> setRefreshing(false))
-        }}
-        refreshing={refreshing}
+        // onRefresh= {async()=> {
+        //   setRefreshing(true)
+        //   await getChatList().then(()=> setRefreshing(false))
+        // }}
+        // refreshing={refreshing}
       />
       <TouchableOpacity onPress={createRoom} style={{marginBottom:100}}>
             <Text> Test for add chat </Text>

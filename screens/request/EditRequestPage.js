@@ -16,6 +16,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer'
 import moment from 'moment'
+import { ToastAndroid } from 'react-native';
 
 const EditRequestPage = ({ navigation }) => {
 
@@ -131,8 +132,7 @@ const EditRequestPage = ({ navigation }) => {
       if (error) {
         throw error
       }
-
-      ToastAndroid.show("Request updated!", ToastAndroid.LONG)
+      ToastAndroid.show('Request Edited!', ToastAndroid.LONG)
       navigation.pop()
 
     } catch (error) {

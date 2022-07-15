@@ -1,13 +1,3 @@
-import React, {useEffect, useState}from 'react'
-import {
-    View,
-    StyleSheet,
-    Text,
-} from 'react-native';
-import moment from 'moment';
-import { supabase } from '../../supabase';
-
-
 const Message = (props) => {
     const {messageData} = props;
     const [username, setUsername] = useState('')
@@ -58,41 +48,4 @@ const Message = (props) => {
             <Text style={styles.time}> {moment(messageData.created_at).fromNow()} </Text>
         </View>
     )
-}    
-
-
-const styles = StyleSheet.create({
-    container: {
-        width: '80%',
-        borderRadius: 30,
-        padding: 10,
-        marginVertical: '1%',
-        marginHorizontal: '2%',
-    },
-    name: {
-        color: 'darkorange',
-        marginBottom: '1%',
-
-    }, 
-    content: {
-      fontSize: 15,
-    },
-    time: {
-        alignSelf:'flex-end',
-        color: 'grey',
-    },
-    botMsg: {
-        fontSize: 13,
-        alignSelf:'center',
-    },
-    botMsgContainer: {
-        backgroundColor: 'lightblue',
-        width: '75%',
-        alignSelf: 'center',
-        borderRadius: 30,
-        padding: 5,
-        marginVertical: '1%',
-    }
-})
-
-export default Message;
+}

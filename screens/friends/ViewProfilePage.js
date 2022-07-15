@@ -12,7 +12,6 @@ import {
 import { supabase } from '../../supabase';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-
 const ViewProfilePage = () => {
     const route = useRoute();
     const [loading, setLoading] = useState(true);
@@ -29,7 +28,6 @@ const ViewProfilePage = () => {
     // const [token, setToken] = useState();
 
     const getProfile = async () => {
-        console.log(route.params.params.profile_id)
         try {
             setLoading(true)
 
@@ -156,7 +154,7 @@ const ViewProfilePage = () => {
             console.log(error);
         }
     }
-
+    
     const sendFriendRequest = async() => {
         try {
             const user = supabase.auth.user()
@@ -310,6 +308,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginTop: 20,
         backgroundColor: "#696969",
+    },
+    
+    DeleteButton: {
+        width: "80%",
+        borderRadius: 25,
+        height: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20,
+        backgroundColor: "red",
     },
 
     container: {

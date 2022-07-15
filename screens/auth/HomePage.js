@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Image,
   Text,
-  FlatList
+  FlatList,
+  Platform
 } from 'react-native';
 import { supabase } from '../../supabase';
 import FriendRequest from '../../components/friends/FriendRequest';
@@ -19,12 +20,15 @@ Notifications.setNotificationHandler({
   }),
 });
 
-
 const HomePage = () => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friendList, setFriendList] = useState([]);
   const [refreshingFriend, setRefreshingFriend] = useState(false);
   const [refreshingRequest, setRefreshingRequest] = useState(false)
+
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+}, []);
 
   //check for real time updates
   useEffect(() => {
