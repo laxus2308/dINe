@@ -20,6 +20,10 @@ const MatchFoundPage = () => {
     // const roomId = route.params.params.chatId;
     const [username, setUsername] = useState('');
     const [profilePic, setProfilePic] = useState(null);
+    const [chatName, setChatName] = useState();
+    const [chatId, setChatId] = useState();
+    const [click, setClick] = useState(false);
+    const user = supabase.auth.user();
 
     useEffect(() => {
         getMatchDetails();
@@ -55,6 +59,56 @@ const MatchFoundPage = () => {
         }
     }
 
+    const getChat = async () => {
+        try {
+            setClick(true)
+            const { data, error } = await supabase
+                .from('friend_relations')
+                .select('chat_id, chat_rooms(name)')
+                .match({
+                    first_id: user.id,
+                    second_id: matchId
+                })
+                .single()
+            if (data.chat_id == null) {
+                await createChat();
+            }else {
+                setChatId(data.chat_id)
+                setChatName(data.chat_rooms.name)
+            }
+            if (error) throw error
+        } catch (error) {
+            console.log(error.message)
+        }
+
+    }
+
+    const createChat = async () => {
+        try {
+            const { data, error } = await supabase.rpc('create_chat_room', {
+                profile_id: matchId
+            })
+            setChatId(data.id)
+            setChatName(data.name)
+
+            if (error) throw error
+        } catch(error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(()=> {
+        if(chatId) {
+            // console.log(chatName,"chatname")
+            setClick(false)
+            navigation.navigate("Chat", {
+                screen: "ChatRoomPage", 
+                params: {
+                    id: chatId,
+                    name: chatName,
+                }})
+        }
+    },[chatId, chatName,click] )
     // const enterRoom = () => {
     //     navigation.navigate('Chat', {screen:'ChatRoomPage', params: {
     //         id:roomId,
@@ -71,6 +125,9 @@ const MatchFoundPage = () => {
                 source={{ uri: profilePic }}
                 style={styles.avatar}
             />
+            <TouchableOpacity onPress={getChat}>
+                    <Image source={require('../../assets/chat.png')} style={styles.button} />
+                </TouchableOpacity>
             {/* <Button style={styles.content}
                 title= 'Join Chat'
                 color= 'purple'
@@ -102,6 +159,13 @@ const styles = StyleSheet.create({
         width: 300,
         height: 200,
         resizeMode: 'contain',
+    },
+    button: {
+        width: 35,
+        height: 35,
+        resizeMode: 'contain',
+        marginLeft: 8,
+        marginRight: 15
     },
 
 })

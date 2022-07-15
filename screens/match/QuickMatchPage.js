@@ -26,52 +26,39 @@ const QuickMatchPage = () => {
     useEffect(() => {
         if (isSearching) {
             const sub = supabase
-            .from('quick_match')
-            .on('*', async (update) => {
-                if (update.new.searching == true && update.new.profile_id != supabase.auth.user().id) {
-                    foundMatchWithCreateRoom(update.new.profile_id)
-                }
-            })
-            .subscribe();
-          return () => {
-            supabase.removeSubscription(sub)
-          }
+                .from('quick_match')
+                .on('*', async (update) => {
+                    console.log(update)
+                    if (update.new.searching == true && update.new.profile_id != supabase.auth.user().id) {
+                        foundMatch(update.new.profile_id)
+                    }
+                })
+                .subscribe();
+            return () => {
+                supabase.removeSubscription(sub)
+            }
         }
-      }, [isSearching])
+    }, [isSearching])
 
-      const foundMatch = async () => {
+    const foundMatch = async (profileId) => {
         try {
             setIsSearching(false);
             await stopSearch();
+
+            navigation.navigate('Match Found', {
+                screen: 'MatchFoundPage', params: {
+                    id: profileId,
+                }
+            })
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const foundMatchWithCreateRoom = async(profileId) => {
-        try {
-            const { data, error} = await supabase.rpc('create_match_room', {
-                profile_id: profileId
-            });
-            await foundMatch();
-           
-            navigation.navigate('Match Found', {screen: 'MatchFoundPage', params: {
-                id: profileId,
-                // chatId: data.id,
-            }})
-
-            if (error){
-                throw error
-            }
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-
     const getUsers = async () => {
         try {
-            let {data, error} = await supabase.from('quick_match').select().eq('searching', true).neq('profile_id', user.id)
+            let { data, error } = await supabase.from('quick_match').select().eq('searching', true).neq('profile_id', user.id)
 
             if (error) {
                 console.log(error)
@@ -80,16 +67,12 @@ const QuickMatchPage = () => {
             if (data.length != 0) {
                 // console.log(data);
                 const profileId = data[0].profile_id;
-                foundMatch(profileId);
-                navigation.navigate('Match Found', {screen: 'MatchFoundPage', params: {
-                    id: profileId,
-                }})
+                await foundMatch(profileId);
             }
         } catch (error) {
             console.log(error)
         }
     }
-
 
     const submitSearch = async () => {
         setIsSearching(true);
@@ -99,15 +82,15 @@ const QuickMatchPage = () => {
                 searching: true
             }
 
-            let { error } = await supabase.from('quick_match').update(updates).match({profile_id: user.id})
-            
+            let { error } = await supabase.from('quick_match').update(updates).match({ profile_id: user.id })
+
             if (error) {
                 throw error
             }
-            getUsers();
-        }  catch(error) {
+            await getUsers();
+        } catch (error) {
             console.log(error)
-        } 
+        }
     }
 
 
@@ -116,38 +99,34 @@ const QuickMatchPage = () => {
             const updates = {
                 searching: false
             }
-
-            let { error } = await supabase.from('quick_match').update(updates).match({profile_id: user.id})
+            let { error } = await supabase.from('quick_match').update(updates).match({ profile_id: user.id })
 
             if (error) {
                 throw error
             }
 
-        }  catch(error) {
+        } catch (error) {
             console.log(error)
         }
-
         setIsSearching(false);
-
     }
-
 
     return (
         <View style={styles.container}>
             {isSearching ? (
-            <View>
-            <Button
-                title='Stop Search'
-                onPress={stopSearch}
-            />
-            </View>
-              ) : (
-            <View>
-            <Button
-                title= 'Search!'
-                onPress={submitSearch}
-            />
-            </View>
+                <View>
+                    <Button
+                        title='Stop Search'
+                        onPress={stopSearch}
+                    />
+                </View>
+            ) : (
+                <View>
+                    <Button
+                        title='Search!'
+                        onPress={submitSearch}
+                    />
+                </View>
             )}
         </View>
     )
