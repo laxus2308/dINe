@@ -15,6 +15,7 @@ import { supabase } from '../../supabase';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer'
 import moment from 'moment'
+import { ToastAndroid } from 'react-native';
 
 const CreateRequestPage = ({ navigation }) => {
   const [uploading, setUploading] = useState(false);
@@ -133,6 +134,7 @@ const CreateRequestPage = ({ navigation }) => {
       } else if (createRoomError) {
         throw createRoomError
       }
+      ToastAndroid.show('Request Created!', ToastAndroid.LONG);
       navigation.pop();
 
     } catch (error) {

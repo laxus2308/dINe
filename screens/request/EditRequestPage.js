@@ -6,7 +6,8 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  ToastAndroid
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
@@ -15,6 +16,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer'
 import moment from 'moment'
+import { ToastAndroid } from 'react-native';
 
 const EditRequestPage = ({ navigation }) => {
 
@@ -130,6 +132,7 @@ const EditRequestPage = ({ navigation }) => {
       if (error) {
         throw error
       }
+      ToastAndroid.show('Request Edited!', ToastAndroid.LONG)
       navigation.pop()
 
     } catch (error) {
