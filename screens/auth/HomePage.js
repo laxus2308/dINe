@@ -11,10 +11,19 @@ import { supabase } from '../../supabase';
 import FriendRequest from '../../components/friends/FriendRequest';
 import Friend from '../../components/friends/Friend';
 import User from '../../components/friends/User';
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true
+  }),
+});
 
 const HomePage = () => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friendList, setFriendList] = useState([]);
+  const [refreshRequest, setRefreshRequest] = useState(false)
+  const [refreshFriend, setRefreshFriend] = useState(false)
 
   //check for real time updates
   useEffect(() => {
@@ -77,40 +86,92 @@ const HomePage = () => {
     );
   }
 
-  
-    return (
-      <View style={styles.container}>
-        <Text style = {styles.header}>Friends</Text>
-          <View
-            style={{
-              borderBottomColor: 'black',
-              borderBottomWidth: StyleSheet.hairlineWidth,
-            }}
-          />
-        <FlatList
-          windowSize={10}
-          data={friendList}
-          renderItem={({ item }) => { return <Friend Friend={item} /> }}
-          keyExtractor={(item) => item.id}
-          style={styles.flatList}
-          ItemSeparatorComponent={ItemDivider}
-        />
-        <Text style = {styles.header}>Pending Requests</Text>
-        <View
-          style={{
-            borderBottomColor: 'black',
-            borderBottomWidth: StyleSheet.hairlineWidth,
-          }}
-        />
-        <FlatList
-          data={friendRequests}
-          renderItem={({ item }) => { return <FriendRequest FriendReq={item} /> }}
-          keyExtractor={(item) => item.id}
-          style={styles.flatList}
-          ItemSeparatorComponent={ItemDivider}
-        />
-      </View>
-    )
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
+
+
+  //Get the token
+  const registerForPushNotificationsAsync = async () => {
+    const user = supabase.auth.user();
+    let token;
+
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+
+    //Ensure that android users will be shown notification at the top
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync("default", {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+      });
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+
+    const updates = {
+      notification_token: token
+    }
+
+    let { data, error } = await supabase.from('profiles').update([updates]).eq('id', user.id);
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Friends</Text>
+      <View
+        style={{
+          borderBottomColor: 'black',
+          borderBottomWidth: StyleSheet.hairlineWidth,
+        }}
+      />
+      <FlatList
+        windowSize={10}
+        data={friendList}
+        renderItem={({ item }) => { return <Friend Friend={item} /> }}
+        keyExtractor={(item) => item.id}
+        style={styles.flatList}
+        ItemSeparatorComponent={ItemDivider}
+        onRefresh= {async()=> {
+          setRefreshFriend(true)
+          await getFriendList().then(()=> setRefreshFriend(false))
+        }}
+        refreshing={refreshFriend}
+      />
+      <Text style={styles.header}>Pending Requests</Text>
+      <View
+        style={{
+          borderBottomColor: 'black',
+          borderBottomWidth: StyleSheet.hairlineWidth,
+        }}
+      />
+      <FlatList
+        data={friendRequests}
+        renderItem={({ item }) => { return <FriendRequest FriendReq={item} /> }}
+        keyExtractor={(item) => item.id}
+        style={styles.flatList}
+        ItemSeparatorComponent={ItemDivider}
+        onRefresh= {async()=> {
+          setRefreshRequest(true)
+          await getFriendRequests().then(()=> setRefreshRequest(false))
+        }}
+        refreshing={refreshRequest}
+      />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({

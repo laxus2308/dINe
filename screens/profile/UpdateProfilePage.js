@@ -5,6 +5,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     TextInput,
+    ToastAndroid
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../../supabase';
@@ -47,6 +48,7 @@ const UpdateProfilePage = ({ navigation }) => {
             if (error) {
                 throw error
             }
+            ToastAndroid.show('Profile Updated!', ToastAndroid.LONG)
             navigation.pop()
 
         } catch (error) {
