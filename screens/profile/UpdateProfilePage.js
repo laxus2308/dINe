@@ -283,7 +283,7 @@ const UpdateProfilePage = ({ navigation }) => {
         getProfile();
     }, [])
     return (
-        <View>
+        <View style={styles.container}>
             <View style={{ ...styles.verticalComponent, ...styles.bottomSeparator }}>
                 <Text style={{ flex: 1 / 3 }}> Name </Text>
                 <TextInput
@@ -368,7 +368,8 @@ const UpdateProfilePage = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-
+        backgroundColor: '#fff8dc',
+        flex: 1
     },
     verticalComponent: {
         flexDirection: 'row',

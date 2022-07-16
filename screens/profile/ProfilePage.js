@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         flex: 1,
+        backgroundColor: '#fff8dc'
     },
     profileDescription: {
         marginTop: '5%',

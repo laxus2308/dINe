@@ -140,17 +140,17 @@ const QuickMatchPage = () => {
         <View style={styles.container}>
             {isSearching ? (
                 <View>
-                    <Button
-                        title='Stop Search'
-                        onPress={stopSearch}
-                    />
+                    <TouchableOpacity style={styles.Button}
+                        onPress={stopSearch}>
+                    <Text> Stop Search </Text>
+                    </TouchableOpacity>
                 </View>
             ) : (
                 <View>
-                    <Button
-                        title='Search!'
-                        onPress={submitSearch}
-                    />
+                    <TouchableOpacity style={styles.Button}
+                        onPress={submitSearch}>
+                    <Text> Search! </Text>
+                    </TouchableOpacity>
                 </View>
             )}
         </View>
@@ -165,6 +165,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    Button: {
+        borderRadius: 25,
+        height: 50,
+        padding: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 10,
+        backgroundColor: "#ffff00",
+      },
 })
 
 

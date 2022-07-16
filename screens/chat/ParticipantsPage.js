@@ -240,7 +240,7 @@ const ParticipantsPage = ({ navigation }) => {
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <View style={styles.topContainer}>
                 <TextInput
                     style={styles.chatName}
@@ -281,6 +281,10 @@ const ParticipantsPage = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff8dc'
+    },
     profileContainer: {
         flexDirection: 'row',
     },

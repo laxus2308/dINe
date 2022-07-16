@@ -20,6 +20,7 @@ const User = (props) => {
             const {data, error} = await supabase.from('profiles').select().eq('id', User.id)
             if (data) {
                 setProfileImage(getProfileUri(data[0].avatar_url))
+                console.log(profileImage)
                 setUsername(data[0].username)
             }
 
@@ -46,10 +47,17 @@ const User = (props) => {
                     profile_id: User.id,
                     temp: true,
                     }})}>
+                {profileImage == 'https://tkwrepsmafszvjeuppqg.supabase.co/storage/v1/object/public/avatars/null' ? (
+                <Image
+                    source={require("../../assets/no_profile_pic.png")}
+                    style={styles.avatar}
+                />
+            ) : (
                 <Image
                     source={{ uri: profileImage }}
                     style={styles.avatar}
                 />
+            )}    
             </TouchableOpacity>
             <View style={styles.textContainer}>
             <TouchableOpacity onPress={() => navigator.navigate('ViewProfilePage', {screen:'ViewProfilePage', 

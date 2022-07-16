@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 50,
-    marginRight:120
+    marginRight:120,
+    borderWidth: 1,
   },
 
   discoverButton: {
@@ -50,7 +51,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 50,
-    marginLeft:120
+    marginLeft:120,
+    borderWidth: 1,
   },
 
   container: {

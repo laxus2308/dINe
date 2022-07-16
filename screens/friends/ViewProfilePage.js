@@ -230,10 +230,17 @@ const ViewProfilePage = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.container}>
+            {profilePic == 'https://tkwrepsmafszvjeuppqg.supabase.co/storage/v1/object/public/avatars/null' ? (
+                <Image
+                    source={require("../../assets/no_profile_pic.png")}
+                    style={styles.avatar}
+                />
+            ) : (
                 <Image
                     source={{ uri: profilePic }}
                     style={styles.avatar}
                 />
+            )}  
                 <Text style={styles.profileDescription}> Name: {username}</Text>
                 <Text style={styles.profileDescription}> Faculty: {faculty}</Text>
                 <Text style={styles.profileDescription}> Age: {age}</Text>
@@ -313,6 +320,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         flex: 1,
+        backgroundColor: '#fff8dc'
     },
     profileDescription: {
         marginTop: '5%',

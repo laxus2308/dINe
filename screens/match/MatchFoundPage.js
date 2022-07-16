@@ -133,6 +133,9 @@ const MatchFoundPage = () => {
                 color= 'purple'
                 //onPress={};
             /> */}
+            <Text>
+                Click to chat with your new match!
+            </Text>
         </View>
     )
 
@@ -165,7 +168,8 @@ const styles = StyleSheet.create({
         height: 35,
         resizeMode: 'contain',
         marginLeft: 8,
-        marginRight: 15
+        marginRight: 15,
+        marginBottom: 10
     },
 
 })

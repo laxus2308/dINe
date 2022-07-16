@@ -37,6 +37,9 @@ const HomeNavigation = () => {
                     component={ViewProfilePage}
                     options={{
                         title: 'View Profile',
+                        headerStyle: {
+                            backgroundColor: 'white'
+                          },
                     }}
             />
             </Stack.Navigator>

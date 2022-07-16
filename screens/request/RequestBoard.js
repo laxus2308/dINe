@@ -5,6 +5,8 @@ import {
   FlatList,
   Button,
   TouchableOpacity,
+  View,
+  Image
 } from 'react-native';
 import Request from '../../components/request/Request.js';
 import { supabase } from '../../supabase.js';
@@ -17,11 +19,9 @@ const RequestBoard = ({ navigation }) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Button
-          title='Create'
-          onPress={()=>{navigation.navigate('Create Request');}}
-          color='lightblue'
-        />
+          <TouchableOpacity onPress={()=>{navigation.navigate('Create Request');}}>
+              <Image source={require('../../assets/create.png')} style={styles.button} />
+          </TouchableOpacity>
     )
     })
   }, [navigation])
@@ -101,6 +101,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-around"
   },
 
+  textContainer2: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+
+  button: {
+    width: 35,
+    height: 35,
+    resizeMode: 'contain',
+    marginLeft: 8,
+    marginRight: 15
+  },
+
+
   requestButtonContainer: {
     flex: 1,
     alignContent: 'center',
@@ -111,7 +127,7 @@ const styles = StyleSheet.create({
 
   appButtonContainer: {
     elevation: 8,
-    backgroundColor: "#009688",
+    backgroundColor: "honeydew",
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12
@@ -119,7 +135,7 @@ const styles = StyleSheet.create({
 
   appButtonText: {
     fontSize: 18,
-    color: "#fff",
+    color: "black",
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase"

@@ -48,7 +48,7 @@ const DiscoverPage = () => {
               height: 1,
               width: "100%",
               alignSelf: 'center',
-              backgroundColor: "white",
+              backgroundColor: "black",
             }}
           />
         );
