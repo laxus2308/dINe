@@ -31,7 +31,7 @@ const Message = (props) => {
 
     useEffect(()=> {
         getUsername();
-    }, [])
+    }, [messageData])
 
     const joinGroupMessage = () => {
         return messageData.is_bot;
