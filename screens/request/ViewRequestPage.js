@@ -52,7 +52,7 @@ const ViewRequestPage = ({ navigation }) => {
 
       if (joinRoomError) throw joinRoomError
 
-      for (let i = 1; i < data.length; i++) {
+      for (let i = 0; i < data.length; i++) {
           sendPushNotification(data[i].notification_token, myUsername.body[0].username + " has joined a request");
       }
       
