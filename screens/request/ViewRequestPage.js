@@ -23,9 +23,10 @@ const ViewRequestPage = ({ navigation }) => {
 
   const joinRequestRoom = async () => {
     try {
-      const { error: joinRoomError } = await supabase.rpc('join_request_room', {
+      const { data,  error: joinRoomError } = await supabase.rpc('join_request_room', {
         request_id: route.params.id
       })
+      console.log(data)
 
       if (joinRoomError) throw joinRoomError
       

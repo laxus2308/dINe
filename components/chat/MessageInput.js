@@ -21,10 +21,11 @@ const MessageInput = (props) => {
         } 
         try {
             setSending(true);
-            const {error} = await supabase.rpc('send_message', {
+            const {data, error} = await supabase.rpc('send_message', {
                 room_id: room_id,
                 content: message,
             })
+            console.log(data)
             
             if(error) throw error
         } catch (error) {

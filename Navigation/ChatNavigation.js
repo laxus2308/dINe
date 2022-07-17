@@ -50,7 +50,9 @@ const ChatNavigation = () => {
         await remove_chat(room_id);
         await remove_messages();
         ToastAndroid.show('Chat Deleted!', ToastAndroid.LONG)
-        navigation.navigate('ChatListPage');
+        navigation.navigate('Chat', {
+            screen: 'ChatListPage'
+        });
     }
 
     return (
