@@ -14,17 +14,17 @@ const ChatListPage = () => {
   const [chatRooms, setChatRooms] = useState(null)
   const [refreshing, setRefreshing] = useState(false)
 
-  const createRoom = async () => {
-    try {
-      const { error } = await supabase.rpc('create_room', {
-        name: 'Chat test name'
-      }).single()
+  // const createRoom = async () => {
+  //   try {
+  //     const { error } = await supabase.rpc('create_room', {
+  //       name: 'Chat test name'
+  //     }).single()
 
-      if (error) throw error
-    } catch (error) {
-      alert(error.message)
-    }
-  }
+  //     if (error) throw error
+  //   } catch (error) {
+  //     alert(error.message)
+  //   }
+  // }
 
   //check for real time updates
   useEffect(() => {
@@ -87,9 +87,9 @@ const ChatListPage = () => {
         }}
         refreshing={refreshing}
       />
-      <TouchableOpacity onPress={createRoom} style={{ marginBottom: 100 }}>
+      {/* <TouchableOpacity onPress={createRoom} style={{ marginBottom: 100 }}>
         <Text> Test for add chat </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   )
 }
