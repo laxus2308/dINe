@@ -21,14 +21,40 @@ const ViewRequestPage = ({ navigation }) => {
       await supabase.from('requests').delete().match({ id: request_id })
   }
 
+  const sendPushNotification = async(token, text) => {
+    const message = {
+      to: token,
+      sound: 'default',
+      title: 'New participant',
+      body: text,
+      data: { someData: 'goes here' },
+    };
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+  }
+
   const joinRequestRoom = async () => {
+    const user = supabase.auth.user();
     try {
       const { data,  error: joinRoomError } = await supabase.rpc('join_request_room', {
         request_id: route.params.id
       })
-      console.log(data)
+
+      const myUsername = await supabase.from('profiles').select().eq('id', user.id);
 
       if (joinRoomError) throw joinRoomError
+
+      for (let i = 1; i < data.length; i++) {
+          sendPushNotification(data[i].notification_token, myUsername.body[0].username + " has joined a request");
+      }
       
       navigation.navigate('Chat', {screen:'ChatRoomPage', params: {
         id:chatId,
