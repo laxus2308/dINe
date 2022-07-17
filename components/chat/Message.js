@@ -12,18 +12,6 @@ const Message = (props) => {
     const {messageData} = props;
     const [username, setUsername] = useState('')
 
-    const joinGroupMessage = () => {
-        return messageData.is_bot;
-    }
-
-    if (joinGroupMessage()) {
-        return (
-            <View style = {styles.botMsgContainer}>
-                <Text style={styles.botMsg}> {messageData.content}</Text>
-            </View>
-        )
-    } 
-
     const getUsername = async () => {
         try {
             const { data: username, error } = await supabase
@@ -41,14 +29,25 @@ const Message = (props) => {
         } 
     }
 
+    useEffect(()=> {
+        getUsername();
+    }, [])
+
+    const joinGroupMessage = () => {
+        return messageData.is_bot;
+    }
+
+    if (joinGroupMessage()) {
+        return (
+            <View style = {styles.botMsgContainer}>
+                <Text style={styles.botMsg}> {messageData.content}</Text>
+            </View>
+        )
+    } 
+
     const isMyMessage = () => {
         return messageData.sender_id === supabase.auth.user().id;
     }
-    
-    useEffect(()=> {
-        getUsername();
-    })
-    // getUsername()
     
     return (
         <View style={[
