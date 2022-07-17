@@ -98,7 +98,7 @@ const ChatListItem = (props) => {
                 {chatRoom.pic_url == null ? (
                     <Image
                         style={styles.avatar}
-                        source={uri}
+                        source={require("../../assets/BlankImage.png")}
                     />) : (
                     <Image
                         style={styles.avatar}
