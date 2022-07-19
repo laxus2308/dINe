@@ -4,8 +4,8 @@ import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
 import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
 
-const FriendRequest = (props, {navigation}) => {
-    const {FriendReq} = props;
+const FriendRequest = (props) => {
+    const {friendReq} = props;
     const [profileImage, setProfileImage] = useState(null);
     const [username, setUsername] = useState(null);
     const navigator = useNavigation();
@@ -16,22 +16,21 @@ const FriendRequest = (props, {navigation}) => {
 
     const getDetails = async() => {
         try {
-            const {data, error} = await supabase.from('profiles').select().eq('id', FriendReq.requestor_id)
+            const {data, error} = await supabase.from('profiles').select().eq('id', friendReq.requestor_id)
             if (data) {
                 setProfileImage(getProfileUri(data[0].avatar_url))
                 setUsername(data[0].username)
             }
+            if (error) throw error
         } catch (error) {
-            console.log(error)
+            alert(error.message)
         }
     }
 
     const getProfileUri = (path) => {
         try {
             const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(path)
-            if (error) {
-                throw error
-            }
+            if (error) throw error
             return publicURL;
         } catch (error) {
             alert('Error downloading image: ', error.message)
@@ -41,27 +40,28 @@ const FriendRequest = (props, {navigation}) => {
     const acceptFriendRequest = async() => {
         const user = supabase.auth.user();
         try {
-            await supabase.from('friend_requests').delete().eq('requestor_id', FriendReq.requestor_id)
+            await supabase.from('friend_requests').delete().eq('requestor_id', friendReq.requestor_id)
             const updates = {
                 first_id: user.id,
-                second_id: FriendReq.requestor_id,
+                second_id: friendReq.requestor_id,
             }
             await supabase.from('friend_relations').insert([updates]);
             const updates2 = {
-                first_id: FriendReq.requestor_id,
+                first_id: friendReq.requestor_id,
                 second_id: user.id,
             }
             await supabase.from('friend_relations').insert([updates2]);
         } catch (error) {
-            console.log(error)
+            alert(error.message)
         }
     }
 
     const declineFriendRequest = async() => {
         try {
-            const {data, error} = await supabase.from('friend_requests').delete().eq('requestor_id', FriendReq.requestor_id)
+            const { error} = await supabase.from('friend_requests').delete().eq('requestor_id', friendReq.requestor_id)
+            if (error) throw error
         } catch (error) {
-            console.log(error)
+            alert(error.message)
         }
     }
 
@@ -69,7 +69,7 @@ const FriendRequest = (props, {navigation}) => {
         <View style={styles.requestContainer}>
             <TouchableOpacity onPress={() => navigator.navigate('ViewProfilePage', {screen:'ViewProfilePage', 
                 params: { 
-                    profile_id: FriendReq.requestor_id,
+                    profile_id: friendReq.requestor_id,
                     temp: false,
                     }})}>
             <Image
@@ -80,7 +80,7 @@ const FriendRequest = (props, {navigation}) => {
             <View style={styles.textContainer}>
                 <TouchableOpacity onPress={() => navigator.navigate('ViewProfilePage', {screen:'ViewProfilePage', 
                 params: { 
-                    profile_id: FriendReq.requestor_id,
+                    profile_id: friendReq.requestor_id,
                     temp: false,
                     }})}>
                     <Text style={styles.title}>{username}</Text>

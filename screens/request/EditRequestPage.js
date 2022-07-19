@@ -126,8 +126,6 @@ const EditRequestPage = ({ navigation }) => {
       }
 
       const { error} = await supabase.rpc('update_request', updates).single()
-
-
       if (error) {
         throw error
       }
@@ -138,7 +136,6 @@ const EditRequestPage = ({ navigation }) => {
     } catch (error) {
       alert(error.message)
     }
-
   }
 
   const pickImage = async () => {

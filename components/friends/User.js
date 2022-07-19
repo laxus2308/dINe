@@ -20,13 +20,12 @@ const User = (props) => {
             const {data, error} = await supabase.from('profiles').select().eq('id', User.id)
             if (data) {
                 setProfileImage(getProfileUri(data[0].avatar_url))
-                console.log(profileImage)
                 setUsername(data[0].username)
             }
 
             if (error) throw error
         } catch (error) {
-            console.log(error)
+            alert(error.message)
         }
     }
 
@@ -68,12 +67,6 @@ const User = (props) => {
                 <Text style={styles.title}>{username}</Text>
             </TouchableOpacity>
             </View>
-            {/* <View style={styles.textContainer2}>
-            <TouchableOpacity //onPress={goToChat}
-            >
-                <Image source={require('../../assets/chat.png')} style = {styles.button} />       
-            </TouchableOpacity>
-            </View> */}
         </View>
     )
 }

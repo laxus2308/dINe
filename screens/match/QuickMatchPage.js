@@ -4,16 +4,11 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    SafeAreaView,
-    FlatList,
-    Platform,
-    Button
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
 
 const QuickMatchPage = () => {
-
     const [isSearching, setIsSearching] = useState(false);
     const navigation = useNavigation();
 
@@ -45,7 +40,7 @@ const QuickMatchPage = () => {
             await stopSearch();
 
         } catch (error) {
-            console.log(error);
+            alert(error.message)
         }
     }
 
@@ -54,7 +49,6 @@ const QuickMatchPage = () => {
             const {  error} = await supabase.rpc('match_friends', {
                 profile_id: profileId
             });
-            // console.log(data)
             await foundMatch();
 
             navigation.navigate('Match Found', {
@@ -63,11 +57,9 @@ const QuickMatchPage = () => {
                 }
             })
 
-            if (error) {
-                throw error
-            }
+            if (error) throw error
         } catch (error) {
-            console.log(error.message)
+            alert(error.message)
         }
     }
 
@@ -75,12 +67,9 @@ const QuickMatchPage = () => {
         try {
             let { data, error } = await supabase.from('quick_match').select().eq('searching', true).neq('profile_id', user.id)
 
-            if (error) {
-                console.log(error)
-            }
+            if (error) throw error
 
             if (data.length != 0) {
-                // console.log(data);
                 const profileId = data[0].profile_id;
                 await foundMatch();
                 navigation.navigate('Match Found', {
@@ -90,14 +79,12 @@ const QuickMatchPage = () => {
                 })
             }
         } catch (error) {
-            console.log(error)
+            alert(error.message)
         }
     }
 
-
     const submitSearch = async () => {
         setIsSearching(true);
-
         try {
             const updates = {
                 searching: true
@@ -105,15 +92,12 @@ const QuickMatchPage = () => {
 
             let { error } = await supabase.from('quick_match').update(updates).match({ profile_id: user.id })
 
-            if (error) {
-                throw error
-            }
+            if (error) throw error
             await getUsers();
         } catch (error) {
-            console.log(error)
+            alert(error.message)
         }
     }
-
 
     const stopSearch = async () => {
         try {
@@ -123,18 +107,14 @@ const QuickMatchPage = () => {
 
             let { error } = await supabase.from('quick_match').update(updates).match({ profile_id: user.id })
 
-            if (error) {
-                throw error
-            }
+            if (error) throw error
 
         } catch (error) {
-            console.log(error)
+            alert(error.message)
+        } finally {
+            setIsSearching(false);
         }
-
-        setIsSearching(false);
-
     }
-
 
     return (
         <View style={styles.container}>
@@ -155,7 +135,6 @@ const QuickMatchPage = () => {
             )}
         </View>
     )
-
 }
 
 const styles = StyleSheet.create({

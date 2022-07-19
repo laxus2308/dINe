@@ -56,7 +56,10 @@ const ViewRequestPage = ({ navigation }) => {
           sendPushNotification(data[i].notification_token, myUsername.body[0].username + " has joined a request");
       }
       
-      navigation.navigate('Chat', {screen:'ChatRoomPage', params: {
+      navigation.navigate('Chat', {
+        screen:'ChatRoomPage',
+        initial: false, 
+        params: {
         id:chatId,
         name:chatName,
       }})

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import {
   View,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   FlatList,
 } from 'react-native';
 import ChatListItem from '../../components/chat/ChatListItem';
@@ -59,16 +57,8 @@ const ChatListPage = () => {
 
   const getChatList = async () => {
     try {
-      const { data, error } = await supabase
-        .from('chat_rooms')
-        .select(`
-        id,
-        name,
-        pic_url,
-        message: messages!last_message_id(content, created_at, sender_id)
-      `).order('created_at', { foreignTable: 'messages!last_message_id', ascending: false });
+      const { data, error } = await supabase.rpc('get_chats')
       if (error) throw error
-
       setChatRooms(data)
     } catch (error) {
       alert(error.message)

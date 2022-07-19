@@ -4,9 +4,6 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    SafeAreaView,
-    FlatList,
-    Button,
     Image
 } from 'react-native';
 import { supabase } from '../../supabase';
@@ -17,7 +14,6 @@ const MatchFoundPage = () => {
     const route = useRoute();
     const navigation = useNavigation();
     const matchId = route.params.params.id;
-    // const roomId = route.params.params.chatId;
     const [username, setUsername] = useState('');
     const [profilePic, setProfilePic] = useState(null);
     const [chatName, setChatName] = useState();
@@ -32,28 +28,21 @@ const MatchFoundPage = () => {
     const getMatchDetails = async () => {
         try {
             let {data, error} = await supabase.from('profiles').select().eq('id', matchId);
-
             setUsername(data[0].username);
             setProfilePic(getProfileUri(data[0].avatar_url));
-
-            // console.log(data)
-            if (error) {
-                throw error
-            }
+            
+            if (error) throw error
 
         } catch (error) {
-            console.log(error);
+            alert(error.message)
         }
     }
 
     const getProfileUri = (path) => {
         try {
             const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(path)
-            if (error) {
-                throw error
-            }
+            if (error) throw error
             return publicURL;
-
         } catch (error) {
             alert('Error downloading image: ', error.message)
         }
@@ -78,7 +67,7 @@ const MatchFoundPage = () => {
             }
             if (error) throw error
         } catch (error) {
-            console.log(error.message)
+            alert(error.message)
         }
 
     }
@@ -93,7 +82,7 @@ const MatchFoundPage = () => {
 
             if (error) throw error
         } catch(error) {
-            console.log(error)
+            alert(error.message)
         }
     }
 
@@ -109,12 +98,6 @@ const MatchFoundPage = () => {
                 }})
         }
     },[chatId, chatName,click] )
-    // const enterRoom = () => {
-    //     navigation.navigate('Chat', {screen:'ChatRoomPage', params: {
-    //         id:roomId,
-    //         name:chatName,
-    //       }})
-    // }
 
     return (
         <View style={styles.container}>
@@ -128,11 +111,6 @@ const MatchFoundPage = () => {
             <TouchableOpacity onPress={getChat}>
                     <Image source={require('../../assets/chat.png')} style={styles.button} />
                 </TouchableOpacity>
-            {/* <Button style={styles.content}
-                title= 'Join Chat'
-                color= 'purple'
-                //onPress={};
-            /> */}
             <Text>
                 Click to chat with your new match!
             </Text>

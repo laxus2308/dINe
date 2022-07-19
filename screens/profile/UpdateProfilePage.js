@@ -229,10 +229,46 @@ const UpdateProfilePage = ({ navigation }) => {
     }, {
         label: "Western",
         value: "Western"
+    }, {
+        label: "French",
+        value: "French"
+    }, {
+        label: "Greek",
+        value: "Greek"
+    }, {
+        label: "Spanish",
+        value: "Spanish"
+    }, {
+        label: "Turkish",
+        value: "Turkish"
+    }, {
+        label: "Thai",
+        value: "Thai"
+    }, {
+        label: "Indian",
+        value: "Indian"
+    }, {
+        label: "Malay",
+        value: "Malay"
+    }, {
+        label: "Mexican",
+        value: "Mexican"
+    }, {
+        label: "German",
+        value: "German"
+    }, {
+        label: "Russian",
+        value: "Russian"
+    }, {
+        label: "Vegan",
+        value: "Vegan"
+    }, {
+        label: "Vegetarian",
+        value: "Vegetarian"
     },
-        //  {
-        //     label:"",
-        //     value:""
+        // {
+        //     label: "",
+        //     value: ""
         // },
     ]
 
@@ -265,23 +301,23 @@ const UpdateProfilePage = ({ navigation }) => {
                 throw error
             }
 
-            console.log(data)
             if (data) {
                 setUsername(data.username)
                 setFaculty(data.faculty)
                 setAge(String(data.age))
                 setDietary(data.dietary)
-                setInterests(data.interests?data.interests:[])
-                setCuisines(data.cuisines?data.cuisines:[])
+                setInterests(data.interests ? data.interests : [])
+                setCuisines(data.cuisines ? data.cuisines : [])
             }
         } catch (error) {
-            console.log(error)
-        } 
+            alert(error.message)
+        }
     }
-    
-    useEffect(()=> {
+
+    useEffect(() => {
         getProfile();
     }, [])
+
     return (
         <View style={styles.container}>
             <View style={{ ...styles.verticalComponent, ...styles.bottomSeparator }}>

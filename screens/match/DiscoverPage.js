@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     View,
-    Text,
     StyleSheet,
-    TouchableOpacity,
-    SafeAreaView,
     FlatList,
 } from 'react-native';
 import { supabase } from '../../supabase';
@@ -24,7 +21,6 @@ const DiscoverPage = () => {
         return () => {
           supabase.removeSubscription(sub)
         }
-    
       }, [])
     
       useEffect(() => {
@@ -32,9 +28,10 @@ const DiscoverPage = () => {
       }, [])
 
       const getUserList = async () => {
-        const user = supabase.auth.user()
         try {
           const { data, error } = await supabase.rpc('discover');
+          if (error) throw error;
+
           setUserList(data);
         } catch (error) {
           alert(error.message)

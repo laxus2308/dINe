@@ -3,9 +3,7 @@ import {
   StyleSheet,
   Text,
   FlatList,
-  Button,
   TouchableOpacity,
-  View,
   Image
 } from 'react-native';
 import Request from '../../components/request/Request.js';
@@ -39,7 +37,6 @@ const RequestBoard = ({ navigation }) => {
     return () => {
       supabase.removeSubscription(sub)
     }
-
   }, [])
 
   //get request details upon first navigate

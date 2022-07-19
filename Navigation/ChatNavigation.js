@@ -37,12 +37,10 @@ const ChatNavigation = () => {
     const remove_messages = async() => {
         try {
             const{error: deleteMessageError} = await supabase.rpc('clear_messages')
-            if (deleteMessageError) {
-                throw deleteMessageError
-            }
+            if (deleteMessageError) throw deleteMessageError
+    
         } catch (error) {
             alert(error.message)
-            console.log(error)
         }
     }
     
@@ -61,7 +59,8 @@ const ChatNavigation = () => {
                 headerStyle: {
                     height: 60,
                 }
-            }}>
+            }}
+            initialRouteName="ChatListPage">
             <Stack.Screen
                 name='ChatListPage'
                 component={ChatListPage}
@@ -131,7 +130,6 @@ const styles = StyleSheet.create({
     },
     midContainer: {
         flex: 18 / 20,
-        // backgroundColor: 'black',
     },
     dots: {
         justifyContent: 'center',

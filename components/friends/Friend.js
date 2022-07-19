@@ -17,7 +17,6 @@ const Friend = (props) => {
 
     useEffect(() => {
         getDetails();
-        // getChat();
     },[])
 
     const getDetails = async () => {
@@ -29,7 +28,7 @@ const Friend = (props) => {
             }
             if (error) throw error
         } catch (error) {
-            console.log(error)
+            alert(error.message)
         }
     }
 
@@ -64,7 +63,7 @@ const Friend = (props) => {
             }
             if (error) throw error
         } catch (error) {
-            console.log(error.message)
+            alert(error.message)
         }
 
     }
@@ -79,7 +78,7 @@ const Friend = (props) => {
 
             if (error) throw error
         } catch(error) {
-            console.log(error)
+            alert(error.message)
         }
     }
 
@@ -89,20 +88,13 @@ const Friend = (props) => {
             setClick(false)
             navigation.navigate("Chat", {
                 screen: "ChatRoomPage", 
+                initial: false,
                 params: {
                     id: chatId,
                     name: chatName,
                 }})
         }
     },[chatId, chatName,click] )
-    // const goToChat = () => {
-    //     getChat().then(()=> navigation.navigate("Chat", {
-    //         screen: "ChatRoomPage", 
-    //         params: {
-    //             id: chatId,
-    //             name: username,
-    //         }}))
-    // }
 
     return (
         <View style={styles.requestContainer}>

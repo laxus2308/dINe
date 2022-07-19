@@ -14,7 +14,6 @@ const ChatRoomPage = () => {
     const route = useRoute();
     const room_id = route.params.id;
     const flatListRef = useRef();
-
     const [messages, setMessages] = useState(null);
     const user = supabase.auth.user();
     
@@ -59,7 +58,7 @@ const ChatRoomPage = () => {
 
     const resetUnreadCounter = async() => {
         try {
-            const {data, error} = await supabase
+            const {error} = await supabase
             .from('chat_unread')
             .update({unread: 0})
             .match({room_id: room_id, 
@@ -88,7 +87,6 @@ const ChatRoomPage = () => {
 const styles = StyleSheet.create({
     flatList: {
         height: '90%',
-
     }
 })
 

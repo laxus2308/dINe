@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -46,22 +46,25 @@ const ChatListItem = (props) => {
                 .single()
 
             if (error) throw error
-            // console.log(data)
             if (data) setUnread(data.unread)
         } catch (error) {
             alert(error.message)
-            // console.log('error', error)
         }
     }
 
     let lastMessage = ""
     let sender
-    if (chatRoom.message) {
-        lastMessage = chatRoom.message.content
-        sender = chatRoom.message.sender_id
-        getUsername(sender)
-        getUnread()
+    if (chatRoom.sender_id) {
+        lastMessage = chatRoom.content
+        sender = chatRoom.sender_id
     }
+
+    useEffect(()=> {
+        if (chatRoom.sender_id) {
+            getUsername(sender)
+            getUnread()
+        }
+    },[])
 
     const getChatUri = (path) => {
         try {
@@ -105,7 +108,7 @@ const ChatListItem = (props) => {
                         source={{ uri: uri }}
                     />)
                 }
-                {chatRoom.message != null ? (
+                {chatRoom.sender_id != null ? (
                     <View style={styles.midContainer}>
                         <Text style={styles.username}> {chatRoom.name} </Text>
                         <Text style={styles.content} ellipsizeMode='tail' numberOfLines={1}>{username}: {lastMessage}</Text>
@@ -116,12 +119,11 @@ const ChatListItem = (props) => {
                     </View>
                 )}
             </View>
-            {chatRoom.message != null ? (
+            {chatRoom.sender_id != null ? (
                 <View style={styles.rightContainer}>
-                    <Text style={styles.timeWithMessage}> {moment(chatRoom.message.created_at).fromNow()}</Text>
+                    <Text style={styles.timeWithMessage}> {moment(chatRoom.created_at).fromNow()}</Text>
                     <Text style={styles.unread}> {unread}</Text>
                 </View>
-
             ) : (
                 <></>
             )}
@@ -154,6 +156,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: '5%',
         justifyContent: 'space-evenly',
+        width:'70%',
     },
     username: {
         fontSize: 20,
@@ -165,15 +168,13 @@ const styles = StyleSheet.create({
         marginLeft: '2%',
     },
     timeWithMessage: {
-        // marginTop: '10%',
-        marginRight: '3%',
-        flex: 1 / 4,
         fontSize: 10,
+        alignSelf: 'center',
     },
     rightContainer: {
         flexDirection: 'column',
         justifyContent: 'space-around',
-
+        width:'20%'
     },
     unread: {
         borderRadius: 40,

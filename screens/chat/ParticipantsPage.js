@@ -47,7 +47,6 @@ const ParticipantsPage = ({ navigation }) => {
 
     useEffect(() => {
         if (url) {
-            // console.log(url)
             setHasUrl(false)
             downloadImage(url)
         }
@@ -70,12 +69,10 @@ const ParticipantsPage = ({ navigation }) => {
             `)
                 .eq('room_id', chatRoomId)
 
-            //console.log(data)
             setParticipants(data)
             if (error) throw error
-
         } catch (error) {
-            console.log(error)
+            alert(error.message)
         }
     }
 
@@ -146,7 +143,6 @@ const ParticipantsPage = ({ navigation }) => {
             base64: true,
         });
         if (!result.cancelled) {
-            // console.log("hasurl", hasUrl)
             setImage(result.uri);
             uploadImage(result.base64);
         }
@@ -156,7 +152,6 @@ const ParticipantsPage = ({ navigation }) => {
         try {
             await getExistingImage();
             if (url) {
-                // console.log("prev", url)
                 const { error: deleteError } = await supabase.storage
                     .from('chatroompics')
                     .remove([url])
@@ -169,7 +164,6 @@ const ParticipantsPage = ({ navigation }) => {
                 .upload(filePath, decode(base64File), {
                     contentType: 'image/png',
                 })
-
 
             const { error } = await supabase
                 .from('chat_rooms')
@@ -184,8 +178,7 @@ const ParticipantsPage = ({ navigation }) => {
                 setHasUrl(false)
             }
         } catch (error) {
-            // alert(error.message)
-            console.log(error)
+            alert(error.message)
         }
     }
 
@@ -195,11 +188,8 @@ const ParticipantsPage = ({ navigation }) => {
                 .from('chat_rooms')
                 .select('pic_url')
                 .match({ id: chatRoomId })
-            if (error) {
-                throw error
-            }
+            if (error) throw error
             if (data && data[0].pic_url != null) {
-                // setHasUrl(true)
                 setUrl(data[0].pic_url)
             }
 
@@ -210,15 +200,11 @@ const ParticipantsPage = ({ navigation }) => {
 
     const downloadImage = (path) => {
         try {
-            // console.log("path",path)
             const { publicURL, error } = supabase.storage.from('chatroompics').getPublicUrl(path)
-            if (error) {
-                throw error
-            }
+            if (error) throw error
             setImage(publicURL);
-
         } catch (error) {
-            console.log('Error downloading image: ', error.message)
+            alert('Error downloading image: ', error.message)
         }
     };
 
@@ -247,7 +233,6 @@ const ParticipantsPage = ({ navigation }) => {
                     value={chatName}
                     onChangeText={(name) => setChatName(name)}
                     editable={edit}
-
                 />
                 {edit ?
                     (<MaterialCommunityIcons name="check-bold" size={30} onPress={changeChatName} />)
@@ -312,7 +297,6 @@ const styles = StyleSheet.create({
     flatListHeader: {
         width: '100%',
         marginTop: '10%',
-        // alignItems:'center',
     },
     header: {
         fontSize: 25,
@@ -340,7 +324,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         backgroundColor: "#ffff00",
     },
-
 })
 
 export default ParticipantsPage;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState} from 'react'
 import {
   View,
   StyleSheet,
@@ -6,7 +6,6 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  SafeAreaView,
   ScrollView,
   ToastAndroid,
 } from 'react-native';
@@ -128,8 +127,6 @@ const CreateRequestPage = ({ navigation }) => {
                 request_id: data[0].id
       })
     
-      
-
       if (error) {
         throw error
       } else if (createRoomError) {

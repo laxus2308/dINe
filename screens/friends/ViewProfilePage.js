@@ -14,7 +14,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 
 const ViewProfilePage = () => {
     const route = useRoute();
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const [username, setUsername] = useState('');
     const [faculty, setFaculty] = useState('');
     const [age, setAge] = useState('');
@@ -27,15 +27,12 @@ const ViewProfilePage = () => {
     const navigation = useNavigation();
 
     const getProfile = async () => {
-        console.log(route.params.params.profile_id)
         try {
-            setLoading(true)
-
-            let { data, error, status } = await supabase
+            // setLoading(true)
+            let { data, error } = await supabase
                 .from('profiles')
                 .select()
                 .eq('id', route.params.params.profile_id)
-
 
             if (data) {
                 setProfilePic(getProfileUri(data[0].avatar_url));
@@ -46,10 +43,9 @@ const ViewProfilePage = () => {
                 setInterests(data[0].interests)
                 setCuisines(data[0].cuisines)
             } 
+            if (error) throw error
         } catch (error) {
             alert(error.message)
-        } finally {
-            setLoading(false)
         }
     }
 
@@ -64,7 +60,6 @@ const ViewProfilePage = () => {
         return () => {
             supabase.removeSubscription(sub)
         }
-        
     }, [])
 
     useEffect(() => {
@@ -90,7 +85,6 @@ const ViewProfilePage = () => {
         return () => {
             supabase.removeSubscription(sub)
         }
-        
     }, [])
 
     const tag = ({ item }) => (
@@ -112,11 +106,8 @@ const ViewProfilePage = () => {
     const getProfileUri = (path) => {
         try {
             const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(path)
-            if (error) {
-                throw error
-            }
+            if (error) throw error
             return publicURL;
-
         } catch (error) {
             alert('Error downloading image: ', error.message)
         }
@@ -137,8 +128,9 @@ const ViewProfilePage = () => {
             if (data.length != 0) {
                 setIsPendingRequest(true);
             }
+            if (error) throw error
         } catch (error) {
-            console.log(error);
+            alert(error.message)
         }
     }
 
@@ -150,21 +142,18 @@ const ViewProfilePage = () => {
             if (data.length != 0) {
                 setisFriends(true);
             }
+            if(error) throw error
         } catch (error) {
-            console.log(error);
+            alert(error.message)
         }
     }
 
     const deleteFriend = async() => {
-        try {
-            const user = supabase.auth.user()
-            await supabase.from('friend_relations').delete().eq('first_id', user.id).eq('second_id', route.params.params.profile_id);
-            await supabase.from('friend_relations').delete().eq('first_id', route.params.params.profile_id).eq('second_id', user.id);
-            ToastAndroid.show('Friend Deleted!', ToastAndroid.LONG)
-            navigation.pop()
-        } catch (error) {
-            console.log(error);
-        }
+        const user = supabase.auth.user()
+        await supabase.from('friend_relations').delete().eq('first_id', user.id).eq('second_id', route.params.params.profile_id);
+        await supabase.from('friend_relations').delete().eq('first_id', route.params.params.profile_id).eq('second_id', user.id);
+        ToastAndroid.show('Friend Deleted!', ToastAndroid.LONG)
+        navigation.pop()
     }
 
     const sendPushNotification = async(token, text) => {
@@ -194,6 +183,7 @@ const ViewProfilePage = () => {
             const {data, error} = await supabase.from('friend_requests').select()
             .eq('secondary_id', user.id)
             .eq('requestor_id', route.params.params.profile_id);
+            if (error) throw error;
             if (data.length != 0) {
                 await supabase.from('friend_requests').delete()
                 .eq('secondary_id', user.id)
@@ -215,6 +205,7 @@ const ViewProfilePage = () => {
                 }
                 await supabase.from('friend_requests').insert([updates]);
                 const {data, error} = await supabase.from('profiles').select().eq("id", route.params.params.profile_id)
+                if (error) throw error;
                 if (data[0].notification_token) {
                     sendPushNotification(data[0].notification_token, myUsername.body[0].username + " has sent you a friend request");
                 }
@@ -223,7 +214,7 @@ const ViewProfilePage = () => {
                 ToastAndroid.show('Friend Request Sent!', ToastAndroid.LONG)
             }
         } catch (error) {
-            console.log(error);
+            alert(error.message)
         }
     }
 

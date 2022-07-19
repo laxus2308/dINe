@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     Text,
   } from 'react-native';
-import { Dimensions, TouchableHighlight } from 'react-native';
+import { Dimensions } from 'react-native';
 
 const MatchingPage = ({navigation}) => {
   return (

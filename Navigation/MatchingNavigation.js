@@ -5,11 +5,9 @@ import DiscoverPage from '../screens/match/DiscoverPage';
 import MatchingPage from '../screens/match/MatchingPage';
 import MatchFoundPage from '../screens/match/MatchFoundPage';
 
-
 const Stack = createNativeStackNavigator();
 
 const MatchingNavigation = () => {
-
     return (
         <Stack.Navigator
             screenOptions={{

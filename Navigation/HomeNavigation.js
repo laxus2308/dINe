@@ -18,7 +18,6 @@ const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 const HomeNavigation = () => {
-    
     return (
         <NavigationContainer>
             <Stack.Navigator
@@ -89,8 +88,6 @@ const TabRoutes = () => {
     )
 }
 
-
-
 const styles = StyleSheet.create({
     header: {
         flex: 1,
@@ -108,6 +105,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     }
 })
-
 
 export default HomeNavigation;

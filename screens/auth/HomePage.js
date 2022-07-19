@@ -160,7 +160,7 @@ const HomePage = () => {
       />
       <FlatList
         data={friendRequests}
-        renderItem={({ item }) => { return <FriendRequest FriendReq={item} /> }}
+        renderItem={({ item }) => { return <FriendRequest friendReq={item} /> }}
         keyExtractor={(item) => item.id}
         style={styles.flatList}
         ItemSeparatorComponent={ItemDivider}

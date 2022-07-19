@@ -11,11 +11,9 @@ const Request = (props) => {
         try {
             const { publicURL, error } = supabase.storage.from('requestpics').getPublicUrl(path)
             
-            if (error) {
-                throw error
-            }
+            if (error) throw error
+            
             return publicURL;
-    
         } catch (error) {
             alert('Error downloading image: ', error.message)
         }
