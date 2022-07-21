@@ -9,7 +9,6 @@ import { supabase } from '../../supabase'
 import { useRoute } from '@react-navigation/native';
 import MessageInput from '../../components/chat/MessageInput';
 
-
 const ChatRoomPage = () => {
     const route = useRoute();
     const room_id = route.params.id;
@@ -33,8 +32,38 @@ const ChatRoomPage = () => {
     //get messages upon first navigate
     useEffect(() => {
         resetUnreadCounter();
+        inChatroom();
         getMessages();
+        return ()=> {
+            notInChatroom();
+        }
     }, [])
+
+    const inChatroom = async () => {
+        try {
+            const { error} = await supabase
+            .from('chat_unread')
+            .update({in_chatroom: true})
+            .match({room_id: room_id, 
+                user_id: user.id})
+            if (error) throw error
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
+    const notInChatroom = async() => {
+        try {
+            const { error} = await supabase
+            .from('chat_unread')
+            .update({in_chatroom: false})
+            .match({room_id: room_id, 
+                user_id: user.id})
+            if (error) throw error
+        } catch (error) {
+            alert(error.message)
+        }
+    }
 
     const getMessages = async () => {
         try {
