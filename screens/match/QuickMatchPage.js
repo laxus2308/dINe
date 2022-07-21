@@ -16,7 +16,10 @@ const QuickMatchPage = () => {
 
     useEffect(() => {
         console.log('Loading');
-    }, [navigation])
+        return ()=> {
+            stopSearch()
+        }
+    }, [])
 
     useEffect(() => {
         if (isSearching) {
@@ -32,6 +35,7 @@ const QuickMatchPage = () => {
                 supabase.removeSubscription(sub)
             }
         }
+
     }, [isSearching])
 
     const foundMatch = async () => {
@@ -46,7 +50,7 @@ const QuickMatchPage = () => {
 
     const foundMatchWithCreateRoom = async (profileId) => {
         try {
-            const {  error} = await supabase.rpc('match_friends', {
+            const { error } = await supabase.rpc('match_friends', {
                 profile_id: profileId
             });
             await foundMatch();
@@ -122,14 +126,14 @@ const QuickMatchPage = () => {
                 <View>
                     <TouchableOpacity style={styles.Button}
                         onPress={stopSearch}>
-                    <Text> Stop Search </Text>
+                        <Text> Stop Search </Text>
                     </TouchableOpacity>
                 </View>
             ) : (
                 <View>
                     <TouchableOpacity style={styles.Button}
                         onPress={submitSearch}>
-                    <Text> Search! </Text>
+                        <Text> Search! </Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -152,7 +156,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginTop: 10,
         backgroundColor: "#ffff00",
-      },
+    },
 })
 
 
