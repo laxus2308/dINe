@@ -8,6 +8,7 @@ import {
     FlatList,
     Image,
     TextInput,
+    ToastAndroid,
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
@@ -145,6 +146,7 @@ const ParticipantsPage = ({ navigation }) => {
         if (!result.cancelled) {
             setImage(result.uri);
             uploadImage(result.base64);
+            ToastAndroid.show('Chatroom picture has been updated successfully', ToastAndroid.LONG)
         }
     };
 
@@ -220,9 +222,10 @@ const ParticipantsPage = ({ navigation }) => {
                 .update({ name: chatName })
                 .eq('id', chatRoomId)
             if (error) throw error
+            ToastAndroid.show('Chatroom name has been updated successfully!', ToastAndroid.LONG)
         }catch (error) {
             alert(error.message)
-        }
+        } 
     }
 
     return (
