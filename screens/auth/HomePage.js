@@ -164,11 +164,11 @@ const HomePage = () => {
         keyExtractor={(item) => item.id}
         style={styles.flatList}
         ItemSeparatorComponent={ItemDivider}
-        onRefresh= {async()=> {
-          setRefreshRequest(true)
-          await getFriendRequests().then(()=> setRefreshRequest(false))
-        }}
-        refreshing={refreshRequest}
+        // onRefresh= {async()=> {
+        //   setRefreshRequest(true)
+        //   await getFriendRequests().then(()=> setRefreshRequest(false))
+        // }}
+        // refreshing={refreshRequest}
       />
     </View>
   )

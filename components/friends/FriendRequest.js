@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
-import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
+import { Text, Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
 
 const FriendRequest = (props) => {
-    const {friendReq} = props;
+    const { friendReq } = props;
     const [profileImage, setProfileImage] = useState(null);
     const [username, setUsername] = useState(null);
+    const [accepting, setAccepting] = useState(false);
+    const [rejecting, setRejecting] = useState(false);
     const navigator = useNavigation();
 
     useEffect(() => {
         getDetails();
     })
 
-    const getDetails = async() => {
+    const getDetails = async () => {
         try {
-            const {data, error} = await supabase.from('profiles').select().eq('id', friendReq.requestor_id)
+            const { data, error } = await supabase.from('profiles').select().eq('id', friendReq.requestor_id)
             if (data) {
                 setProfileImage(getProfileUri(data[0].avatar_url))
                 setUsername(data[0].username)
@@ -37,8 +39,9 @@ const FriendRequest = (props) => {
         }
     }
 
-    const acceptFriendRequest = async() => {
+    const acceptFriendRequest = async () => {
         const user = supabase.auth.user();
+        setAccepting(true)
         try {
             await supabase.from('friend_requests').delete().eq('requestor_id', friendReq.requestor_id)
             const updates = {
@@ -53,12 +56,13 @@ const FriendRequest = (props) => {
             await supabase.from('friend_relations').insert([updates2]);
         } catch (error) {
             alert(error.message)
-        }
+        } 
     }
 
-    const declineFriendRequest = async() => {
+    const declineFriendRequest = async () => {
+        setRejecting(true)
         try {
-            const { error} = await supabase.from('friend_requests').delete().eq('requestor_id', friendReq.requestor_id)
+            const { error } = await supabase.from('friend_requests').delete().eq('requestor_id', friendReq.requestor_id)
             if (error) throw error
         } catch (error) {
             alert(error.message)
@@ -67,32 +71,36 @@ const FriendRequest = (props) => {
 
     return (
         <View style={styles.requestContainer}>
-            <TouchableOpacity onPress={() => navigator.navigate('ViewProfilePage', {screen:'ViewProfilePage', 
-                params: { 
+            <TouchableOpacity onPress={() => navigator.navigate('ViewProfilePage', {
+                screen: 'ViewProfilePage',
+                params: {
                     profile_id: friendReq.requestor_id,
                     temp: false,
-                    }})}>
-            <Image
-                source={{ uri: profileImage }}
-                style={styles.avatar}
-            />
+                }
+            })}>
+                <Image
+                    source={{ uri: profileImage }}
+                    style={styles.avatar}
+                />
             </TouchableOpacity>
             <View style={styles.textContainer}>
-                <TouchableOpacity onPress={() => navigator.navigate('ViewProfilePage', {screen:'ViewProfilePage', 
-                params: { 
-                    profile_id: friendReq.requestor_id,
-                    temp: false,
-                    }})}>
+                <TouchableOpacity onPress={() => navigator.navigate('ViewProfilePage', {
+                    screen: 'ViewProfilePage',
+                    params: {
+                        profile_id: friendReq.requestor_id,
+                        temp: false,
+                    }
+                })}>
                     <Text style={styles.title}>{username}</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.textContainer2}>
-            <TouchableOpacity onPress={acceptFriendRequest}> 
-                <Image source={require('../../assets/greentick.png')} style = {styles.button} />          
-            </TouchableOpacity>
-            <TouchableOpacity onPress={declineFriendRequest}> 
-                <Image source={require('../../assets/redcross.png')} style = {styles.button} />          
-            </TouchableOpacity>
+                <TouchableOpacity onPress={acceptFriendRequest} disabled={accepting}>
+                    <Image source={require('../../assets/greentick.png')} style={styles.button} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={declineFriendRequest} disabled={rejecting}>
+                    <Image source={require('../../assets/redcross.png')} style={styles.button} />
+                </TouchableOpacity>
             </View>
         </View>
     )

@@ -57,14 +57,16 @@ const ChatListItem = (props) => {
     if (chatRoom.sender_id) {
         lastMessage = chatRoom.content
         sender = chatRoom.sender_id
+        getUsername(sender)
+        getUnread()
     }
 
-    useEffect(()=> {
-        if (chatRoom.sender_id) {
-            getUsername(sender)
-            getUnread()
-        }
-    },[])
+    // useEffect(()=> {
+    //     if (chatRoom.sender_id) {
+    //         getUsername(sender)
+    //         getUnread()
+    //     }
+    // },[])
 
     const getChatUri = (path) => {
         try {

@@ -32,8 +32,8 @@ const ChatRoomPage = () => {
 
     //get messages upon first navigate
     useEffect(() => {
-        getMessages();
         resetUnreadCounter();
+        getMessages();
     }, [])
 
     const getMessages = async () => {
