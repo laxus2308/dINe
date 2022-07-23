@@ -73,7 +73,8 @@ const ParticipantsPage = ({ navigation }) => {
             setParticipants(data)
             if (error) throw error
         } catch (error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("get participants data", error)
         }
     }
 
@@ -86,7 +87,8 @@ const ParticipantsPage = ({ navigation }) => {
             return publicURL;
 
         } catch (error) {
-            alert('Error downloading image: ', error.message)
+            // alert('Error downloading image: ', error.message)
+            console.log("get profile uri", error)
         }
     }
 
@@ -180,7 +182,8 @@ const ParticipantsPage = ({ navigation }) => {
                 setHasUrl(false)
             }
         } catch (error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("upload image", error)
         }
     }
 
@@ -194,9 +197,9 @@ const ParticipantsPage = ({ navigation }) => {
             if (data && data[0].pic_url != null) {
                 setUrl(data[0].pic_url)
             }
-
         } catch (error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("get existing image", error)
         }
     }
 
@@ -206,7 +209,8 @@ const ParticipantsPage = ({ navigation }) => {
             if (error) throw error
             setImage(publicURL);
         } catch (error) {
-            alert('Error downloading image: ', error.message)
+            // alert('Error downloading image: ', error.message)
+            console.log("donwload image", error)
         }
     };
 
@@ -224,7 +228,8 @@ const ParticipantsPage = ({ navigation }) => {
             if (error) throw error
             ToastAndroid.show('Chatroom name has been updated successfully!', ToastAndroid.LONG)
         }catch (error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("change chatname", error)
         } 
     }
 

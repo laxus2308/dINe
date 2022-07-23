@@ -30,7 +30,8 @@ const ChatNavigation = () => {
                 throw error
             }
         } catch (error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("remove_chat", error)
         }
     }
 
@@ -40,7 +41,8 @@ const ChatNavigation = () => {
             if (deleteMessageError) throw deleteMessageError
     
         } catch (error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("remove_messages", error)
         }
     }
     

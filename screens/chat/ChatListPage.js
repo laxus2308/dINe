@@ -3,6 +3,8 @@ import {
   View,
   StyleSheet,
   FlatList,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import ChatListItem from '../../components/chat/ChatListItem';
 import { supabase } from '../../supabase';
@@ -61,7 +63,8 @@ const ChatListPage = () => {
       if (error) throw error
       setChatRooms(data)
     } catch (error) {
-      alert(error.message)
+      // alert(error.message)
+      console.log('getChatList', error)
     }
   }
 

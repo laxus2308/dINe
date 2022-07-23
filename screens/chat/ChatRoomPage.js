@@ -40,16 +40,11 @@ const ChatRoomPage = () => {
     }, [])
 
     const inChatroom = async () => {
-        try {
-            const { error} = await supabase
-            .from('chat_unread')
-            .update({in_chatroom: true})
-            .match({room_id: room_id, 
-                user_id: user.id})
-            if (error) throw error
-        } catch (error) {
-            alert(error.message)
-        }
+        await supabase
+        .from('chat_unread')
+        .update({in_chatroom: true})
+        .match({room_id: room_id, 
+            user_id: user.id})
     }
 
     const notInChatroom = async() => {
@@ -61,7 +56,8 @@ const ChatRoomPage = () => {
                 user_id: user.id})
             if (error) throw error
         } catch (error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("not in chatroom", error)
         }
     }
 
@@ -81,7 +77,8 @@ const ChatRoomPage = () => {
             
             setMessages(data)
         } catch(error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("get messages", error)
         }   
     }
 
@@ -95,7 +92,8 @@ const ChatRoomPage = () => {
 
             if (error) throw error
         } catch (error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("reset unread", error)
         }
     }
 

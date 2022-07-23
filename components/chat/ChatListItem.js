@@ -30,7 +30,8 @@ const ChatListItem = (props) => {
             if (data) setUsername(data[0].username)
 
         } catch (error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("getUsername", error)
         }
     }
 
@@ -43,12 +44,11 @@ const ChatListItem = (props) => {
                     room_id: chatRoom.id,
                     user_id: user.id,
                 })
-                .single()
 
             if (error) throw error
             if (data) setUnread(data.unread)
         } catch (error) {
-            alert(error.message)
+            console.log("getUnread", error)
         }
     }
 
@@ -77,7 +77,8 @@ const ChatListItem = (props) => {
             return publicURL;
 
         } catch (error) {
-            alert('Error downloading image: ', error.message)
+            // alert('Error downloading image: ', error.message)
+            console.log("get chat uri", error)
         }
     }
 
