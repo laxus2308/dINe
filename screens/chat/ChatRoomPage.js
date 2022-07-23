@@ -40,11 +40,21 @@ const ChatRoomPage = () => {
     }, [])
 
     const inChatroom = async () => {
-        await supabase
-        .from('chat_unread')
-        .update({in_chatroom: true})
-        .match({room_id: room_id, 
-            user_id: user.id})
+        try {
+            const { error} = await supabase
+            .from('chat_unread')
+            .update({in_chatroom: true})
+            .match({room_id: room_id, 
+                user_id: user.id})
+            if (error) throw error
+        } catch (error) {
+            if (error == []) {
+
+            } else {
+                alert(error.message)
+            }
+            // console.log("In chatroom", error)
+        }
     }
 
     const notInChatroom = async() => {
