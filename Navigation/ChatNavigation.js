@@ -95,9 +95,9 @@ const ChatNavigation = () => {
                                     <Text ellipsizeMode='tail' numberOfLines={1} style={styles.headerText}>  {route.params.name} </Text>
                                 </TouchableOpacity>
                             </View>
-                            <TouchableOpacity style={styles.dots}>
+                            {/* <TouchableOpacity style={styles.dots}>
                                 <MaterialCommunityIcons name="dots-vertical" size={40} />
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <TouchableOpacity style={styles.dots} onPress={() => exitChat(route.params.id)}>
                                 <MaterialCommunityIcons name="exit-to-app" size={40} />
                             </TouchableOpacity>
@@ -133,10 +133,10 @@ const styles = StyleSheet.create({
     midContainer: {
         flex: 18 / 20,
     },
-    dots: {
-        justifyContent: 'center',
-        alignLeft: '5%',
-    },
+    // dots: {
+    //     justifyContent: 'center',
+    //     alignLeft: '5%',
+    // },
     headerText: {
         alignSelf: 'center',
         fontSize: 20,
