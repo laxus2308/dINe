@@ -210,7 +210,7 @@ const ViewProfilePage = () => {
                     sendPushNotification(data[0].notification_token, myUsername.body[0].username + " has sent you a friend request");
                 }
                 setIsPendingRequest(true);
-                alert("Friend Request Sent!")
+                // alert("Friend Request Sent!")
                 ToastAndroid.show('Friend Request Sent!', ToastAndroid.LONG)
             }
         } catch (error) {
