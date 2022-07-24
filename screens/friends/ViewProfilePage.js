@@ -7,7 +7,8 @@ import {
     SafeAreaView,
     FlatList,
     Image,
-    ToastAndroid
+    ToastAndroid,
+    Alert
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -24,7 +25,9 @@ const ViewProfilePage = () => {
     const [profilePic, setProfilePic] = useState(null);
     const [isPendingRequest, setIsPendingRequest] = useState(false);
     const [isFriends, setisFriends] = useState(false);
+    const [showBox, setShowBox] = useState(true);
     const navigation = useNavigation();
+    const user = supabase.auth.user()
 
     const getProfile = async () => {
         try {
@@ -123,7 +126,6 @@ const ViewProfilePage = () => {
 
     const checkIfPendingRequest = async() => {
         try {
-            const user = supabase.auth.user()
             const {data, error} = await supabase.from('friend_requests').select().eq('requestor_id', user.id).eq('secondary_id', route.params.params.profile_id);
             if (data.length != 0) {
                 setIsPendingRequest(true);
@@ -136,7 +138,6 @@ const ViewProfilePage = () => {
 
     const checkFriend = async() => {
         try {
-            const user = supabase.auth.user()
             const {data, error} = await supabase.from('friend_relations').select().eq('first_id', user.id).eq('second_id', route.params.params.profile_id);
             console.log(data)
             if (data.length != 0) {
@@ -148,13 +149,30 @@ const ViewProfilePage = () => {
         }
     }
 
-    const deleteFriend = async() => {
-        const user = supabase.auth.user()
-        await supabase.from('friend_relations').delete().eq('first_id', user.id).eq('second_id', route.params.params.profile_id);
-        await supabase.from('friend_relations').delete().eq('first_id', route.params.params.profile_id).eq('second_id', user.id);
-        ToastAndroid.show('Friend Deleted!', ToastAndroid.LONG)
-        navigation.pop()
-    }
+    const deleteFriend = () => {
+        return Alert.alert(
+          "Delete friend?",
+          "Are you sure you want to remove this friend? ",
+          [
+            // The "Yes" button
+            {
+              text: "Yes",
+              onPress: async () => {
+                setShowBox(false)
+                await supabase.from('friend_relations').delete().eq('first_id', user.id).eq('second_id', route.params.params.profile_id);
+                await supabase.from('friend_relations').delete().eq('first_id', route.params.params.profile_id).eq('second_id', user.id);
+                ToastAndroid.show('Friend Deleted!', ToastAndroid.LONG)
+                navigation.pop();
+              },
+            },
+            // The "No" button
+            // Does nothing but dismiss the dialog when tapped
+            {
+              text: "No",
+            },
+          ]
+        );
+      };
 
     const sendPushNotification = async(token, text) => {
         const message = {
