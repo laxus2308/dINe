@@ -5,6 +5,8 @@ import {
   Text,
   Image,
   Button,
+  ToastAndroid,
+  Alert,
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
@@ -15,11 +17,34 @@ const ViewRequestPage = ({ navigation }) => {
   const [requestData, setRequestData] = useState(null);
   const [chatId, setChatId] = useState('');
   const [chatName, setChatName] = useState('');
+  const [showBox, setShowBox] = useState(false);
 
   const deleteRequest = async () => {
-      navigation.navigate("Request Board")
-      await supabase.from('requests').delete().match({ id: request_id })
-  }
+    return Alert.alert(
+      "Delete request?",
+      "Are you sure you want to remove this request? ",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: async () => {
+            setShowBox(false)
+            navigation.navigate("Request Board")
+            await supabase.from('requests').delete().match({ id: request_id })
+            ToastAndroid.show('Request Deleted!', ToastAndroid.LONG)
+            navigation.pop();
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+  };
+      
+  
 
   const sendPushNotification = async(token, text) => {
     const message = {

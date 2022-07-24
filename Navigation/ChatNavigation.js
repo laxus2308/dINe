@@ -1,14 +1,15 @@
 import ChatRoomPage from '../screens/chat/ChatRoomPage';
 import ChatListPage from '../screens/chat/ChatListPage';
 import ParticipantsPage from '../screens/chat/ParticipantsPage';
-import React from 'react';
+import React, {useState} from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
     StyleSheet,
     TouchableOpacity,
     Text,
     View,
-    ToastAndroid
+    ToastAndroid,
+    Alert
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
@@ -20,6 +21,7 @@ const Stack = createNativeStackNavigator();
 
 const ChatNavigation = () => {
     const navigation = useNavigation();
+    const [showBox, setShowBox] = useState(false);
 
     const remove_chat = async(room_id) => {
         try {
@@ -47,12 +49,31 @@ const ChatNavigation = () => {
     }
     
     const exitChat = async (room_id) => {
-        await remove_chat(room_id);
-        await remove_messages();
-        ToastAndroid.show('Chat Deleted!', ToastAndroid.LONG)
-        navigation.navigate('Chat', {
-            screen: 'ChatListPage'
-        });
+        return Alert.alert(
+            "Delete chatroom?",
+            "Are you sure you want to remove this chatroom? ",
+            [
+              // The "Yes" button
+              {
+                text: "Yes",
+                onPress: async () => {
+                  setShowBox(false)
+                  await remove_chat(room_id);
+                await remove_messages();
+                ToastAndroid.show('Chat Deleted!', ToastAndroid.LONG)
+                navigation.navigate('Chat', {
+                    screen: 'ChatListPage'
+                });
+                },
+              },
+              // The "No" button
+              // Does nothing but dismiss the dialog when tapped
+              {
+                text: "No",
+              },
+            ]
+          );
+        
     }
 
     return (
