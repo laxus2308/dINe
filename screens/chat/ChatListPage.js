@@ -59,7 +59,7 @@ const ChatListPage = () => {
 
   const getChatList = async () => {
     try {
-      const { data, error } = await supabase.rpc('get_chats')
+      const { data, error } = await supabase.rpc('get_chat')
       if (error) throw error
       setChatRooms(data)
     } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, } from 'react';
 import {
     StyleSheet,
     View,
@@ -14,7 +14,7 @@ const ChatListItem = (props) => {
     const { chatRoom } = props;
     const navigation = useNavigation();
     const [username, setUsername] = useState('');
-    const [unread, setUnread] = useState();
+    // const [unread, setUnread] = useState();
     const user = supabase.auth.user();
 
     const getUsername = async (senderId) => {
@@ -35,22 +35,22 @@ const ChatListItem = (props) => {
         }
     }
 
-    const getUnread = async () => {
-        try {
-            const { data, error } = await supabase
-                .from('chat_unread')
-                .select('unread')
-                .match({
-                    room_id: chatRoom.id,
-                    user_id: user.id,
-                })
+    // const getUnread = async () => {
+    //     try {
+    //         const { data, error } = await supabase
+    //             .from('chat_unread')
+    //             .select('unread')
+    //             .match({
+    //                 room_id: chatRoom.id,
+    //                 user_id: user.id,
+    //             })
 
-            if (error) throw error
-            if (data) setUnread(data.unread)
-        } catch (error) {
-            console.log("getUnread", error)
-        }
-    }
+    //         if (error) throw error
+    //         if (data) setUnread(data.unread)
+    //     } catch (error) {
+    //         console.log("getUnread", error)
+    //     }
+    // }
 
     let lastMessage = ""
     let sender
@@ -58,7 +58,7 @@ const ChatListItem = (props) => {
         lastMessage = chatRoom.content
         sender = chatRoom.sender_id
         getUsername(sender)
-        getUnread()
+        // getUnread()
     }
 
     // useEffect(()=> {
@@ -125,7 +125,7 @@ const ChatListItem = (props) => {
             {chatRoom.sender_id != null ? (
                 <View style={styles.rightContainer}>
                     <Text style={styles.timeWithMessage}> {moment(chatRoom.created_at).fromNow()}</Text>
-                    <Text style={styles.unread}> {unread}</Text>
+                    <Text style={styles.unread}> {chatRoom.unread}</Text>
                 </View>
             ) : (
                 <></>
