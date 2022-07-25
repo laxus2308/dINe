@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Alert, ToastAndroid } from 'react-native';
 import HomePage from '../screens/auth/HomePage';
 import ProfileNavigation from './ProfileNavigation';
 import ChatNavigation from '../Navigation/ChatNavigation';
@@ -46,13 +46,40 @@ const HomeNavigation = () => {
     );
 }
 
+
 const DrawerRoutes = () => {
+    const [disabled, setDisabled] = useState(false)
+
+    const Logout = () => {
+        return Alert.alert(
+          "Log Out?",
+          "Are you sure you want to log out? ",
+          [
+            // The "Yes" button
+            {
+              text: "Yes",
+              onPress: async () => {
+                setDisabled(true)
+                await supabase.auth.signOut()
+                ToastAndroid.show('Logged out!', ToastAndroid.LONG)
+              },
+              disabled: disabled,
+            },
+            // The "No" button
+            // Does nothing but dismiss the dialog when tapped
+            {
+              text: "No",
+            },
+          ]
+        );
+      };
+    
     return (
         <Drawer.Navigator initialRouteName="Home" useLegacyImplementation={true} drawerContent={props => {
             return (
                 <DrawerContentScrollView {...props} >
                     <DrawerItemList {...props} />
-                    <DrawerItem label="Logout" onPress={async () => await supabase.auth.signOut()} />
+                    <DrawerItem label="Logout" onPress={Logout} />
                 </DrawerContentScrollView>
             )
         }}>

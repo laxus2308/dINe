@@ -32,7 +32,6 @@ const ViewRequestPage = ({ navigation }) => {
             navigation.navigate("Request Board")
             await supabase.from('requests').delete().match({ id: request_id })
             ToastAndroid.show('Request Deleted!', ToastAndroid.LONG)
-            navigation.pop();
           },
         },
         // The "No" button
@@ -94,7 +93,6 @@ const ViewRequestPage = ({ navigation }) => {
       } else {
         alert(error.message)
       }
-      console.log(error.message);
     }
   }
 

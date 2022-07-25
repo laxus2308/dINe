@@ -9,10 +9,11 @@ import User from '../../components/friends/User';
 
 const DiscoverPage = () => {
     const [userList, setUserList] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         const sub = supabase
-          .from('*')
+          .from('friend_relations')
           .on('*', async (update) => {
             await getUserList()
           })
@@ -60,6 +61,11 @@ const DiscoverPage = () => {
                 keyExtractor={(item) => item.id}
                 style={styles.flatList}
                 ItemSeparatorComponent={ItemDivider}
+                onRefresh= {async()=> {
+                  setRefresh(true)
+                  await getUserList().then(()=> setRefresh(false))
+                }}
+                refreshing={refresh}
              />
         </View>
     )

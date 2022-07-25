@@ -28,25 +28,43 @@ const HomePage = () => {
   //check for real time updates
   useEffect(() => {
     const sub = supabase
-      .from('*')
+      .from('friend_relations')
       .on('*', async (update) => {
-        await getFriendRequests()
+        // await getFriendRequests()
         await getFriendList()
       })
       .subscribe();
 
-  }, [])
+      return () => {
+        supabase.removeSubscription(sub)
+      }
+
+  }, [friendList]) 
+
+  useEffect(() => {
+    const sub = supabase
+      .from('friend_requests')
+      .on('*', async (update) => {
+        await getFriendRequests()
+        // await getFriendList()
+      })
+      .subscribe();
+
+      return () => {
+        supabase.removeSubscription(sub)
+      }
+
+  }, [ friendRequests]) 
 
 
 
   useEffect(() => {
     getFriendRequests();
-    
-  }, [])
+  }, [friendRequests])
 
   useEffect(() => {
     getFriendList();
-  }, [])
+  }, [friendList])
 
   const getFriendRequests = async () => {
     const user = supabase.auth.user()

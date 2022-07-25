@@ -15,7 +15,6 @@ const QuickMatchPage = () => {
     const user = supabase.auth.user()
 
     useEffect(() => {
-        console.log('Loading');
         return ()=> {
             stopSearch()
         }

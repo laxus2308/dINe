@@ -17,7 +17,7 @@ const Friend = (props) => {
 
     useEffect(() => {
         getDetails();
-    },[])
+    },[profileImage, username])
 
     const getDetails = async () => {
         try {

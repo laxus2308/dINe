@@ -13,6 +13,7 @@ import {
 import { supabase } from '../../supabase';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
+
 const ViewProfilePage = () => {
     const route = useRoute();
     // const [loading, setLoading] = useState(true);
@@ -26,6 +27,8 @@ const ViewProfilePage = () => {
     const [isPendingRequest, setIsPendingRequest] = useState(false);
     const [isFriends, setisFriends] = useState(false);
     const [showBox, setShowBox] = useState(true);
+    const [disabled, setDisabled] = useState(false);
+    const [disabledDelete, setDisabledDelete] = useState(false);
     const navigation = useNavigation();
     const user = supabase.auth.user()
 
@@ -139,7 +142,6 @@ const ViewProfilePage = () => {
     const checkFriend = async() => {
         try {
             const {data, error} = await supabase.from('friend_relations').select().eq('first_id', user.id).eq('second_id', route.params.params.profile_id);
-            console.log(data)
             if (data.length != 0) {
                 setisFriends(true);
             }
@@ -158,6 +160,7 @@ const ViewProfilePage = () => {
             {
               text: "Yes",
               onPress: async () => {
+                setDisabledDelete(true)
                 setShowBox(false)
                 await supabase.from('friend_relations').delete().eq('first_id', user.id).eq('second_id', route.params.params.profile_id);
                 await supabase.from('friend_relations').delete().eq('first_id', route.params.params.profile_id).eq('second_id', user.id);
@@ -196,6 +199,7 @@ const ViewProfilePage = () => {
 
       const sendFriendRequest = async() => {
         try {
+            setDisabled(true)
             const user = supabase.auth.user()
             const myUsername = await supabase.from('profiles').select().eq('id', user.id);
             const {data, error} = await supabase.from('friend_requests').select()
@@ -276,7 +280,7 @@ const ViewProfilePage = () => {
                     {(() => {
                         if (isFriends) {
                             return (
-                                <TouchableOpacity style={styles.DeleteButton} onPress={deleteFriend}>
+                                <TouchableOpacity style={styles.DeleteButton} onPress={deleteFriend} disabled={disabledDelete}>
                                     <Text style={styles.text}> Delete Friend </Text>
                                 </TouchableOpacity>
                             )
@@ -287,7 +291,7 @@ const ViewProfilePage = () => {
                                 )
                             } else {
                                 return (
-                                    <TouchableOpacity style={styles.Button} onPress={sendFriendRequest}>
+                                    <TouchableOpacity style={styles.Button} onPress={sendFriendRequest} disabled={disabled}>
                                         <Text style={styles.text}> Send Friend Request </Text>
                                     </TouchableOpacity>
                                 )

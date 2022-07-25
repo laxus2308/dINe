@@ -22,6 +22,7 @@ const Stack = createNativeStackNavigator();
 const ChatNavigation = () => {
     const navigation = useNavigation();
     const [showBox, setShowBox] = useState(false);
+    const [disabled, setDisabled] = useState(false);
 
     const remove_chat = async(room_id) => {
         try {
@@ -57,6 +58,7 @@ const ChatNavigation = () => {
               {
                 text: "Yes",
                 onPress: async () => {
+                    setDisabled(true);
                   setShowBox(false)
                   await remove_chat(room_id);
                 await remove_messages();
@@ -65,6 +67,7 @@ const ChatNavigation = () => {
                     screen: 'ChatListPage'
                 });
                 },
+                disabled:disabled
               },
               // The "No" button
               // Does nothing but dismiss the dialog when tapped

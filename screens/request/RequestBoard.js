@@ -4,7 +4,8 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  Image
+  Image,
+  View
 } from 'react-native';
 import Request from '../../components/request/Request.js';
 import { supabase } from '../../supabase.js';
@@ -42,7 +43,7 @@ const RequestBoard = ({ navigation }) => {
   //get request details upon first navigate
   useEffect(() => {
     getRequests();
-  }, [])
+  }, [requests])
 
   const getRequests = async () => {
     try {
@@ -61,6 +62,10 @@ const RequestBoard = ({ navigation }) => {
   }
 
   return (
+    <View style={styles.container}>
+<TouchableOpacity onPress={() => navigation.navigate('View Own Request')} style={styles.appButtonContainer}>
+    <Text style={styles.appButtonText}>View Your Requests</Text>
+  </TouchableOpacity>
     <FlatList
       style={styles.requestsList}
       contentContainerStyle={styles.requestsListContainer}
@@ -69,20 +74,27 @@ const RequestBoard = ({ navigation }) => {
       numColumns={2}
       columnWrapperStyle={styles.row}
       keyExtractor={(item) => item.id}
-      ListHeaderComponent={() =>
-        <TouchableOpacity onPress={() => navigation.navigate('View Own Request')} style={styles.appButtonContainer}>
-          <Text style={styles.appButtonText}>View Your Requests</Text>
-        </TouchableOpacity>}
+      // ListHeaderComponent={() =>
+      //   <TouchableOpacity onPress={() => navigation.navigate('View Own Request')} style={styles.appButtonContainer}>
+      //     <Text style={styles.appButtonText}>View Your Requests</Text>
+      //   </TouchableOpacity>}
         onRefresh= {async()=> {
           setRefreshing(true)
           await getRequests().then(()=> setRefreshing(false))
         }}
         refreshing={refreshing}
     />
+
+    </View>
   )
+    
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff8dc',
+  },
   requestsList: {
     backgroundColor: '#fff8dc',
   },
@@ -127,7 +139,8 @@ const styles = StyleSheet.create({
     backgroundColor: "honeydew",
     borderRadius: 10,
     paddingVertical: 10,
-    paddingHorizontal: 12
+    paddingHorizontal: 12,
+    marginTop:10,
   },
 
   appButtonText: {

@@ -25,10 +25,11 @@ const CreateRequestPage = ({ navigation }) => {
   const [datePicked, setDate] = useState('Select a date first');
   const [timePicked, setTime] = useState('Select a time first');
   const [dateTime, setDateTime] = useState('');
-  const [pax, setPax] = useState();
+  const [pax, setPax] = useState(0);
   const [paxOpen, setPaxOpen] = useState(false);
   const [request_url, setRequestUrl] = useState(null);
   const [selectedDate, setSelectedDate] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
 
@@ -84,7 +85,12 @@ const CreateRequestPage = ({ navigation }) => {
   const submitRequest = async (e) => {
     e.preventDefault();
     try {
+      
       const user = supabase.auth.user()
+      if (title == '') {
+        alert("Please insert a title!")
+        return;
+      }
       if (location == '') {
         alert("Please insert a location!")
         return;
@@ -106,6 +112,7 @@ const CreateRequestPage = ({ navigation }) => {
         return;
       }
 
+      setDisabled(true);
       const updates = {
         requestor_id: user.id,
         location: location,
@@ -124,7 +131,7 @@ const CreateRequestPage = ({ navigation }) => {
         .insert([updates])
 
       const {  error: createRoomError } = await supabase.rpc('create_request_room', {
-                request_id: data[0].id
+            request_id: data[0].id
       })
     
       if (error) {
@@ -263,7 +270,7 @@ const CreateRequestPage = ({ navigation }) => {
             }}
           />
         </View>
-        <TouchableOpacity style={styles.submitButton} onPress={submitRequest}>
+        <TouchableOpacity style={styles.submitButton} onPress={submitRequest} disabled = {disabled}>
           <Text> Submit </Text>
         </TouchableOpacity>
       </ScrollView>

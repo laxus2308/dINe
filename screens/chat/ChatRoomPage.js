@@ -29,6 +29,10 @@ const ChatRoomPage = () => {
         }
     }, [])
 
+    // useEffect(()=> {
+    //     getMessages()
+    // }, [messages])
+
     //get messages upon first navigate
     useEffect(() => {
         resetUnreadCounter();
@@ -67,7 +71,7 @@ const ChatRoomPage = () => {
             if (error) throw error
         } catch (error) {
             // alert(error.message)
-            console.log("not in chatroom", error)
+            // console.log("not in chatroom", error)
         }
     }
 
