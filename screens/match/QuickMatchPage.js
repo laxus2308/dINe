@@ -4,173 +4,140 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    SafeAreaView,
-    FlatList,
-    Platform,
-    Button
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useNavigation } from '@react-navigation/native';
 
 const QuickMatchPage = () => {
-
     const [isSearching, setIsSearching] = useState(false);
     const navigation = useNavigation();
 
+    const user = supabase.auth.user()
+
     useEffect(() => {
-        console.log('Loading');
-    }, [navigation])
+        return ()=> {
+            stopSearch()
+        }
+    }, [])
 
     useEffect(() => {
         if (isSearching) {
             const sub = supabase
-            .from('quick_match')
-            .on('*', async (update) => {
-                if (update.new.searching == true && update.new.profile_id != supabase.auth.user().id) {
-                    foundMatchWithCreateRoom(update.new.profile_id)
-                }
-            })
-            .subscribe();
-          return () => {
-            supabase.removeSubscription(sub)
-          }
+                .from('quick_match')
+                .on('*', async (update) => {
+                    if (update.new.searching == true && update.new.profile_id != supabase.auth.user().id) {
+                        await foundMatchWithCreateRoom(update.new.profile_id)
+                    }
+                })
+                .subscribe();
+            return () => {
+                supabase.removeSubscription(sub)
+            }
         }
-      }, [isSearching])
 
-      const foundMatch = async (profileId) => {
+    }, [isSearching])
+
+    const foundMatch = async () => {
         try {
             setIsSearching(false);
-            const user = supabase.auth.user()
-
-            const updates = {
-                searching: false
-            }
-
-            await supabase.from('quick_match').update(updates).match({profile_id: user.id})
-            //console.log(id);
-            
+            await stopSearch();
 
         } catch (error) {
-            console.log(error);
+            alert(error.message)
         }
     }
 
-    const foundMatchWithCreateRoom = async(profileId) => {
-        //rpc
+    const foundMatchWithCreateRoom = async (profileId) => {
         try {
-            // const { data, error} = await supabase.rpc('create_match_room', {
-            //     profile_id: profileId
-            // });
+            const { error } = await supabase.rpc('match_friends', {
+                profile_id: profileId
+            });
             await foundMatch();
-            navigation.navigate('Match Found', {screen: 'MatchFoundPage', params: {
-                id: profileId,
-                // chatId: data.id,
-            }})
-        } catch (error) {
-            console.log(error.message)
-        }
 
-    }
-
-    
-    const getUsers = async (e) => {
-        try {
-            const user = supabase.auth.user()
-
-            let {data, error} = await supabase.from('quick_match').select().eq('searching', true).neq('profile_id', user.id)
-
-            if (error) {
-                console.log(error)
-            }
-
-            if (data.length == 0) {
-                //console.log(data);
-                // setTimeout(() => getUsers(), 5000);
-
-  
-            } else {
-                console.log(data);
-                const profileId = data[0].profile_id;
-                foundMatch(profileId);
-                navigation.navigate('Match Found', {screen: 'MatchFoundPage', params: {
+            navigation.navigate('Match Found', {
+                screen: 'MatchFoundPage', params: {
                     id: profileId,
-                }})
-            }
+                }
+            })
 
-
+            if (error) throw error
         } catch (error) {
-            console.log(error)
+            alert(error.message)
         }
     }
 
-
-    const submitSearch = async (e) => {
-
-        setIsSearching(true);
-
+    const getUsers = async () => {
         try {
-            const user = supabase.auth.user()
+            let { data, error } = await supabase.from('quick_match').select().eq('searching', true).neq('profile_id', user.id)
 
+            if (error) throw error
 
+            if (data.length != 0) {
+                const profileId = data[0].profile_id;
+                await foundMatch();
+                navigation.navigate('Match Found', {
+                    screen: 'MatchFoundPage', params: {
+                        id: profileId,
+                    }
+                })
+            }
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
+    const submitSearch = async () => {
+        setIsSearching(true);
+        try {
             const updates = {
                 searching: true
             }
 
-            await supabase.from('quick_match').update(updates).match({profile_id: user.id})
+            let { error } = await supabase.from('quick_match').update(updates).match({ profile_id: user.id })
 
-            getUsers();
-            
-        }  catch(error) {
-            console.log(error)
-        } 
+            if (error) throw error
+            await getUsers();
+        } catch (error) {
+            alert(error.message)
+        }
     }
 
-
-    const stopSearch = async (e) => {
-        e.preventDefault();
-
+    const stopSearch = async () => {
         try {
-            const user = supabase.auth.user()
-
             const updates = {
                 searching: false
             }
 
-            let { data, error } = await supabase.from('quick_match').update(updates).match({profile_id: user.id})
+            let { error } = await supabase.from('quick_match').update(updates).match({ profile_id: user.id })
 
-            if (error) {
-                throw error
-            }
+            if (error) throw error
 
-        }  catch(error) {
-            console.log(error)
+        } catch (error) {
+            alert(error.message)
+        } finally {
+            setIsSearching(false);
         }
-
-        setIsSearching(false);
-
     }
-
 
     return (
         <View style={styles.container}>
             {isSearching ? (
-            <View>
-            <Button
-                title='Stop Search'
-                onPress={stopSearch}
-            />
-            </View>
-              ) : (
-            <View>
-            <Button
-                title= 'Search!'
-                onPress={submitSearch}
-            />
-            </View>
+                <View>
+                    <TouchableOpacity style={styles.Button}
+                        onPress={stopSearch}>
+                        <Text> Stop Search </Text>
+                    </TouchableOpacity>
+                </View>
+            ) : (
+                <View>
+                    <TouchableOpacity style={styles.Button}
+                        onPress={submitSearch}>
+                        <Text> Search! </Text>
+                    </TouchableOpacity>
+                </View>
             )}
         </View>
     )
-
 }
 
 const styles = StyleSheet.create({
@@ -179,6 +146,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff8dc',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    Button: {
+        borderRadius: 25,
+        height: 50,
+        padding: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 10,
+        backgroundColor: "#ffff00",
     },
 })
 

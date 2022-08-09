@@ -1,53 +1,82 @@
 import ChatRoomPage from '../screens/chat/ChatRoomPage';
 import ChatListPage from '../screens/chat/ChatListPage';
 import ParticipantsPage from '../screens/chat/ParticipantsPage';
-import React from 'react';
+import React, {useState} from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
     StyleSheet,
     TouchableOpacity,
     Text,
     View,
+    ToastAndroid,
+    Alert
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { supabase } from '../supabase';
+import ViewProfilePage from '../screens/friends/ViewProfilePage'
 
 const Stack = createNativeStackNavigator();
 
 
 const ChatNavigation = () => {
     const navigation = useNavigation();
+    const [showBox, setShowBox] = useState(false);
+    const [disabled, setDisabled] = useState(false);
 
     const remove_chat = async(room_id) => {
         try {
             const { error} = await supabase.rpc('delete_chatroom', {
               chatroom_id: room_id
             })
-
-
             if (error) {
                 throw error
             }
         } catch (error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("remove_chat", error)
         }
     }
 
     const remove_messages = async() => {
         try {
             const{error: deleteMessageError} = await supabase.rpc('clear_messages')
-            if (deleteMessageError) {
-                throw deleteMessageError
-            }
+            if (deleteMessageError) throw deleteMessageError
+    
         } catch (error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("remove_messages", error)
         }
     }
+    
     const exitChat = async (room_id) => {
-        await remove_chat(room_id);
-        await remove_messages();
-        navigation.navigate('ChatListPage');
+        return Alert.alert(
+            "Delete chatroom?",
+            "Are you sure you want to remove this chatroom? ",
+            [
+              // The "Yes" button
+              {
+                text: "Yes",
+                onPress: async () => {
+                    setDisabled(true);
+                  setShowBox(false)
+                  await remove_chat(room_id);
+                await remove_messages();
+                ToastAndroid.show('Chat Deleted!', ToastAndroid.LONG)
+                navigation.navigate('Chat', {
+                    screen: 'ChatListPage'
+                });
+                },
+                disabled:disabled
+              },
+              // The "No" button
+              // Does nothing but dismiss the dialog when tapped
+              {
+                text: "No",
+              },
+            ]
+          );
+        
     }
 
     return (
@@ -56,12 +85,20 @@ const ChatNavigation = () => {
                 headerStyle: {
                     height: 60,
                 }
-            }}>
+            }}
+            initialRouteName="ChatListPage">
             <Stack.Screen
                 name='ChatListPage'
                 component={ChatListPage}
                 options={{
                     title: 'Chats',
+                }}
+            />
+            <Stack.Screen
+                name='ViewProfilePage'
+                component={ViewProfilePage}
+                options={{
+                    title: 'View Profile',
                 }}
             />
             <Stack.Screen
@@ -82,9 +119,9 @@ const ChatNavigation = () => {
                                     <Text ellipsizeMode='tail' numberOfLines={1} style={styles.headerText}>  {route.params.name} </Text>
                                 </TouchableOpacity>
                             </View>
-                            <TouchableOpacity style={styles.dots}>
+                            {/* <TouchableOpacity style={styles.dots}>
                                 <MaterialCommunityIcons name="dots-vertical" size={40} />
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <TouchableOpacity style={styles.dots} onPress={() => exitChat(route.params.id)}>
                                 <MaterialCommunityIcons name="exit-to-app" size={40} />
                             </TouchableOpacity>
@@ -119,12 +156,11 @@ const styles = StyleSheet.create({
     },
     midContainer: {
         flex: 18 / 20,
-        // backgroundColor: 'black',
     },
-    dots: {
-        justifyContent: 'center',
-        alignLeft: '5%',
-    },
+    // dots: {
+    //     justifyContent: 'center',
+    //     alignLeft: '5%',
+    // },
     headerText: {
         alignSelf: 'center',
         fontSize: 20,

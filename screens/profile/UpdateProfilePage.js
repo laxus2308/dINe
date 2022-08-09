@@ -5,6 +5,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     TextInput,
+    ToastAndroid
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../../supabase';
@@ -47,6 +48,7 @@ const UpdateProfilePage = ({ navigation }) => {
             if (error) {
                 throw error
             }
+            ToastAndroid.show('Profile Updated!', ToastAndroid.LONG)
             navigation.pop()
 
         } catch (error) {
@@ -227,10 +229,46 @@ const UpdateProfilePage = ({ navigation }) => {
     }, {
         label: "Western",
         value: "Western"
+    }, {
+        label: "French",
+        value: "French"
+    }, {
+        label: "Greek",
+        value: "Greek"
+    }, {
+        label: "Spanish",
+        value: "Spanish"
+    }, {
+        label: "Turkish",
+        value: "Turkish"
+    }, {
+        label: "Thai",
+        value: "Thai"
+    }, {
+        label: "Indian",
+        value: "Indian"
+    }, {
+        label: "Malay",
+        value: "Malay"
+    }, {
+        label: "Mexican",
+        value: "Mexican"
+    }, {
+        label: "German",
+        value: "German"
+    }, {
+        label: "Russian",
+        value: "Russian"
+    }, {
+        label: "Vegan",
+        value: "Vegan"
+    }, {
+        label: "Vegetarian",
+        value: "Vegetarian"
     },
-        //  {
-        //     label:"",
-        //     value:""
+        // {
+        //     label: "",
+        //     value: ""
         // },
     ]
 
@@ -263,25 +301,25 @@ const UpdateProfilePage = ({ navigation }) => {
                 throw error
             }
 
-            console.log(data)
             if (data) {
                 setUsername(data.username)
                 setFaculty(data.faculty)
                 setAge(String(data.age))
                 setDietary(data.dietary)
-                setInterests(data.interests?data.interests:[])
-                setCuisines(data.cuisines?data.cuisines:[])
+                setInterests(data.interests ? data.interests : [])
+                setCuisines(data.cuisines ? data.cuisines : [])
             }
         } catch (error) {
-            console.log(error)
-        } 
+            alert(error.message)
+        }
     }
-    
-    useEffect(()=> {
+
+    useEffect(() => {
         getProfile();
     }, [])
+
     return (
-        <View>
+        <View style={styles.container}>
             <View style={{ ...styles.verticalComponent, ...styles.bottomSeparator }}>
                 <Text style={{ flex: 1 / 3 }}> Name </Text>
                 <TextInput
@@ -366,7 +404,8 @@ const UpdateProfilePage = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-
+        backgroundColor: '#fff8dc',
+        flex: 1
     },
     verticalComponent: {
         flexDirection: 'row',

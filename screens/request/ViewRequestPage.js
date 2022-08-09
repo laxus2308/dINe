@@ -5,6 +5,8 @@ import {
   Text,
   Image,
   Button,
+  ToastAndroid,
+  Alert,
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
@@ -15,21 +17,73 @@ const ViewRequestPage = ({ navigation }) => {
   const [requestData, setRequestData] = useState(null);
   const [chatId, setChatId] = useState('');
   const [chatName, setChatName] = useState('');
+  const [showBox, setShowBox] = useState(false);
 
   const deleteRequest = async () => {
-      navigation.navigate("Request Board")
-      await supabase.from('requests').delete().match({ id: request_id })
+    return Alert.alert(
+      "Delete request?",
+      "Are you sure you want to remove this request? ",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: async () => {
+            setShowBox(false)
+            navigation.navigate("Request Board")
+            await supabase.from('requests').delete().match({ id: request_id })
+            ToastAndroid.show('Request Deleted!', ToastAndroid.LONG)
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+  };
+      
+  
+
+  const sendPushNotification = async(token, text) => {
+    const message = {
+      to: token,
+      sound: 'default',
+      title: 'New participant',
+      body: text,
+      data: { someData: 'goes here' },
+    };
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
   }
 
   const joinRequestRoom = async () => {
+    const user = supabase.auth.user();
     try {
-      const { error: joinRoomError } = await supabase.rpc('join_request_room', {
+      const { data,  error: joinRoomError } = await supabase.rpc('join_request_room', {
         request_id: route.params.id
       })
 
+      const myUsername = await supabase.from('profiles').select().eq('id', user.id);
+
       if (joinRoomError) throw joinRoomError
+
+      for (let i = 0; i < data.length; i++) {
+          sendPushNotification(data[i].notification_token, myUsername.body[0].username + " has joined a request");
+      }
       
-      navigation.navigate('Chat', {screen:'ChatRoomPage', params: {
+      navigation.navigate('Chat', {
+        screen:'ChatRoomPage',
+        initial: false, 
+        params: {
         id:chatId,
         name:chatName,
       }})
@@ -39,7 +93,6 @@ const ViewRequestPage = ({ navigation }) => {
       } else {
         alert(error.message)
       }
-      console.log(error.message);
     }
   }
 

@@ -11,11 +11,9 @@ const Request = (props) => {
         try {
             const { publicURL, error } = supabase.storage.from('requestpics').getPublicUrl(path)
             
-            if (error) {
-                throw error
-            }
+            if (error) throw error
+            
             return publicURL;
-    
         } catch (error) {
             alert('Error downloading image: ', error.message)
         }
@@ -62,6 +60,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: 'honeydew',
         borderRadius: 16,
+        borderColor: 'gold',
         shadowOpacity: 0.2,
         shadowRadius: 4,
         shadowColor: 'black',
@@ -78,6 +77,8 @@ const styles = StyleSheet.create({
         height: 120,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
+        borderBottomLeftRadius: 16,
+        borderBottomRightRadius: 16,
         width: '100%',
     },
 

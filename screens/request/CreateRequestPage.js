@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState} from 'react'
 import {
   View,
   StyleSheet,
@@ -6,8 +6,8 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  SafeAreaView,
-  ScrollView
+  ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -25,10 +25,11 @@ const CreateRequestPage = ({ navigation }) => {
   const [datePicked, setDate] = useState('Select a date first');
   const [timePicked, setTime] = useState('Select a time first');
   const [dateTime, setDateTime] = useState('');
-  const [pax, setPax] = useState();
+  const [pax, setPax] = useState(0);
   const [paxOpen, setPaxOpen] = useState(false);
   const [request_url, setRequestUrl] = useState(null);
   const [selectedDate, setSelectedDate] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
 
@@ -84,7 +85,12 @@ const CreateRequestPage = ({ navigation }) => {
   const submitRequest = async (e) => {
     e.preventDefault();
     try {
+      
       const user = supabase.auth.user()
+      if (title == '') {
+        alert("Please insert a title!")
+        return;
+      }
       if (location == '') {
         alert("Please insert a location!")
         return;
@@ -96,7 +102,7 @@ const CreateRequestPage = ({ navigation }) => {
       if (datePicked == 'Select a date') {
         alert("Please select a date!")
         return;
-      } 
+      }
       if (dateTime < moment()) {
         alert("Please select a proper date and time.")
         return;
@@ -106,6 +112,7 @@ const CreateRequestPage = ({ navigation }) => {
         return;
       }
 
+      setDisabled(true);
       const updates = {
         requestor_id: user.id,
         location: location,
@@ -123,16 +130,17 @@ const CreateRequestPage = ({ navigation }) => {
         .from('requests')
         .insert([updates])
 
-
-      const { error: createRoomError } = await supabase.rpc('create_request_room', {
-        request_id: data[0].id
+      const {  error: createRoomError } = await supabase.rpc('create_request_room', {
+            request_id: data[0].id
       })
-
+    
       if (error) {
         throw error
       } else if (createRoomError) {
         throw createRoomError
       }
+
+      ToastAndroid.show('Request Created!', ToastAndroid.LONG)
       navigation.pop();
 
     } catch (error) {
@@ -161,8 +169,6 @@ const CreateRequestPage = ({ navigation }) => {
     try {
       setUploading(true)
       const user = supabase.auth.user()
-
-
       const filePath = `public/${user.id}/${Math.random()}`
       setRequestUrl(filePath)
 
@@ -236,7 +242,7 @@ const CreateRequestPage = ({ navigation }) => {
             onConfirm={handleConfirm}
             onCancel={hideDateTimePicker}
             minimumDate={new Date()}
-            // minimumTime={moment().format("HH:mm:ss")}
+          // minimumTime={moment().format("HH:mm:ss")}
           />
         </View>
 
@@ -264,7 +270,7 @@ const CreateRequestPage = ({ navigation }) => {
             }}
           />
         </View>
-        <TouchableOpacity style={styles.submitButton} onPress={submitRequest}>
+        <TouchableOpacity style={styles.submitButton} onPress={submitRequest} disabled = {disabled}>
           <Text> Submit </Text>
         </TouchableOpacity>
       </ScrollView>
@@ -277,18 +283,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff8dc',
   },
-
   container2: {
     alignItems: 'center'
   },
-
   verticalComponent: {
     flexDirection: 'row',
     alignItems: 'center',
     zIndex: -1,
     marginTop: 10,
   },
-
   bottomSeparator: {
     marginTop: 10,
     marginBottom: 10,
@@ -296,7 +299,6 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
     zIndex: -1,
   },
-
   date: {
     width: "40%",
     borderRadius: 25,
@@ -306,7 +308,6 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
     backgroundColor: "#ffff00",
   },
-
   submitButton: {
     justifyContent: 'center',
     alignItems: "center",
@@ -326,7 +327,6 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: 'contain',
   },
-
   Button: {
     borderRadius: 25,
     height: 50,
@@ -336,22 +336,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: "#ffff00",
   },
-
   leftContainer: {
     width: '60%',
     flexDirection: 'column',
   },
-
   dateContainer: {
     marginBottom: '10%',
     flexDirection: 'row',
     flex: 1 / 3,
   },
-
   grey: {
     color: 'grey',
   },
-
   black: {
     color: 'black',
   },

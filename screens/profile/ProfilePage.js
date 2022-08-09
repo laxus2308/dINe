@@ -101,7 +101,7 @@ const ProfilePage = ({ navigation }) => {
                         renderItem={tag}
                         keyExtractor={item => item.toString()}
                         horizontal={true}
-                        ListHeaderComponent={item => <Text style={styles.container}>Testing</Text>}
+                        ListHeaderComponent={item => <Text style={styles.container}>Interests</Text>}
                     />
                     <FlatList
                         style={styles.flatList}
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         flex: 1,
+        backgroundColor: '#fff8dc'
     },
     profileDescription: {
         marginTop: '5%',

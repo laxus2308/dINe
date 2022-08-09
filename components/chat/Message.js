@@ -1,4 +1,4 @@
-import React, {useState}from 'react'
+import React, {useEffect, useState}from 'react'
 import {
     View,
     StyleSheet,
@@ -11,10 +11,6 @@ import { supabase } from '../../supabase';
 const Message = (props) => {
     const {messageData} = props;
     const [username, setUsername] = useState('')
-
-    const isMyMessage = () => {
-        return messageData.sender_id === supabase.auth.user().id;
-    }
 
     const getUsername = async () => {
         try {
@@ -30,9 +26,28 @@ const Message = (props) => {
             // return username;
         } catch(error) {
             console.log('Message', error)
-        }
+        } 
     }
-    getUsername()
+
+    useEffect(()=> {
+        getUsername();
+    }, [messageData])
+
+    const joinGroupMessage = () => {
+        return messageData.is_bot;
+    }
+
+    if (joinGroupMessage()) {
+        return (
+            <View style = {styles.botMsgContainer}>
+                <Text style={styles.botMsg}> {messageData.content}</Text>
+            </View>
+        )
+    } 
+
+    const isMyMessage = () => {
+        return messageData.sender_id === supabase.auth.user().id;
+    }
     
     return (
         <View style={[
@@ -45,7 +60,8 @@ const Message = (props) => {
             <Text style={styles.time}> {moment(messageData.created_at).fromNow()} </Text>
         </View>
     )
-}
+}    
+
 
 const styles = StyleSheet.create({
     container: {
@@ -67,6 +83,18 @@ const styles = StyleSheet.create({
         alignSelf:'flex-end',
         color: 'grey',
     },
+    botMsg: {
+        fontSize: 13,
+        alignSelf:'center',
+    },
+    botMsgContainer: {
+        backgroundColor: 'lightblue',
+        width: '75%',
+        alignSelf: 'center',
+        borderRadius: 30,
+        padding: 5,
+        marginVertical: '1%',
+    }
 })
 
 export default Message;

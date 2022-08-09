@@ -9,14 +9,13 @@ import { supabase } from '../../supabase'
 import { useRoute } from '@react-navigation/native';
 import MessageInput from '../../components/chat/MessageInput';
 
-
 const ChatRoomPage = () => {
     const route = useRoute();
     const room_id = route.params.id;
     const flatListRef = useRef();
-
     const [messages, setMessages] = useState(null);
-
+    const user = supabase.auth.user();
+    
     //check for real time updates
     useEffect(() => {
         const sub = supabase
@@ -28,13 +27,53 @@ const ChatRoomPage = () => {
         return () => {
             supabase.removeSubscription(sub)
         }
-        
     }, [])
+
+    // useEffect(()=> {
+    //     getMessages()
+    // }, [messages])
 
     //get messages upon first navigate
     useEffect(() => {
+        resetUnreadCounter();
+        inChatroom();
         getMessages();
+        return ()=> {
+            notInChatroom();
+        }
     }, [])
+
+    const inChatroom = async () => {
+        try {
+            const { error} = await supabase
+            .from('chat_unread')
+            .update({in_chatroom: true})
+            .match({room_id: room_id, 
+                user_id: user.id})
+            if (error) throw error
+        } catch (error) {
+            if (error == []) {
+
+            } else {
+                alert(error.message)
+            }
+            // console.log("In chatroom", error)
+        }
+    }
+
+    const notInChatroom = async() => {
+        try {
+            const { error} = await supabase
+            .from('chat_unread')
+            .update({in_chatroom: false})
+            .match({room_id: room_id, 
+                user_id: user.id})
+            if (error) throw error
+        } catch (error) {
+            // alert(error.message)
+            // console.log("not in chatroom", error)
+        }
+    }
 
     const getMessages = async () => {
         try {
@@ -43,7 +82,8 @@ const ChatRoomPage = () => {
             .select(`
               content,
               sender_id,
-              created_at
+              created_at,
+              is_bot
             `)
             .eq('room_id', room_id)
             .order('created_at', {ascending:false})
@@ -51,10 +91,25 @@ const ChatRoomPage = () => {
             
             setMessages(data)
         } catch(error) {
-            alert(error.message)
+            // alert(error.message)
+            console.log("get messages", error)
         }   
     }
-      
+
+    const resetUnreadCounter = async() => {
+        try {
+            const {error} = await supabase
+            .from('chat_unread')
+            .update({unread: 0})
+            .match({room_id: room_id, 
+                    user_id: user.id})
+
+            if (error) throw error
+        } catch (error) {
+            // alert(error.message)
+            console.log("reset unread", error)
+        }
+    }
 
     return (
         <View>
@@ -73,7 +128,6 @@ const ChatRoomPage = () => {
 const styles = StyleSheet.create({
     flatList: {
         height: '90%',
-
     }
 })
 

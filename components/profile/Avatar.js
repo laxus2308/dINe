@@ -122,7 +122,7 @@ const Avatar = ({ url }) => {
             {hasUrl ? (
                 <Image
                     style={styles.image}
-                    source={image}
+                    source={require("../../assets/no_profile_pic.png")}
                 />
             ) : (
                 <Image

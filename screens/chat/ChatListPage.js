@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import {
   View,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   FlatList,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import ChatListItem from '../../components/chat/ChatListItem';
 import { supabase } from '../../supabase';
@@ -12,53 +12,59 @@ import { supabase } from '../../supabase';
 
 const ChatListPage = () => {
   const [chatRooms, setChatRooms] = useState(null)
+  const [refreshing, setRefreshing] = useState(false)
 
-  const createRoom = async () => {
-    try {
-      const { error} = await supabase.rpc('create_room', {
-        name: 'Chat test name'
-      }).single()
+  // const createRoom = async () => {
+  //   try {
+  //     const { error } = await supabase.rpc('create_room', {
+  //       name: 'Chat test name'
+  //     }).single()
 
-      if (error) throw error
-    } catch (error) {
-      alert(error.message)
-    }
-  }
+  //     if (error) throw error
+  //   } catch (error) {
+  //     alert(error.message)
+  //   }
+  // }
 
   //check for real time updates
   useEffect(() => {
     const sub = supabase
-        .from('chat_rooms')
-        .on('*', async (update) => {
-            await getChatList()
-        })
-        .subscribe();
+      .from('chat_rooms')
+      .on('*', async (update) => {
+        await getChatList()
+      })
+      .subscribe();
     return () => {
-        supabase.removeSubscription(sub)
+      supabase.removeSubscription(sub)
     }
-    
-}, [])
+  }, [])
 
-//get chat lists upon first navigate
-useEffect(() => {
+  useEffect(() => {
+    const sub = supabase
+      .from('chat_unread')
+      .on('*', async (update) => {
+        await getChatList()
+      })
+      .subscribe();
+    return () => {
+      supabase.removeSubscription(sub)
+    }
+  }, [])
+
+
+  //get chat lists upon first navigate
+  useEffect(() => {
     getChatList();
-}, [])
+  }, [])
 
   const getChatList = async () => {
     try {
-      const { data, error } = await supabase
-      .from('chat_rooms')
-      .select(`
-        id,
-        name,
-        username:profiles ( username ),
-        avatar_url:profiles (avatar_url),
-        pic_url
-      `)
+      const { data, error } = await supabase.rpc('get_chat')
       if (error) throw error
       setChatRooms(data)
     } catch (error) {
-      alert(error.message)
+      // alert(error.message)
+      console.log('getChatList', error)
     }
   }
 
@@ -67,11 +73,16 @@ useEffect(() => {
       <FlatList
         style={styles.flatListItem}
         data={chatRooms}
-        renderItem={({item}) => <ChatListItem chatRoom = {item}/>}
+        renderItem={({ item }) => <ChatListItem chatRoom={item} />}
+        onRefresh={async () => {
+          setRefreshing(true)
+          await getChatList().then(() => setRefreshing(false))
+        }}
+        refreshing={refreshing}
       />
-      <TouchableOpacity onPress={createRoom} style={{marginBottom:100}}>
-            <Text> Test for add chat </Text>
-        </TouchableOpacity>
+      {/* <TouchableOpacity onPress={createRoom} style={{ marginBottom: 100 }}>
+        <Text> Test for add chat </Text>
+      </TouchableOpacity> */}
     </View>
   )
 }
@@ -84,7 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   flatListItem: {
-    width:'100%',
+    width: '100%',
   }
 });
 

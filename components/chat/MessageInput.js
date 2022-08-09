@@ -12,28 +12,53 @@ import { supabase } from '../../supabase';
 const MessageInput = (props) => {
     const [message, setMessage] = useState('');
     const {room_id} = props;
+    const [sending, setSending] = useState(false);
+
+    const sendPushNotification = async(token, text, title) => {
+        const message = {
+          to: token,
+          sound: 'default',
+          title: title,
+          body: text,
+          data: { someData: 'goes here' },
+        };
+    
+        await fetch('https://exp.host/--/api/v2/push/send', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Accept-encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(message),
+        });
+      }
 
     const sendMessage = async () => {
         if (!message) {
             alert("Can't send empty messages")
             return
         } 
+        const user = supabase.auth.user();
         try {
-            const user = supabase.auth.user()
-            const { error } = await supabase
-            .from('messages')
-            .insert([
-                { 
-                room_id:room_id,
+            setSending(true);
+            const myUsername = await supabase.from('profiles').select().eq('id', user.id);
+            const room_title = await supabase.from('chat_rooms').select().eq('id', room_id);
+            const {data, error} = await supabase.rpc('send_message', {
+                room_id: room_id,
                 content: message,
-                sender_id: user.id,
-                }
-            ])
+            })
+
+            for (let i = 0; i < data.length; i++) {
+                sendPushNotification(data[i].notification_token, myUsername.body[0].username + ": " + message, room_title.body[0].name);
+            }
+            
             if(error) throw error
         } catch (error) {
-            console.log('Message input', error)
+            alert(error.message)
         } finally {
-            setMessage('')
+            setMessage('');
+            setSending(false);
         }
     }
 
@@ -48,7 +73,7 @@ const MessageInput = (props) => {
                 onChangeText={(message) => setMessage(message)}
                 // multiline
             />
-            <TouchableOpacity  style={styles.icon} onPress={sendMessage}>
+            <TouchableOpacity  style={styles.icon} onPress={sendMessage} disabled= {sending}>
                 <MaterialCommunityIcons name='send' size ={30}/>
             </TouchableOpacity>
         </View>

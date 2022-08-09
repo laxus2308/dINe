@@ -6,7 +6,8 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  ToastAndroid
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useRoute } from '@react-navigation/native';
@@ -125,17 +126,16 @@ const EditRequestPage = ({ navigation }) => {
       }
 
       const { error} = await supabase.rpc('update_request', updates).single()
-
-
       if (error) {
         throw error
       }
+
+      ToastAndroid.show('Request Edited!', ToastAndroid.LONG)
       navigation.pop()
 
     } catch (error) {
       alert(error.message)
     }
-
   }
 
   const pickImage = async () => {
